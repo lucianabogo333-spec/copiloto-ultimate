@@ -1,27 +1,401 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-<meta charset="UTF-8">
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>Copiloto — Assistente de Objeções em Tempo Real</title>
 
 <style>
-*{box-sizing:border-box;font-family:Inter,Arial,sans-serif}
-body{margin:0;background:#f7f8fa;color:#1f2933}
-header{background:#fff;padding:16px 32px;border-bottom:1px solid #e5e7eb}
-header h1{margin:0;font-size:22px}
-header span{font-size:13px;color:#6b7280}
-.container{display:grid;grid-template-columns:260px 1fr 360px;gap:20px;padding:24px}
-.card{background:#fff;padding:14px;border-radius:6px;margin-bottom:12px}
-.product-card h3{margin:0 0 8px}
-.product-card ul{padding-left:18px;margin:0}
-textarea{width:100%;height:180px;padding:12px;font-size:14px}
-button{padding:6px 10px;cursor:pointer}
-.responses h4{margin:0 0 6px}
-.mic{margin-top:8px}
-.modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,.4);display:flex;align-items:center;justify-content:center;z-index:10}
-.modal{background:#fff;padding:24px;width:420px;border-radius:8px}
-.modal-actions{display:flex;justify-content:flex-end;gap:10px;margin-top:20px}
-.primary{background:#4c5bd4;color:#fff;border:none}
+  :root{
+    --bg:#f6f7fb;
+    --panel:#ffffff;
+    --text:#111827;
+    --muted:#6b7280;
+    --border:#e5e7eb;
+    --shadow: 0 10px 26px rgba(17,24,39,.08);
+    --shadow2: 0 6px 16px rgba(17,24,39,.07);
+
+    --primary:#4c5bd4;
+    --primary-2:#3f4bd0;
+    --ring: rgba(76,91,212,.18);
+
+    --good:#16a34a;
+    --warn:#f59e0b;
+    --bad:#ef4444;
+
+    --chip:#f3f4f6;
+    --chipText:#111827;
+
+    --radius:14px;
+    --radius2:18px;
+  }
+
+  *{box-sizing:border-box}
+  html,body{height:100%}
+  body{
+    margin:0;
+    font-family: Inter, ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+    color:var(--text);
+    background:
+      radial-gradient(900px 400px at 12% 0%, rgba(76,91,212,.10), transparent 55%),
+      radial-gradient(900px 520px at 92% 12%, rgba(245,158,11,.09), transparent 55%),
+      var(--bg);
+  }
+
+  /* Header */
+  header{
+    position:sticky; top:0; z-index:5;
+    background:rgba(255,255,255,.86);
+    backdrop-filter: blur(10px);
+    border-bottom:1px solid var(--border);
+  }
+  .topbar{
+    display:flex; align-items:center; justify-content:space-between;
+    padding:14px 18px;
+    max-width:1200px; margin:0 auto;
+    gap:12px;
+  }
+  .brand{
+    display:flex; flex-direction:column; gap:2px;
+  }
+  .brand h1{
+    margin:0; font-size:18px; letter-spacing:.2px;
+  }
+  .brand span{
+    font-size:12px; color:var(--muted);
+  }
+  .statusline{
+    display:flex; align-items:center; gap:10px; flex-wrap:wrap;
+  }
+  .pill{
+    display:inline-flex; align-items:center; gap:8px;
+    padding:7px 10px;
+    border:1px solid var(--border);
+    border-radius:999px;
+    background:#fff;
+    box-shadow: 0 1px 0 rgba(17,24,39,.02);
+    font-size:12px;
+    color:var(--muted);
+  }
+  .dot{
+    width:8px; height:8px; border-radius:999px;
+    background: #cbd5e1;
+  }
+  .dot.on{background: var(--good)}
+  .kbd{
+    font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+    font-size:11px;
+    padding:2px 6px;
+    border:1px solid var(--border);
+    border-bottom-color:#d1d5db;
+    background:#fff;
+    border-radius:8px;
+    color:#374151;
+  }
+
+  /* Layout */
+  main{
+    max-width:1200px;
+    margin:0 auto;
+    padding:18px;
+  }
+  .grid{
+    display:grid;
+    grid-template-columns: 300px 1fr 420px;
+    gap:16px;
+    align-items:start;
+  }
+
+  /* Cards */
+  .card{
+    background:var(--panel);
+    border:1px solid var(--border);
+    border-radius:var(--radius);
+    box-shadow: var(--shadow2);
+    overflow:hidden;
+  }
+  .card .head{
+    padding:14px 14px 10px;
+    border-bottom:1px solid rgba(229,231,235,.75);
+    display:flex; align-items:flex-start; justify-content:space-between; gap:10px;
+  }
+  .card .body{
+    padding:14px;
+  }
+  .title{
+    display:flex; flex-direction:column; gap:4px;
+  }
+  .title h2, .title h3, .title h4{
+    margin:0;
+    font-weight:700;
+    letter-spacing:.2px;
+  }
+  .title h2{font-size:14px}
+  .title h3{font-size:14px}
+  .subtitle{
+    margin:0;
+    font-size:12px;
+    color:var(--muted);
+    line-height:1.35;
+  }
+
+  .chip{
+    display:inline-flex; align-items:center; gap:6px;
+    padding:6px 9px;
+    border-radius:999px;
+    background:var(--chip);
+    color:var(--chipText);
+    border:1px solid rgba(229,231,235,.9);
+    font-size:12px;
+    white-space:nowrap;
+  }
+  .chip.good{background: rgba(22,163,74,.10); border-color: rgba(22,163,74,.22); color:#065f46}
+  .chip.warn{background: rgba(245,158,11,.12); border-color: rgba(245,158,11,.25); color:#7c2d12}
+  .chip.bad{background: rgba(239,68,68,.11); border-color: rgba(239,68,68,.24); color:#7f1d1d}
+
+  .updated-badge{
+    display:none;
+    align-items:center;
+    gap:6px;
+    padding:6px 9px;
+    border-radius:999px;
+    background: rgba(76,91,212,.10);
+    border: 1px solid rgba(76,91,212,.22);
+    color: #1f2a9a;
+    font-size:12px;
+    white-space:nowrap;
+  }
+  .updated-badge.show{display:inline-flex}
+
+  /* Product card */
+  .productName{
+    font-size:16px;
+    margin:0;
+    line-height:1.2;
+  }
+  .productMeta{
+    padding:10px 14px 14px;
+    display:flex; flex-direction:column; gap:10px;
+  }
+  .infoList{
+    margin:0;
+    padding-left:18px;
+    color:#111827;
+  }
+  .infoList li{
+    margin:6px 0;
+    color:#111827;
+    font-size:13px;
+    line-height:1.35;
+  }
+  .hint{
+    font-size:12px;
+    color:var(--muted);
+    margin:0;
+  }
+
+  /* Input */
+  .inputWrap{
+    display:flex;
+    flex-direction:column;
+    gap:10px;
+  }
+  textarea{
+    width:100%;
+    min-height:240px;
+    resize:vertical;
+    padding:14px 14px;
+    font-size:14px;
+    line-height:1.55;
+    border-radius:12px;
+    border:1px solid var(--border);
+    outline:none;
+    background:#fff;
+    box-shadow: 0 1px 0 rgba(17,24,39,.03);
+  }
+  textarea:focus{
+    border-color: rgba(76,91,212,.45);
+    box-shadow: 0 0 0 4px var(--ring);
+  }
+  .toolbar{
+    display:flex;
+    gap:10px;
+    flex-wrap:wrap;
+    align-items:center;
+    justify-content:space-between;
+  }
+  .btnRow{
+    display:flex;
+    gap:10px;
+    align-items:center;
+    flex-wrap:wrap;
+  }
+
+  button{
+    border:1px solid rgba(229,231,235,.9);
+    background:#fff;
+    color:#111827;
+    padding:10px 12px;
+    border-radius:12px;
+    cursor:pointer;
+    font-weight:600;
+    font-size:13px;
+    box-shadow: 0 2px 0 rgba(17,24,39,.03);
+    transition: transform .06s ease, box-shadow .16s ease, border-color .16s ease;
+    user-select:none;
+  }
+  button:hover{
+    border-color: rgba(76,91,212,.30);
+    box-shadow: 0 10px 20px rgba(17,24,39,.08);
+  }
+  button:active{transform: translateY(1px)}
+  .primary{
+    background: linear-gradient(180deg, var(--primary), var(--primary-2));
+    color:#fff;
+    border:none;
+  }
+  .primary:hover{box-shadow: 0 12px 22px rgba(76,91,212,.20)}
+  .danger{
+    background: rgba(239,68,68,.10);
+    border-color: rgba(239,68,68,.22);
+    color:#7f1d1d;
+  }
+
+  /* Responses */
+  .responsesGrid{
+    display:flex;
+    flex-direction:column;
+    gap:12px;
+  }
+  .responseCard .body{
+    padding-top:12px;
+    display:flex;
+    flex-direction:column;
+    gap:10px;
+  }
+  .responseText{
+    margin:0;
+    font-size:14px;
+    line-height:1.55;
+    color:#111827;
+    white-space:pre-wrap;
+  }
+  .responseFooter{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap:10px;
+    flex-wrap:wrap;
+  }
+  .levelTag{
+    display:inline-flex;
+    align-items:center;
+    gap:8px;
+  }
+
+  /* Effects */
+  .fx{
+    position:relative;
+  }
+  .fxPulse{
+    animation: pulseGlow 650ms ease-out 1;
+  }
+  .fxSlideFade{
+    animation: slideFadeIn 260ms ease-out 1;
+  }
+  @keyframes slideFadeIn{
+    from{opacity:.35; transform: translateY(6px)}
+    to{opacity:1; transform: translateY(0)}
+  }
+  @keyframes pulseGlow{
+    0%{box-shadow: 0 0 0 0 rgba(76,91,212,.00)}
+    30%{box-shadow: 0 0 0 6px rgba(76,91,212,.18)}
+    100%{box-shadow: 0 0 0 0 rgba(76,91,212,.00)}
+  }
+  .highlightBorder{
+    border-color: rgba(76,91,212,.45) !important;
+  }
+
+  /* Toast */
+  .toast{
+    position: fixed;
+    right: 16px;
+    bottom: 16px;
+    z-index: 20;
+    display:none;
+    align-items:center;
+    gap:10px;
+    padding:12px 14px;
+    border-radius:14px;
+    background: rgba(17,24,39,.92);
+    color:#fff;
+    border:1px solid rgba(255,255,255,.10);
+    box-shadow: 0 16px 30px rgba(0,0,0,.18);
+    max-width: min(420px, calc(100vw - 32px));
+    font-size:13px;
+  }
+  .toast.show{display:flex}
+  .toast .mini{
+    width:10px; height:10px; border-radius:999px; background: var(--good);
+  }
+
+  /* Modal */
+  .modal-overlay{
+    position:fixed; inset:0;
+    background:rgba(17,24,39,.55);
+    display:flex; align-items:center; justify-content:center;
+    z-index:10;
+    padding:16px;
+  }
+  .modal{
+    width:min(520px, 100%);
+    background: #fff;
+    border:1px solid rgba(229,231,235,.9);
+    border-radius: var(--radius2);
+    box-shadow: var(--shadow);
+    overflow:hidden;
+  }
+  .modal .mHead{
+    padding:18px 18px 0;
+  }
+  .modal .mHead h1{
+    margin:0;
+    font-size:20px;
+    letter-spacing:.3px;
+  }
+  .modal .mHead h3{
+    margin:8px 0 0;
+    font-size:14px;
+    color:var(--muted);
+    font-weight:600;
+  }
+  .modal .mBody{
+    padding:14px 18px 18px;
+    color:#374151;
+    line-height:1.55;
+    font-size:14px;
+  }
+  .modal-actions{
+    display:flex;
+    justify-content:flex-end;
+    gap:10px;
+    padding:0 18px 18px;
+  }
+
+  /* Mobile */
+  @media (max-width: 980px){
+    .grid{
+      grid-template-columns: 1fr;
+      gap:14px;
+    }
+    /* ordem: Produto → Objeção → Respostas */
+    .area-product{order:1}
+    .area-input{order:2}
+    .area-resp{order:3}
+
+    textarea{min-height:210px}
+    .topbar{padding:12px 14px}
+  }
 </style>
 </head>
 
@@ -30,12 +404,17 @@ button{padding:6px 10px;cursor:pointer}
 <!-- MODAL -->
 <div id="welcome" class="modal-overlay">
   <div class="modal">
-    <h1>COPILOTO</h1>
-    <h3>Assistente de Objeções em Tempo Real</h3>
-    <p>
-      Copiloto é um software que ajuda vendedores a lembrar informações do produto
-      e quebrar objeções em tempo real, com respostas curtas e humanas.
-    </p>
+    <div class="mHead">
+      <h1>COPILOTO</h1>
+      <h3>Assistente de Objeções em Tempo Real</h3>
+    </div>
+    <div class="mBody">
+      Copiloto ajuda vendedores a lembrar informações do produto e quebrar objeções em tempo real,
+      com respostas curtas, humanas e com direção clara.
+      <br><br>
+      <strong>Dica:</strong> digite (ou dite) o que o cliente falou. Quando o sistema identificar um produto ou objeção,
+      você verá um destaque visual de “Atualizado”.
+    </div>
     <div class="modal-actions">
       <button onclick="closeModal()">Fechar</button>
       <button class="primary" onclick="closeModal()">Começar</button>
@@ -44,119 +423,501 @@ button{padding:6px 10px;cursor:pointer}
 </div>
 
 <header>
-<h1>COPILOTO</h1>
-<span>Assistente de Objeções em Tempo Real</span>
+  <div class="topbar">
+    <div class="brand">
+      <h1>COPILOTO</h1>
+      <span>Assistente de Objeções em Tempo Real</span>
+    </div>
+
+    <div class="statusline">
+      <div class="pill" title="Microfone manual (não fica escutando infinito)">
+        <span class="dot" id="micDot"></span>
+        <span id="micLabel">Microfone: desligado</span>
+      </div>
+      <div class="pill" title="Atalhos úteis">
+        <span class="kbd">Ctrl</span><span class="kbd">K</span>
+        <span style="color:var(--muted)">Limpar</span>
+      </div>
+    </div>
+  </div>
 </header>
 
-<main class="container">
+<main>
+  <div class="grid">
 
-<!-- PRODUTO -->
-<aside class="card product-card">
-<h3 id="prod-name">Produto não identificado</h3>
-<ul id="prod-info"></ul>
-</aside>
+    <!-- PRODUTO -->
+    <aside class="card area-product fx" id="productCard">
+      <div class="head">
+        <div class="title">
+          <h2>Produto ativo</h2>
+          <p class="subtitle">Detectado pelo texto. Se não houver novo match, mantém o último.</p>
+        </div>
+        <div class="updated-badge" id="prodBadge">✨ Atualizado</div>
+      </div>
 
-<!-- OBJEÇÃO -->
-<section>
-<textarea id="input" placeholder="Digite ou dite o que o cliente disse..." oninput="processText()"></textarea>
-<button class="mic" onclick="startListening()">🎙️ Ouvir microfone</button>
-</section>
+      <div class="productMeta">
+        <h3 class="productName" id="prod-name">Produto não identificado</h3>
+        <div style="display:flex; gap:8px; flex-wrap:wrap; align-items:center;">
+          <span class="chip good" id="prodChip">—</span>
+          <span class="chip" id="prodHintChip">Digite palavras do produto (ex.: “morada”, “cedros”, “búfalo”...)</span>
+        </div>
+        <ul class="infoList" id="prod-info"></ul>
+        <p class="hint">Sugestão: mantenha o texto do cliente “cru”. O sistema procura palavras-chave e atualiza na hora.</p>
+      </div>
+    </aside>
 
-<!-- RESPOSTAS -->
-<section class="responses">
-<div class="card">
-<h4>Quebra Leve</h4>
-<p id="r1">—</p>
-<button onclick="copy('r1')">Copiar</button>
-</div>
+    <!-- OBJEÇÃO (INPUT) -->
+    <section class="card area-input fx" id="inputCard">
+      <div class="head">
+        <div class="title">
+          <h3>Fala do cliente</h3>
+          <p class="subtitle">Digite ou dite. O sistema identifica objeção e sugere respostas (leve / média / agressiva).</p>
+        </div>
+        <div class="updated-badge" id="objBadge">⚡ Atualizado</div>
+      </div>
 
-<div class="card">
-<h4>Quebra Média</h4>
-<p id="r2">—</p>
-<button onclick="copy('r2')">Copiar</button>
-</div>
+      <div class="body inputWrap">
+        <textarea id="input" placeholder="Digite ou dite o que o cliente disse..."></textarea>
 
-<div class="card">
-<h4>Quebra Agressiva</h4>
-<p id="r3">—</p>
-<button onclick="copy('r3')">Copiar</button>
-</div>
-</section>
+        <div class="toolbar">
+          <div class="btnRow">
+            <button class="primary" id="micBtn" onclick="toggleListening()">🎙️ Ouvir microfone</button>
+            <button class="danger" onclick="clearAll()">Limpar</button>
+          </div>
 
+          <div style="display:flex; gap:8px; flex-wrap:wrap; align-items:center; justify-content:flex-end;">
+            <span class="chip" id="objChip">Objeção: —</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- RESPOSTAS -->
+    <section class="responsesGrid area-resp fx" id="responsesWrap">
+
+      <div class="card responseCard">
+        <div class="head">
+          <div class="title">
+            <h4>Quebra Leve</h4>
+            <p class="subtitle">Acolhe + direciona com pergunta (ideal pra cliente frio).</p>
+          </div>
+          <span class="chip good">Leve</span>
+        </div>
+        <div class="body">
+          <p id="r1" class="responseText">—</p>
+          <div class="responseFooter">
+            <div class="levelTag">
+              <span class="chip" id="tip1">Tom: humano e consultivo</span>
+            </div>
+            <button onclick="copy('r1')">Copiar</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="card responseCard">
+        <div class="head">
+          <div class="title">
+            <h4>Quebra Média</h4>
+            <p class="subtitle">Reenquadra + pede critério (puxa pra próxima etapa).</p>
+          </div>
+          <span class="chip warn">Média</span>
+        </div>
+        <div class="body">
+          <p id="r2" class="responseText">—</p>
+          <div class="responseFooter">
+            <div class="levelTag">
+              <span class="chip" id="tip2">Tom: firme, sem pressão</span>
+            </div>
+            <button onclick="copy('r2')">Copiar</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="card responseCard">
+        <div class="head">
+          <div class="title">
+            <h4>Quebra Agressiva</h4>
+            <p class="subtitle">Custo da inação + pergunta de decisão (sem grosseria).</p>
+          </div>
+          <span class="chip bad">Agressiva</span>
+        </div>
+        <div class="body">
+          <p id="r3" class="responseText">—</p>
+          <div class="responseFooter">
+            <div class="levelTag">
+              <span class="chip" id="tip3">Tom: direto e objetivo</span>
+            </div>
+            <button onclick="copy('r3')">Copiar</button>
+          </div>
+        </div>
+      </div>
+
+    </section>
+
+  </div>
 </main>
 
+<!-- TOAST -->
+<div class="toast" id="toast">
+  <span class="mini"></span>
+  <span id="toastText">Copiado!</span>
+</div>
+
 <script>
-// ================= PRODUTOS =================
-const products=[
-{name:"MORADA BRASIL",keys:["morada"],info:["Loteamento residencial","Parcelas a partir de R$ 713","Entrada: não","Av. André Maggi"]},
-{name:"CASA PRONTA – SINOP",keys:["casa","mcmv"],info:["Casa 2 quartos","Parcelas a partir de R$ 699","Entrada: R$ 1.500","Financiamento Caixa"]},
-{name:"CHÁCARAS – SANTA CARMEM",keys:["chacara","chácara"],info:["1.800 m²","Parcelas a partir de R$ 695","Entrada: não","6 km de Santa Carmem"]},
-{name:"GRAN CANÁRIO",keys:["canario","gran"],info:["Loteamento urbano","Parcelas a partir de R$ 595","Entrada: sim / não","MT-140"]},
-{name:"CEDROS JARDINS",keys:["cedros","búfalo"],info:["Lotes 200 m²","Parcelas a partir de R$ 753","Entrada: não","Posto Búfalo"]}
+/* ================= PRODUTOS (mantido) ================= */
+const products = [
+  {name:"MORADA BRASIL", keys:["morada"], info:["Loteamento residencial","Parcelas a partir de R$ 713","Entrada: não","Av. André Maggi"]},
+  {name:"CASA PRONTA – SINOP", keys:["casa","mcmv"], info:["Casa 2 quartos","Parcelas a partir de R$ 699","Entrada: R$ 1.500","Financiamento Caixa"]},
+  {name:"CHÁCARAS – SANTA CARMEM", keys:["chacara","chácara"], info:["1.800 m²","Parcelas a partir de R$ 695","Entrada: não","6 km de Santa Carmem"]},
+  {name:"GRAN CANÁRIO", keys:["canario","gran"], info:["Loteamento urbano","Parcelas a partir de R$ 595","Entrada: sim / não","MT-140"]},
+  {name:"CEDROS JARDINS", keys:["cedros","búfalo"], info:["Lotes 200 m²","Parcelas a partir de R$ 753","Entrada: não","Posto Búfalo"]}
 ];
 
-// ================= 50 OBJEÇÕES =================
-const objections=[
-{keys:["caro"],a:"Entendo, é normal analisar o valor. O que mais pesou pra você?",b:"Você está comparando com qual opção?",c:"Se a parcela couber, você avança?"},
-{keys:["orçamento"],a:"Faz sentido cuidar do orçamento. Qual valor seria confortável?",b:"O problema é a parcela ou o prazo?",c:"Ajustando isso, você seguiria?"},
-{keys:["pensar"],a:"Claro, pensar é importante. O que você quer avaliar?",b:"Isso é dúvida ou timing?",c:"Se nada mudar, sua resposta é sim ou não?"},
-{keys:["depois"],a:"Tudo bem. Quando seria um bom momento?",b:"O que precisa acontecer pra você voltar?",c:"Se acabar antes, tudo bem pra você?"},
-{keys:["esposa","marido","familia"],a:"Faz sentido alinhar. O que ela vai perguntar?",b:"Quer ajuda pra explicar?",c:"Se ela concordar, você segue?"},
-{keys:["comparando"],a:"Normal comparar. O que você está comparando?",b:"Preço ou condição?",c:"Se aqui fizer mais sentido, você decide?"},
-{keys:["medo","receio"],a:"Entendo. Medo de quê exatamente?",b:"Isso vem de experiência passada?",c:"Se resolvermos isso, você avança?"},
-{keys:["confio"],a:"Obrigado pela sinceridade. O que falta pra confiar?",b:"Confiança pra você vem de quê?",c:"Se resolver agora, você decide?"},
-{keys:["não conheço"],a:"Normal. O que te traria mais segurança?",b:"Localização ou documentação?",c:"Se eu mostrar agora, resolve?"},
-{keys:["tempo"],a:"Sem problema. Quando seria ideal?",b:"O que muda com mais tempo?",c:"Se não mudar, você perde interesse?"},
-{keys:["juros"],a:"Entendo. Você prefere menos prazo ou menor parcela?",b:"Você olha mais total ou mensal?",c:"Se fizer sentido, você segue?"},
-{keys:["apertar"],a:"Certo. O que é apertar pra você?",b:"Qual valor mensal é tranquilo?",c:"Se não apertar, você fecha?"},
-{keys:["esperar"],a:"Esperar por quê exatamente?",b:"Tempo ou condição?",c:"Se não mudar, você perde a oportunidade?"},
-{keys:["decidir"],a:"Claro. O que falta pra decidir?",b:"Qual ponto pesa mais?",c:"Se resolver agora, você decide?"},
-{keys:["contrato"],a:"Entendo. Qual cláusula te preocupa?",b:"Quer que eu explique essa parte?",c:"Se ficar claro, você avança?"}
+/* ================= OBJEÇÕES (mais completas, sem mudar regra de match) =================
+   Regras mantidas: detecção por keywords (includes), retorna 3 respostas (a,b,c).
+*/
+const objections = [
+  { keys:["caro","muito caro","valor alto","preço alto"],
+    a:"Entendo totalmente. Só pra eu te orientar certo: quando você diz caro, é pelo valor total ou pela parcela?",
+    b:"Caro comparado com qual opção? Se for só condição, eu consigo te mostrar o melhor encaixe pro seu bolso.",
+    c:"Se eu ajustar pra caber sem te apertar (entrada/parcela/prazo), você avança agora ou ainda fica em dúvida?"
+  },
+  { keys:["orçamento","sem orçamento","estourado","limite","apertado"],
+    a:"Faz sentido cuidar do orçamento. Qual faixa mensal fica confortável pra você hoje?",
+    b:"O ponto é a parcela ou o prazo? Se me disser o limite, eu te passo a melhor configuração.",
+    c:"Se eu encaixar dentro do seu limite sem surpresa, você dá o próximo passo ou prefere encerrar?"
+  },
+  { keys:["vou pensar","pensar","analisar","vou analisar","ver depois","vou ver"],
+    a:"Perfeito, analisar é o certo. O que você quer avaliar primeiro: preço, condição ou localização?",
+    b:"Pra sua análise não virar só “deixar pra depois”: o que precisa acontecer pra virar um sim?",
+    c:"Se nada mudar nas condições, sua resposta tende mais pra sim ou pra não? Só pra eu não te prender aqui."
+  },
+  { keys:["depois","mais pra frente","não agora","agora não","outro momento","não é o momento"],
+    a:"Tudo bem. O que faz não ser o momento: grana, prioridade ou insegurança?",
+    b:"Só pra eu te ajudar: quando seria um bom timing? Semana que vem, mês que vem… o que você tem em mente?",
+    c:"Se a condição mudar e ficar pior depois, tudo bem pra você? Ou prefere garantir agora e ir ajustando no caminho?"
+  },
+  { keys:["esposa","marido","familia","família","minha mulher","meu marido"],
+    a:"Claro, faz sentido alinhar. O que ela(e) costuma perguntar primeiro: parcela, localização ou segurança?",
+    b:"Me diz a dúvida principal dele(a) que eu te mando uma mensagem curta pronta pra você encaminhar.",
+    c:"Se ele(a) disser ok com a condição, você fecha? Porque aí eu te ajudo a conduzir do jeito mais rápido."
+  },
+  { keys:["comparar","comparando","vou ver outro","outros","mais barato em outro lugar","tem outro"],
+    a:"Normal comparar. Você tá comparando mais pelo preço ou pela localização?",
+    b:"Pra comparar certo, olha 3 pontos: documentação, acesso/local e potencial de valorização. Qual deles te chama mais atenção?",
+    c:"Se eu te provar que aqui faz mais sentido no conjunto (não só no preço), você decide por aqui?"
+  },
+  { keys:["medo","receio","inseguro","insegurança","não confio","desconfio","golpe"],
+    a:"Justíssimo. Medo de quê exatamente: documentação, localização ou experiência passada?",
+    b:"Pra você ficar tranquilo: eu te mostro o básico que valida tudo (mapa/registro/condição por escrito). O que você quer ver primeiro?",
+    c:"Você prefere validar por documento agora ou por visita? Se a validação ficar ok, você avança?"
+  },
+  { keys:["contrato","cláusula","clausula","papelada","documento","documentação"],
+    a:"Perfeito você olhar isso. Qual parte te preocupa mais no contrato: prazos, multas ou garantias?",
+    b:"Se você me disser o ponto, eu explico de forma simples e objetiva (sem juridiquês).",
+    c:"Se eu deixar isso 100% claro agora, você segue com a próxima etapa ou ainda vai travar?"
+  },
+  { keys:["juros","taxa","financiamento","muito juros","juros alto"],
+    a:"Entendo. Você prefere otimizar parcela menor ou reduzir o total pago no fim?",
+    b:"A melhor forma é escolher um equilíbrio: prazo que não te aperte e condição que não encareça. Qual faixa mensal é segura pra você?",
+    c:"Se eu te mostrar o cenário mais inteligente (sem te apertar), você toma decisão hoje?"
+  },
+  { keys:["apertar","não cabe","não dá","pesa","pesado","parcela alta"],
+    a:"Entendi. Qual valor mensal você considera tranquilo sem estresse?",
+    b:"Se a gente ajustar entrada/parcela/prazo pra caber, você fica confortável em avançar?",
+    c:"Se não encaixar no seu bolso, eu te digo na hora. Mas antes: você quer que eu tente encaixar agora?"
+  },
+  { keys:["desconto","abaixa","baixar","melhorar valor","melhora","negociar","negociação"],
+    a:"Posso te ajudar nisso. Você quer melhorar mais a entrada, a parcela ou o valor final?",
+    b:"Geralmente dá pra melhorar com troca: fechar mais rápido ou ajustar formato. O que faz mais sentido pra você?",
+    c:"Se eu te entregar a melhor condição possível hoje, você fecha hoje? Pra eu travar isso pra você."
+  },
+  { keys:["não conheço","nunca ouvi","não sei","não conheço o lugar","não conheço esse"],
+    a:"Normal não conhecer. O que te daria mais segurança agora: localização no mapa ou documentação?",
+    b:"Eu posso te mandar um resumo em 30 segundos: onde fica, como é o acesso e qual o diferencial. Quer?",
+    c:"Se eu te mostrar tudo de forma objetiva e fizer sentido, você avança ou quer só conhecer por curiosidade?"
+  },
+  { keys:["tempo","sem tempo","correria","ocupado","agora não posso"],
+    a:"Tranquilo. Você prefere que eu te mande um resumo rápido por mensagem ou você quer falar em outro horário?",
+    b:"Pra facilitar: qual é melhor — hoje à noite ou amanhã? E você quer focar em parcela ou localização?",
+    c:"Se eu te mandar tudo bem objetivo e você gostar, você me dá um ok pra eu reservar o próximo passo?"
+  },
+  { keys:["esperar","vou esperar","aguardar","vou aguardar","vou juntar"],
+    a:"Entendo. Você vai esperar por grana ou por condição melhor?",
+    b:"Só um ponto: quando você for voltar, pode ter mudado preço/condição. O que você precisa pra considerar agora?",
+    c:"Se eu conseguir manter a melhor condição hoje, você prefere garantir agora ou correr o risco de pagar mais depois?"
+  },
+  { keys:["localização","longe","distante","onde fica","fica onde","bairro ruim"],
+    a:"Boa pergunta. O que é “boa localização” pra você: perto do centro, trabalho ou comércio?",
+    b:"Se eu te mostrar no mapa e explicar o acesso (tempo real), isso já resolve sua dúvida?",
+    c:"Se a localização te agradar e a condição couber, você fecha ou ainda tem outro ponto travando?"
+  },
+  { keys:["visita","ver pessoalmente","ir lá","quero ver"],
+    a:"Perfeito. Ver ajuda muito. Você quer agendar em qual período: manhã, tarde ou fim de tarde?",
+    b:"Pra visita ser objetiva: você quer avaliar terreno/localização ou tirar dúvidas de condição/documentação?",
+    c:"Se você curtir na visita e a condição estiver ok, você já deixa encaminhado pra garantir?"
+  },
+  { keys:["investir","investimento","valorizar","valorização","revender"],
+    a:"Legal. Você pensa em investir pra revender ou pra construir depois?",
+    b:"Valorização costuma vir de 3 fatores: crescimento ao redor, acesso e procura. Qual você quer que eu comprove primeiro?",
+    c:"Se eu te mostrar que o caminho de valorização é claro, você garante agora ou prefere entrar quando já estiver mais caro?"
+  },
+  { keys:["aluguel","pagar aluguel","prefiro alugar"],
+    a:"Entendo. Hoje o aluguel te incomoda mais pelo valor ou por ser um gasto sem retorno?",
+    b:"Se a parcela ficar parecida com o que você já paga, a lógica muda: você prefere pagar aluguel ou construir patrimônio?",
+    c:"Se eu te mostrar uma condição que caiba e faça sentido financeiramente, você encara ou ainda quer continuar no aluguel?"
+  },
+  { keys:["não quero compromisso","compromisso","muito tempo","muito longo"],
+    a:"Faz sentido. Você prefere algo mais curto (parcela maior) ou mais confortável (prazo maior)?",
+    b:"A gente pode montar um caminho pra você não se sentir preso: parcela que cabe e possibilidade de antecipar quando quiser.",
+    c:"Se eu te mostrar um plano que te dá controle (sem sufoco), você decide agora?"
+  }
 ];
 
-// ================= FUNÇÕES =================
+/* ================= ELEMENTOS ================= */
+const input = document.getElementById("input");
+const r1 = document.getElementById("r1");
+const r2 = document.getElementById("r2");
+const r3 = document.getElementById("r3");
+
+const prodNameEl = document.getElementById("prod-name");
+const prodInfoEl = document.getElementById("prod-info");
+const prodCard = document.getElementById("productCard");
+const prodBadge = document.getElementById("prodBadge");
+const prodChip = document.getElementById("prodChip");
+
+const objChip = document.getElementById("objChip");
+const objBadge = document.getElementById("objBadge");
+const responsesWrap = document.getElementById("responsesWrap");
+
+const toast = document.getElementById("toast");
+const toastText = document.getElementById("toastText");
+
+const micDot = document.getElementById("micDot");
+const micLabel = document.getElementById("micLabel");
+const micBtn = document.getElementById("micBtn");
+
+/* ================= ESTADO (mantém comportamento) ================= */
+let lastProduct = null;       // mantém último produto se não houver novo match
+let lastObjection = null;     // mantém última objeção se não houver novo match
+let lastObjectionKey = "";    // para exibir no chip
+let lastTextProcessed = "";   // debounce simples
+
+/* ================= FX helpers ================= */
+function flashUpdated(elBadge){
+  elBadge.classList.add("show");
+  setTimeout(()=> elBadge.classList.remove("show"), 1000);
+}
+
+function animateUpdate(elCard){
+  elCard.classList.add("fxPulse","fxSlideFade","highlightBorder");
+  setTimeout(()=>{
+    elCard.classList.remove("fxPulse","fxSlideFade","highlightBorder");
+  }, 780);
+}
+
+function showToast(msg){
+  toastText.textContent = msg;
+  toast.classList.add("show");
+  clearTimeout(showToast._t);
+  showToast._t = setTimeout(()=> toast.classList.remove("show"), 1400);
+}
+
+/* ================= CORE (mantido: match por includes) ================= */
 function processText(){
-const t=input.value.toLowerCase();
+  const t = (input.value || "").toLowerCase();
 
-// produto
-let p=products.find(x=>x.keys.some(k=>t.includes(k)));
-if(p){
-document.getElementById("prod-name").innerText=p.name;
-document.getElementById("prod-info").innerHTML=p.info.map(i=>"<li>"+i+"</li>").join("");
+  // debounce leve: evita reprocessar exatamente o mesmo texto em eventos repetidos
+  if(t === lastTextProcessed) return;
+  lastTextProcessed = t;
+
+  // produto
+  const p = products.find(x => x.keys.some(k => t.includes(k)));
+  if(p){
+    if(!lastProduct || lastProduct.name !== p.name){
+      // produto mudou
+      prodNameEl.textContent = p.name;
+      prodInfoEl.innerHTML = p.info.map(i => "<li>"+escapeHtml(i)+"</li>").join("");
+      prodChip.textContent = "Ativo";
+      lastProduct = p;
+
+      flashUpdated(prodBadge);
+      animateUpdate(prodCard);
+    }else{
+      // mesmo produto, só garante dados
+      prodNameEl.textContent = lastProduct.name;
+      prodInfoEl.innerHTML = lastProduct.info.map(i => "<li>"+escapeHtml(i)+"</li>").join("");
+      prodChip.textContent = "Ativo";
+    }
+  }else{
+    // sem novo match: mantém último produto ativo (regra original)
+    if(lastProduct){
+      prodNameEl.textContent = lastProduct.name;
+      prodInfoEl.innerHTML = lastProduct.info.map(i => "<li>"+escapeHtml(i)+"</li>").join("");
+      prodChip.textContent = "Ativo";
+    }else{
+      prodNameEl.textContent = "Produto não identificado";
+      prodInfoEl.innerHTML = "";
+      prodChip.textContent = "—";
+    }
+  }
+
+  // objeção
+  const o = objections.find(x => x.keys.some(k => t.includes(k)));
+  if(o){
+    // identificar qual keyword bateu, pra exibir no chip
+    const hit = o.keys.find(k => t.includes(k)) || "";
+    const signature = (o.a + "||" + o.b + "||" + o.c);
+
+    if(!lastObjection || (lastObjection.signature !== signature)){
+      // objeção mudou
+      r1.textContent = o.a;
+      r2.textContent = o.b;
+      r3.textContent = o.c;
+
+      lastObjection = { signature };
+      lastObjectionKey = hit;
+
+      objChip.textContent = "Objeção: " + (hit ? ("“" + hit + "”") : "detectada");
+      flashUpdated(objBadge);
+      animateUpdate(responsesWrap);
+    }else{
+      // mesma objeção detectada, mantém
+      objChip.textContent = "Objeção: " + (lastObjectionKey ? ("“" + lastObjectionKey + "”") : "detectada");
+    }
+  }else{
+    // sem novo match: mantém última objeção (regra original)
+    if(lastObjection){
+      objChip.textContent = "Objeção: " + (lastObjectionKey ? ("“" + lastObjectionKey + "”") : "—");
+    }else{
+      objChip.textContent = "Objeção: —";
+    }
+  }
 }
 
-// objeção
-let o=objections.find(x=>x.keys.some(k=>t.includes(k)));
-if(o){
-r1.innerText=o.a;
-r2.innerText=o.b;
-r3.innerText=o.c;
-}
-}
-
+/* ================= AÇÕES ================= */
 function copy(id){
-navigator.clipboard.writeText(document.getElementById(id).innerText);
+  const text = (document.getElementById(id).innerText || "").trim();
+  if(!text || text === "—") { showToast("Nada para copiar"); return; }
+
+  navigator.clipboard.writeText(text)
+    .then(()=> showToast("Copiado ✅"))
+    .catch(()=> showToast("Não foi possível copiar"));
 }
 
-function closeModal(){welcome.style.display="none";}
+function clearAll(){
+  input.value = "";
+  lastTextProcessed = "";
+  // não zera produto/objeção por regra de UX? Aqui é ação explícita do usuário,
+  // então manteremos comportamento simples: limpa e reseta visual.
+  lastProduct = null;
+  lastObjection = null;
+  lastObjectionKey = "";
 
-// ================= MICROFONE =================
-let recognition;
+  prodNameEl.textContent = "Produto não identificado";
+  prodInfoEl.innerHTML = "";
+  prodChip.textContent = "—";
+  objChip.textContent = "Objeção: —";
+
+  r1.textContent = "—";
+  r2.textContent = "—";
+  r3.textContent = "—";
+
+  animateUpdate(document.getElementById("inputCard"));
+}
+
+function closeModal(){
+  document.getElementById("welcome").style.display = "none";
+}
+
+/* ================= MICROFONE (manual, sem escuta infinita) ================= */
+let recognition = null;
+let listening = false;
+
+function toggleListening(){
+  if(listening){
+    stopListening();
+    return;
+  }
+  startListening();
+}
+
 function startListening(){
-if(!('webkitSpeechRecognition' in window)){
-alert("Seu navegador não suporta reconhecimento de voz.");
-return;
+  if(!('webkitSpeechRecognition' in window)){
+    alert("Seu navegador não suporta reconhecimento de voz.");
+    return;
+  }
+
+  recognition = new webkitSpeechRecognition();
+  recognition.lang = "pt-BR";
+  recognition.continuous = false;      // não vira escuta infinita
+  recognition.interimResults = false;
+
+  recognition.onstart = () => {
+    listening = true;
+    micDot.classList.add("on");
+    micLabel.textContent = "Microfone: ouvindo";
+    micBtn.textContent = "⏹️ Parar microfone";
+    micBtn.classList.add("danger");
+    micBtn.classList.remove("primary");
+  };
+
+  recognition.onend = () => {
+    listening = false;
+    micDot.classList.remove("on");
+    micLabel.textContent = "Microfone: desligado";
+    micBtn.textContent = "🎙️ Ouvir microfone";
+    micBtn.classList.remove("danger");
+    micBtn.classList.add("primary");
+  };
+
+  recognition.onerror = () => {
+    // mantém manual e simples
+    listening = false;
+  };
+
+  recognition.onresult = (e) => {
+    const transcript = e.results?.[0]?.[0]?.transcript || "";
+    if(transcript){
+      input.value = (input.value ? (input.value + " ") : "") + transcript;
+      processText();
+      animateUpdate(document.getElementById("inputCard"));
+    }
+  };
+
+  recognition.start();
 }
-recognition=new webkitSpeechRecognition();
-recognition.lang="pt-BR";
-recognition.continuous=false;
-recognition.interimResults=false;
-recognition.onresult=e=>{
-input.value+=" "+e.results[0][0].transcript;
-processText();
-};
-recognition.start();
+
+function stopListening(){
+  try{
+    recognition && recognition.stop();
+  }catch(e){}
 }
+
+/* ================= UTIL ================= */
+function escapeHtml(str){
+  return String(str)
+    .replaceAll("&","&amp;")
+    .replaceAll("<","&lt;")
+    .replaceAll(">","&gt;")
+    .replaceAll('"',"&quot;")
+    .replaceAll("'","&#039;");
+}
+
+/* ================= EVENTOS ================= */
+input.addEventListener("input", () => {
+  processText();
+});
+
+// Atalho: Ctrl+K = Limpar
+window.addEventListener("keydown", (e) => {
+  const isMac = navigator.platform.toUpperCase().includes("MAC");
+  const ctrlOrCmd = isMac ? e.metaKey : e.ctrlKey;
+  if(ctrlOrCmd && (e.key.toLowerCase() === "k")){
+    e.preventDefault();
+    clearAll();
+  }
+});
 </script>
 
 </body>

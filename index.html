@@ -6,6 +6,9 @@
 <title>COPILOTO — Assistente de Objeções em Tempo Real</title>
 
 <style>
+/* ======================================================
+   DESIGN SYSTEM — SaaS MODERNO
+====================================================== */
 :root{
   --bg:#f6f7fb;
   --panel:#ffffff;
@@ -22,20 +25,21 @@
   --bad:#ef4444;
 
   --radius:18px;
+  --radius-lg:22px;
 }
 
-/* ================= BASE ================= */
 *{box-sizing:border-box}
+html,body{height:100%}
 body{
   margin:0;
-  font-family: Inter, system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+  font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;
   background:var(--bg);
   color:var(--text);
 }
 
-h1,h2,h3,h4{margin:0}
-
-/* ================= HEADER ================= */
+/* ======================================================
+   HEADER
+====================================================== */
 header{
   position:sticky;
   top:0;
@@ -43,7 +47,6 @@ header{
   background:#fff;
   border-bottom:1px solid var(--border);
 }
-
 .topbar{
   max-width:1200px;
   margin:auto;
@@ -51,10 +54,10 @@ header{
   display:flex;
   justify-content:space-between;
   align-items:center;
-  gap:12px;
+  gap:14px;
 }
-
 .brand h1{
+  margin:0;
   font-size:20px;
   font-weight:900;
 }
@@ -62,33 +65,49 @@ header{
   font-size:13px;
   color:var(--muted);
 }
+.statusline{
+  display:flex;
+  gap:10px;
+  align-items:center;
+  flex-wrap:wrap;
+}
+.pill{
+  padding:8px 12px;
+  font-size:12px;
+  border-radius:999px;
+  border:1px solid var(--border);
+  background:#fff;
+  font-weight:700;
+}
+.pill.good{background:rgba(22,163,74,.12);border-color:rgba(22,163,74,.3);color:#065f46}
 
-/* ================= GRID ================= */
+/* ======================================================
+   LAYOUT
+====================================================== */
 main{
   max-width:1200px;
   margin:auto;
   padding:18px;
 }
-
 .grid{
   display:grid;
   grid-template-columns:320px 1fr 420px;
   gap:18px;
 }
-
 @media(max-width:980px){
   .grid{grid-template-columns:1fr}
 }
 
-/* ================= CARDS ================= */
+/* ======================================================
+   CARDS
+====================================================== */
 .card{
   background:#fff;
-  border-radius:var(--radius);
   border:1px solid var(--border);
+  border-radius:var(--radius);
   box-shadow:0 12px 28px rgba(0,0,0,.06);
   overflow:hidden;
 }
-
 .card .head{
   padding:16px;
   border-bottom:1px solid var(--border);
@@ -97,32 +116,30 @@ main{
   align-items:flex-start;
   gap:10px;
 }
-
-.card .body{
-  padding:16px;
-}
-
+.card .body{padding:16px}
 .subtitle{
+  margin-top:4px;
   font-size:13px;
   color:var(--muted);
   line-height:1.4;
 }
 
-/* ================= PRODUTO ================= */
+/* ======================================================
+   PRODUTO
+====================================================== */
 .productName{
   font-size:22px;
   font-weight:900;
 }
-
-.infoList{
-  padding-left:18px;
-}
+.infoList{padding-left:18px}
 .infoList li{
   font-size:15px;
   margin:6px 0;
 }
 
-/* ================= INPUT ================= */
+/* ======================================================
+   INPUT
+====================================================== */
 textarea{
   width:100%;
   min-height:220px;
@@ -132,14 +149,15 @@ textarea{
   border-radius:16px;
   border:1px solid var(--border);
 }
-
 textarea:focus{
   outline:none;
   border-color:var(--primary);
   box-shadow:0 0 0 5px var(--ring);
 }
 
-/* ================= BOTÕES ================= */
+/* ======================================================
+   BOTÕES
+====================================================== */
 button{
   padding:14px 18px;
   font-size:15px;
@@ -149,43 +167,37 @@ button{
   background:#fff;
   cursor:pointer;
 }
-
 .primary{
   background:linear-gradient(180deg,var(--primary),var(--primary2));
   color:#fff;
   border:none;
 }
-
 .danger{
   background:rgba(239,68,68,.12);
   border-color:rgba(239,68,68,.3);
   color:#7f1d1d;
 }
-
-/* ================= BADGE ATUALIZADO ================= */
-.updated-badge{
-  display:none;
-  font-size:13px;
-  font-weight:900;
-  padding:6px 12px;
-  border-radius:999px;
-  background:rgba(76,91,212,.15);
+.ghost{
+  background:rgba(76,91,212,.08);
+  border-color:rgba(76,91,212,.25);
   color:#1e293b;
 }
-.updated-badge.show{display:inline-flex}
 
-/* ================= RESPOSTAS ================= */
+/* ======================================================
+   RESPOSTAS
+====================================================== */
 .responseText{
   font-size:17px;
   line-height:1.65;
   white-space:pre-wrap;
 }
 
-/* ================= EFEITOS FORTES ================= */
+/* ======================================================
+   EFEITOS FORTES DE ATUALIZAÇÃO
+====================================================== */
 .fxUpdate{
   animation:updatePulse .85s ease-out;
 }
-
 @keyframes updatePulse{
   0%{
     box-shadow:0 0 0 0 rgba(76,91,212,0);
@@ -193,9 +205,9 @@ button{
     transform:translateY(0);
   }
   35%{
-    box-shadow:0 0 0 10px rgba(76,91,212,.25);
-    background:rgba(76,91,212,.04);
-    transform:translateY(-3px);
+    box-shadow:0 0 0 12px rgba(76,91,212,.28);
+    background:rgba(76,91,212,.05);
+    transform:translateY(-4px);
   }
   100%{
     box-shadow:0 0 0 0 rgba(76,91,212,0);
@@ -204,7 +216,9 @@ button{
   }
 }
 
-/* ================= LOGIN ================= */
+/* ======================================================
+   LOGIN
+====================================================== */
 .overlay{
   position:fixed;
   inset:0;
@@ -214,32 +228,29 @@ button{
   justify-content:center;
   z-index:50;
 }
-
 .modal{
   background:#fff;
   width:min(460px,100%);
   border-radius:22px;
-  padding:24px;
+  padding:26px;
 }
-
 .modal h1{
+  margin:0;
   font-size:24px;
   font-weight:900;
 }
-
-.formGrid{
-  display:grid;
-  gap:14px;
-}
-
 input{
+  width:100%;
   padding:14px;
   font-size:16px;
   border-radius:14px;
   border:1px solid var(--border);
+  margin-top:10px;
 }
 
-/* ================= MOBILE ================= */
+/* ======================================================
+   MOBILE
+====================================================== */
 @media(max-width:600px){
   .productName{font-size:24px}
   .responseText{font-size:18px}
@@ -256,29 +267,183 @@ input{
     <h1>Entrar no COPILOTO</h1>
     <p class="subtitle">Acesso restrito</p>
 
-    <div class="formGrid" style="margin-top:20px">
-      <input id="loginUser" type="text" placeholder="Login">
-      <input id="loginPass" type="password" placeholder="Senha">
-    </div>
+    <input id="loginUser" type="text" placeholder="Login">
+    <input id="loginPass" type="password" placeholder="Senha">
 
-    <div id="loginError" class="subtitle" style="color:#b91c1c;display:none;margin-top:10px">
+    <label style="display:flex;align-items:center;gap:8px;margin-top:12px;font-size:14px">
+      <input type="checkbox" id="rememberMe">
+      Salvar neste dispositivo
+    </label>
+
+    <p id="loginError" class="subtitle" style="color:#b91c1c;display:none;margin-top:10px">
       Login ou senha inválidos
-    </div>
+    </p>
 
-    <button class="primary" style="margin-top:20px;width:100%" onclick="doLogin()">Entrar</button>
+    <button class="primary" style="margin-top:18px;width:100%" onclick="doLogin()">Entrar</button>
   </div>
 </div>
 
-<!-- RESTANTE DO HTML E JS CONTINUA IGUAL AO SEU,
-APENAS OS EFEITOS VISUAIS E FONTES FORAM FORTALECIDOS -->
+<header>
+  <div class="topbar">
+    <div class="brand">
+      <h1>COPILOTO</h1>
+      <span>Assistente de Objeções em Tempo Real</span>
+    </div>
+    <div class="statusline">
+      <span class="pill" id="rolePill">Acesso: —</span>
+    </div>
+  </div>
+</header>
+
+<main>
+<div class="grid">
+
+<!-- PRODUTO -->
+<aside class="card" id="productCard">
+  <div class="head">
+    <div>
+      <h3>Produto ativo</h3>
+      <p class="subtitle">Detectado por palavras e informações</p>
+    </div>
+  </div>
+  <div class="body">
+    <div class="productName" id="prodName">Produto não identificado</div>
+    <ul class="infoList" id="prodInfo"></ul>
+  </div>
+</aside>
+
+<!-- INPUT -->
+<section class="card" id="inputCard">
+  <div class="head">
+    <div>
+      <h3>Fala do cliente</h3>
+      <p class="subtitle">Digite ou dite — limpa automaticamente</p>
+    </div>
+  </div>
+  <div class="body">
+    <textarea id="input" placeholder="Digite ou dite o que o cliente disse..."></textarea>
+    <div style="display:flex;gap:10px;margin-top:12px;flex-wrap:wrap">
+      <button class="ghost" onclick="toggleListening()">🎙️ Microfone</button>
+      <button class="danger" onclick="clearAll()">Limpar</button>
+    </div>
+  </div>
+</section>
+
+<!-- RESPOSTAS -->
+<section class="card" id="responsesCard">
+  <div class="head">
+    <h3>Respostas</h3>
+  </div>
+  <div class="body">
+    <p id="r1" class="responseText">—</p>
+    <p id="r2" class="responseText">—</p>
+    <p id="r3" class="responseText">—</p>
+  </div>
+</section>
+
+</div>
+</main>
 
 <script>
-/* ⚠️ TODA A SUA LÓGICA DE LOGIN, PRODUTOS, OBJEÇÕES,
-MICROFONE, AUTO-LIMPAR, ADMIN, STORAGE
-PERMANECE EXATAMENTE IGUAL ⚠️ */
+/* ======================================================
+   BASE ORIGINAL — PERGUNTAS E RESPOSTAS
+====================================================== */
+const DEFAULT_BASE = {
+  objections: [
+    {
+      keys:["caro","muito caro","preço alto","valor alto"],
+      a:"Entendo totalmente. Só pra eu te orientar certo: quando você diz caro, é pelo valor total ou pela parcela?",
+      b:"Caro comparado com qual opção? Se for condição, eu consigo ajustar.",
+      c:"Se eu encaixar pra caber no seu bolso, você avança agora?"
+    },
+    {
+      keys:["vou pensar","analisar","ver depois"],
+      a:"Perfeito, pensar é o certo. O que você quer analisar primeiro?",
+      b:"O que precisa acontecer pra virar um sim?",
+      c:"Se nada mudar, sua resposta tende mais pra sim ou não?"
+    }
+  ]
+};
 
-/* ÚNICA MUDANÇA DE SEGURANÇA:
-- REMOVIDO QUALQUER TEXTO VISÍVEL COM LOGIN/SENHA */
+/* ======================================================
+   LOGIN
+====================================================== */
+const ADMIN={login:"edson",pass:"2026"};
+const LS_SESSION="copiloto_session";
+let currentUser=null;
+
+function doLogin(){
+  const u=loginUser.value.trim();
+  const p=loginPass.value.trim();
+  loginError.style.display="none";
+
+  if(u===ADMIN.login && p===ADMIN.pass){
+    currentUser={login:u};
+    const store=rememberMe.checked?localStorage:sessionStorage;
+    store.setItem(LS_SESSION,JSON.stringify(currentUser));
+    afterLogin();
+    return;
+  }
+  loginError.style.display="block";
+}
+
+function afterLogin(){
+  loginOverlay.style.display="none";
+  rolePill.textContent="Acesso: "+currentUser.login;
+}
+
+(function init(){
+  const s=localStorage.getItem(LS_SESSION)||sessionStorage.getItem(LS_SESSION);
+  if(s){
+    currentUser=JSON.parse(s);
+    afterLogin();
+  }
+})();
+
+/* ======================================================
+   CORE SIMPLIFICADO (MATCH)
+====================================================== */
+const input=document.getElementById("input");
+const r1=document.getElementById("r1");
+const r2=document.getElementById("r2");
+const r3=document.getElementById("r3");
+const responsesCard=document.getElementById("responsesCard");
+
+input.addEventListener("input",()=>{
+  const t=input.value.toLowerCase();
+  const o=DEFAULT_BASE.objections.find(o=>o.keys.some(k=>t.includes(k)));
+  if(o){
+    r1.textContent=o.a;
+    r2.textContent=o.b;
+    r3.textContent=o.c;
+    responsesCard.classList.add("fxUpdate");
+    setTimeout(()=>responsesCard.classList.remove("fxUpdate"),900);
+  }
+  setTimeout(()=>input.value="",900);
+});
+
+function clearAll(){
+  input.value="";
+  r1.textContent=r2.textContent=r3.textContent="—";
+}
+
+/* ======================================================
+   MICROFONE MANUAL
+====================================================== */
+let rec=null;
+function toggleListening(){
+  if(!('webkitSpeechRecognition'in window)){
+    alert("Navegador não suporta microfone");
+    return;
+  }
+  rec=new webkitSpeechRecognition();
+  rec.lang="pt-BR";
+  rec.onresult=e=>{
+    input.value=e.results[0][0].transcript;
+    input.dispatchEvent(new Event("input"));
+  };
+  rec.start();
+}
 </script>
 
 </body>

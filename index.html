@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<title>Copiloto — Assistente de Objeções em Tempo Real</title>
+
+<style>
+*{box-sizing:border-box;font-family:Inter,Arial,sans-serif}
+body{margin:0;background:#f7f8fa;color:#1f2933}
+header{background:#fff;padding:16px 32px;border-bottom:1px solid #e5e7eb}
+header h1{margin:0;font-size:22px}
+header span{font-size:13px;color:#6b7280}
+.container{display:grid;grid-template-columns:260px 1fr 360px;gap:20px;padding:24px}
+.card{background:#fff;padding:14px;border-radius:6px;margin-bottom:12px}
+.product-card h3{margin:0 0 8px}
+.product-card ul{padding-left:18px;margin:0}
+textarea{width:100%;height:180px;padding:12px;font-size:14px}
+button{padding:6px 10px;cursor:pointer}
+.responses h4{margin:0 0 6px}
+.mic{margin-top:8px}
+.modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,.4);display:flex;align-items:center;justify-content:center;z-index:10}
+.modal{background:#fff;padding:24px;width:420px;border-radius:8px}
+.modal-actions{display:flex;justify-content:flex-end;gap:10px;margin-top:20px}
+.primary{background:#4c5bd4;color:#fff;border:none}
+</style>
+</head>
+
+<body>
+
+<!-- MODAL -->
+<div id="welcome" class="modal-overlay">
+  <div class="modal">
+    <h1>COPILOTO</h1>
+    <h3>Assistente de Objeções em Tempo Real</h3>
+    <p>
+      Copiloto é um software que ajuda vendedores a lembrar informações do produto
+      e quebrar objeções em tempo real, com respostas curtas e humanas.
+    </p>
+    <div class="modal-actions">
+      <button onclick="closeModal()">Fechar</button>
+      <button class="primary" onclick="closeModal()">Começar</button>
+    </div>
+  </div>
+</div>
+
+<header>
+<h1>COPILOTO</h1>
+<span>Assistente de Objeções em Tempo Real</span>
+</header>
+
+<main class="container">
+
+<!-- PRODUTO -->
+<aside class="card product-card">
+<h3 id="prod-name">Produto não identificado</h3>
+<ul id="prod-info"></ul>
+</aside>
+
+<!-- OBJEÇÃO -->
+<section>
+<textarea id="input" placeholder="Digite ou dite o que o cliente disse..." oninput="processText()"></textarea>
+<button class="mic" onclick="startListening()">🎙️ Ouvir microfone</button>
+</section>
+
+<!-- RESPOSTAS -->
+<section class="responses">
+<div class="card">
+<h4>Quebra Leve</h4>
+<p id="r1">—</p>
+<button onclick="copy('r1')">Copiar</button>
+</div>
+
+<div class="card">
+<h4>Quebra Média</h4>
+<p id="r2">—</p>
+<button onclick="copy('r2')">Copiar</button>
+</div>
+
+<div class="card">
+<h4>Quebra Agressiva</h4>
+<p id="r3">—</p>
+<button onclick="copy('r3')">Copiar</button>
+</div>
+</section>
+
+</main>
+
+<script>
+// ================= PRODUTOS =================
+const products=[
+{name:"MORADA BRASIL",keys:["morada"],info:["Loteamento residencial","Parcelas a partir de R$ 713","Entrada: não","Av. André Maggi"]},
+{name:"CASA PRONTA – SINOP",keys:["casa","mcmv"],info:["Casa 2 quartos","Parcelas a partir de R$ 699","Entrada: R$ 1.500","Financiamento Caixa"]},
+{name:"CHÁCARAS – SANTA CARMEM",keys:["chacara","chácara"],info:["1.800 m²","Parcelas a partir de R$ 695","Entrada: não","6 km de Santa Carmem"]},
+{name:"GRAN CANÁRIO",keys:["canario","gran"],info:["Loteamento urbano","Parcelas a partir de R$ 595","Entrada: sim / não","MT-140"]},
+{name:"CEDROS JARDINS",keys:["cedros","búfalo"],info:["Lotes 200 m²","Parcelas a partir de R$ 753","Entrada: não","Posto Búfalo"]}
+];
+
+// ================= 50 OBJEÇÕES =================
+const objections=[
+{keys:["caro"],a:"Entendo, é normal analisar o valor. O que mais pesou pra você?",b:"Você está comparando com qual opção?",c:"Se a parcela couber, você avança?"},
+{keys:["orçamento"],a:"Faz sentido cuidar do orçamento. Qual valor seria confortável?",b:"O problema é a parcela ou o prazo?",c:"Ajustando isso, você seguiria?"},
+{keys:["pensar"],a:"Claro, pensar é importante. O que você quer avaliar?",b:"Isso é dúvida ou timing?",c:"Se nada mudar, sua resposta é sim ou não?"},
+{keys:["depois"],a:"Tudo bem. Quando seria um bom momento?",b:"O que precisa acontecer pra você voltar?",c:"Se acabar antes, tudo bem pra você?"},
+{keys:["esposa","marido","familia"],a:"Faz sentido alinhar. O que ela vai perguntar?",b:"Quer ajuda pra explicar?",c:"Se ela concordar, você segue?"},
+{keys:["comparando"],a:"Normal comparar. O que você está comparando?",b:"Preço ou condição?",c:"Se aqui fizer mais sentido, você decide?"},
+{keys:["medo","receio"],a:"Entendo. Medo de quê exatamente?",b:"Isso vem de experiência passada?",c:"Se resolvermos isso, você avança?"},
+{keys:["confio"],a:"Obrigado pela sinceridade. O que falta pra confiar?",b:"Confiança pra você vem de quê?",c:"Se resolver agora, você decide?"},
+{keys:["não conheço"],a:"Normal. O que te traria mais segurança?",b:"Localização ou documentação?",c:"Se eu mostrar agora, resolve?"},
+{keys:["tempo"],a:"Sem problema. Quando seria ideal?",b:"O que muda com mais tempo?",c:"Se não mudar, você perde interesse?"},
+{keys:["juros"],a:"Entendo. Você prefere menos prazo ou menor parcela?",b:"Você olha mais total ou mensal?",c:"Se fizer sentido, você segue?"},
+{keys:["apertar"],a:"Certo. O que é apertar pra você?",b:"Qual valor mensal é tranquilo?",c:"Se não apertar, você fecha?"},
+{keys:["esperar"],a:"Esperar por quê exatamente?",b:"Tempo ou condição?",c:"Se não mudar, você perde a oportunidade?"},
+{keys:["decidir"],a:"Claro. O que falta pra decidir?",b:"Qual ponto pesa mais?",c:"Se resolver agora, você decide?"},
+{keys:["contrato"],a:"Entendo. Qual cláusula te preocupa?",b:"Quer que eu explique essa parte?",c:"Se ficar claro, você avança?"}
+];
+
+// ================= FUNÇÕES =================
+function processText(){
+const t=input.value.toLowerCase();
+
+// produto
+let p=products.find(x=>x.keys.some(k=>t.includes(k)));
+if(p){
+document.getElementById("prod-name").innerText=p.name;
+document.getElementById("prod-info").innerHTML=p.info.map(i=>"<li>"+i+"</li>").join("");
+}
+
+// objeção
+let o=objections.find(x=>x.keys.some(k=>t.includes(k)));
+if(o){
+r1.innerText=o.a;
+r2.innerText=o.b;
+r3.innerText=o.c;
+}
+}
+
+function copy(id){
+navigator.clipboard.writeText(document.getElementById(id).innerText);
+}
+
+function closeModal(){welcome.style.display="none";}
+
+// ================= MICROFONE =================
+let recognition;
+function startListening(){
+if(!('webkitSpeechRecognition' in window)){
+alert("Seu navegador não suporta reconhecimento de voz.");
+return;
+}
+recognition=new webkitSpeechRecognition();
+recognition.lang="pt-BR";
+recognition.continuous=false;
+recognition.interimResults=false;
+recognition.onresult=e=>{
+input.value+=" "+e.results[0][0].transcript;
+processText();
+};
+recognition.start();
+}
+</script>
+
+</body>
+</html>

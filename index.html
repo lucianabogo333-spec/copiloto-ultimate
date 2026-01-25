@@ -1,8 +1,7 @@
 <!DOCTYPE html>
-<html lang="pt-BR">
-<head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1" />
+<html lang="pt-BR"><head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
 <title>COPILOTO — Assistente de Objeções em Tempo Real</title>
 
 <style>
@@ -550,7 +549,7 @@
 </div>
 
 <!-- LOGIN -->
-<div id="loginOverlay" class="overlay">
+<div id="loginOverlay" class="overlay" style="display: none;">
   <div class="modal">
     <div class="mHead">
       <h1>Entrar no COPILOTO</h1>
@@ -560,16 +559,16 @@
       <div class="formGrid two">
         <div>
           <label>Login</label>
-          <input id="loginUser" type="text" placeholder="ex: edson" autocomplete="username" />
+          <input id="loginUser" type="text" placeholder="ex: edson" autocomplete="username">
         </div>
         <div>
           <label>Senha</label>
-          <input id="loginPass" type="password" placeholder="••••••" autocomplete="current-password" />
+          <input id="loginPass" type="password" placeholder="••••••" autocomplete="current-password">
         </div>
       </div>
       <div class="row" style="margin-top:12px; justify-content:space-between">
         <label style="display:flex; align-items:center; gap:10px; font-weight:900; color:#111827">
-          <input type="checkbox" id="rememberMe" style="width:18px; height:18px; accent-color: var(--primary)" />
+          <input type="checkbox" id="rememberMe" style="width:18px; height:18px; accent-color: var(--primary)">
           Salvar neste dispositivo
         </label>
         <span class="chip" title="Dica">Sem credenciais visíveis</span>
@@ -598,7 +597,7 @@
       </div>
 
       <div class="pill" title="Sessão / acesso">
-        <span id="rolePill">Acesso: —</span>
+        <span id="rolePill">Acesso: Admin (edson)</span>
       </div>
 
       <div class="pill" title="Atalho para limpar">
@@ -606,7 +605,7 @@
         <span style="color:var(--muted)">Limpar</span>
       </div>
 
-      <button id="adminBtn" class="ghost" style="display:none" onclick="openAdmin()">⚙️ Admin</button>
+      <button id="adminBtn" class="ghost" style="display: inline-flex;" onclick="openAdmin()">⚙️ Admin</button>
       <button class="danger" onclick="logout()">Sair</button>
     </div>
   </div>
@@ -722,7 +721,7 @@
 </main>
 
 <!-- ADMIN DRAWER -->
-<div id="adminDrawer" class="drawer">
+<div id="adminDrawer" class="drawer show">
   <div class="backdrop" onclick="closeAdmin()"></div>
   <div class="panel">
     <div class="panelHeader">
@@ -734,15 +733,15 @@
     </div>
 
     <div class="tabs">
-      <button class="tabBtn active" id="tabProducts" onclick="setTab('products')">Produtos</button>
+      <button class="tabBtn" id="tabProducts" onclick="setTab('products')">Produtos</button>
       <button class="tabBtn" id="tabObjections" onclick="setTab('objections')">Objeções</button>
       <button class="tabBtn" id="tabUsers" onclick="setTab('users')">Usuários</button>
-      <button class="tabBtn" id="tabExport" onclick="setTab('export')">Exportar/Importar</button>
+      <button class="tabBtn active" id="tabExport" onclick="setTab('export')">Exportar/Importar</button>
     </div>
 
     <div class="panelBody">
       <!-- PRODUCTS TAB -->
-      <div id="viewProducts">
+      <div id="viewProducts" style="display: none;">
         <div class="card">
           <div class="head">
             <div class="title">
@@ -755,11 +754,11 @@
             <div class="formGrid">
               <div>
                 <label>Nome do produto</label>
-                <input id="pName" type="text" placeholder="ex: CEDROS JARDINS" />
+                <input id="pName" type="text" placeholder="ex: CEDROS JARDINS">
               </div>
               <div>
                 <label>Palavras-chave (separe por vírgula)</label>
-                <input id="pKeys" type="text" placeholder="ex: cedros, búfalo, posto búfalo" />
+                <input id="pKeys" type="text" placeholder="ex: cedros, búfalo, posto búfalo">
               </div>
               <div>
                 <label>Informações do produto (1 por linha)</label>
@@ -785,10 +784,60 @@ Av. André Maggi"></textarea>
               <h3>Produtos cadastrados</h3>
               <p class="subtitle">Clique em “Editar” para carregar no formulário.</p>
             </div>
-            <span class="chip" id="countProducts">0</span>
+            <span class="chip" id="countProducts">5</span>
           </div>
           <div class="body">
-            <div class="list" id="productsList"></div>
+            <div class="list" id="productsList"><div class="item">
+      <div style="min-width:0">
+        <h5>MORADA BRASIL</h5>
+        <p><strong>Keys:</strong> morada</p>
+        <p><strong>Info:</strong> Loteamento residencial • Parcelas a partir de R$ 713 • Entrada: não • Av. André Maggi</p>
+      </div>
+      <div class="actions">
+        <button class="miniBtn" onclick="editProduct(0)">Editar</button>
+        <button class="miniBtn danger" onclick="removeProduct(0)">Remover</button>
+      </div>
+    </div><div class="item">
+      <div style="min-width:0">
+        <h5>CASA PRONTA – SINOP</h5>
+        <p><strong>Keys:</strong> casa, mcmv</p>
+        <p><strong>Info:</strong> Casa 2 quartos • Parcelas a partir de R$ 699 • Entrada: R$ 1.500 • Financiamento Caixa</p>
+      </div>
+      <div class="actions">
+        <button class="miniBtn" onclick="editProduct(1)">Editar</button>
+        <button class="miniBtn danger" onclick="removeProduct(1)">Remover</button>
+      </div>
+    </div><div class="item">
+      <div style="min-width:0">
+        <h5>CHÁCARAS – SANTA CARMEM</h5>
+        <p><strong>Keys:</strong> chacara, chácara</p>
+        <p><strong>Info:</strong> 1.800 m² • Parcelas a partir de R$ 695 • Entrada: não • 6 km de Santa Carmem</p>
+      </div>
+      <div class="actions">
+        <button class="miniBtn" onclick="editProduct(2)">Editar</button>
+        <button class="miniBtn danger" onclick="removeProduct(2)">Remover</button>
+      </div>
+    </div><div class="item">
+      <div style="min-width:0">
+        <h5>GRAN CANÁRIO</h5>
+        <p><strong>Keys:</strong> canario, gran</p>
+        <p><strong>Info:</strong> Loteamento urbano • Parcelas a partir de R$ 595 • Entrada: sim / não • MT-140</p>
+      </div>
+      <div class="actions">
+        <button class="miniBtn" onclick="editProduct(3)">Editar</button>
+        <button class="miniBtn danger" onclick="removeProduct(3)">Remover</button>
+      </div>
+    </div><div class="item">
+      <div style="min-width:0">
+        <h5>CEDROS JARDINS</h5>
+        <p><strong>Keys:</strong> cedros, búfalo</p>
+        <p><strong>Info:</strong> Lotes 200 m² • Parcelas a partir de R$ 753 • Entrada: não • Posto Búfalo</p>
+      </div>
+      <div class="actions">
+        <button class="miniBtn" onclick="editProduct(4)">Editar</button>
+        <button class="miniBtn danger" onclick="removeProduct(4)">Remover</button>
+      </div>
+    </div></div>
           </div>
         </div>
       </div>
@@ -807,7 +856,7 @@ Av. André Maggi"></textarea>
             <div class="formGrid">
               <div>
                 <label>Palavras-chave da objeção (vírgula)</label>
-                <input id="oKeys" type="text" placeholder="ex: caro, preço alto, muito caro" />
+                <input id="oKeys" type="text" placeholder="ex: caro, preço alto, muito caro">
               </div>
 
               <div class="formGrid three">
@@ -840,16 +889,93 @@ Av. André Maggi"></textarea>
               <h3>Objeções cadastradas</h3>
               <p class="subtitle">Clique em “Editar” para carregar no formulário.</p>
             </div>
-            <span class="chip" id="countObjections">0</span>
+            <span class="chip" id="countObjections">7</span>
           </div>
           <div class="body">
-            <div class="list" id="objectionsList"></div>
+            <div class="list" id="objectionsList"><div class="item">
+      <div style="min-width:0">
+        <h5>caro, muito caro, valor alto, preço alto</h5>
+        <p><strong>Leve:</strong> Entendo totalmente. Só pra eu te orientar certo: quando você diz caro, é pelo valor total ou pela parcela?</p>
+        <p><strong>Média:</strong> Caro comparado com qual opção? Se for só condição, eu consigo te mostrar o melhor encaixe pro seu bolso.</p>
+        <p><strong>Agressiva:</strong> Se eu ajustar pra caber sem te apertar (entrada/parcela/prazo), você avança agora ou ainda fica em dúvida?</p>
+      </div>
+      <div class="actions">
+        <button class="miniBtn" onclick="editObjection(0)">Editar</button>
+        <button class="miniBtn danger" onclick="removeObjection(0)">Remover</button>
+      </div>
+    </div><div class="item">
+      <div style="min-width:0">
+        <h5>orçamento, sem orçamento, estourado, limite, apertado</h5>
+        <p><strong>Leve:</strong> Faz sentido cuidar do orçamento. Qual faixa mensal fica confortável pra você hoje?</p>
+        <p><strong>Média:</strong> O ponto é a parcela ou o prazo? Se me disser o limite, eu te passo a melhor configuração.</p>
+        <p><strong>Agressiva:</strong> Se eu encaixar dentro do seu limite sem surpresa, você dá o próximo passo ou prefere encerrar?</p>
+      </div>
+      <div class="actions">
+        <button class="miniBtn" onclick="editObjection(1)">Editar</button>
+        <button class="miniBtn danger" onclick="removeObjection(1)">Remover</button>
+      </div>
+    </div><div class="item">
+      <div style="min-width:0">
+        <h5>vou pensar, pensar, analisar, vou analisar, ver depois, vou ver</h5>
+        <p><strong>Leve:</strong> Perfeito, analisar é o certo. O que você quer avaliar primeiro: preço, condição ou localização?</p>
+        <p><strong>Média:</strong> Pra sua análise não virar só “deixar pra depois”: o que precisa acontecer pra virar um sim?</p>
+        <p><strong>Agressiva:</strong> Se nada mudar nas condições, sua resposta tende mais pra sim ou pra não? Só pra eu não te prender aqui.</p>
+      </div>
+      <div class="actions">
+        <button class="miniBtn" onclick="editObjection(2)">Editar</button>
+        <button class="miniBtn danger" onclick="removeObjection(2)">Remover</button>
+      </div>
+    </div><div class="item">
+      <div style="min-width:0">
+        <h5>depois, mais pra frente, não agora, agora não, outro momento, não é o momento</h5>
+        <p><strong>Leve:</strong> Tudo bem. O que faz não ser o momento: grana, prioridade ou insegurança?</p>
+        <p><strong>Média:</strong> Só pra eu te ajudar: quando seria um bom timing? Semana que vem, mês que vem… o que você tem em mente?</p>
+        <p><strong>Agressiva:</strong> Se a condição mudar e ficar pior depois, tudo bem pra você? Ou prefere garantir agora e ir ajustando no caminho?</p>
+      </div>
+      <div class="actions">
+        <button class="miniBtn" onclick="editObjection(3)">Editar</button>
+        <button class="miniBtn danger" onclick="removeObjection(3)">Remover</button>
+      </div>
+    </div><div class="item">
+      <div style="min-width:0">
+        <h5>esposa, marido, familia, família, minha mulher, meu marido</h5>
+        <p><strong>Leve:</strong> Claro, faz sentido alinhar. O que ela(e) costuma perguntar primeiro: parcela, localização ou segurança?</p>
+        <p><strong>Média:</strong> Me diz a dúvida principal dele(a) que eu te mando uma mensagem curta pronta pra você encaminhar.</p>
+        <p><strong>Agressiva:</strong> Se ele(a) disser ok com a condição, você fecha? Porque aí eu te ajudo a conduzir do jeito mais rápido.</p>
+      </div>
+      <div class="actions">
+        <button class="miniBtn" onclick="editObjection(4)">Editar</button>
+        <button class="miniBtn danger" onclick="removeObjection(4)">Remover</button>
+      </div>
+    </div><div class="item">
+      <div style="min-width:0">
+        <h5>comparar, comparando, vou ver outro, outros, mais barato em outro lugar, tem outro</h5>
+        <p><strong>Leve:</strong> Normal comparar. Você tá comparando mais pelo preço ou pela localização?</p>
+        <p><strong>Média:</strong> Pra comparar certo, olha 3 pontos: documentação, acesso/local e potencial de valorização. Qual deles te chama mais atenç…</p>
+        <p><strong>Agressiva:</strong> Se eu te provar que aqui faz mais sentido no conjunto (não só no preço), você decide por aqui?</p>
+      </div>
+      <div class="actions">
+        <button class="miniBtn" onclick="editObjection(5)">Editar</button>
+        <button class="miniBtn danger" onclick="removeObjection(5)">Remover</button>
+      </div>
+    </div><div class="item">
+      <div style="min-width:0">
+        <h5>medo, receio, inseguro, insegurança, não confio, desconfio, golpe</h5>
+        <p><strong>Leve:</strong> Justíssimo. Medo de quê exatamente: documentação, localização ou experiência passada?</p>
+        <p><strong>Média:</strong> Pra você ficar tranquilo: eu te mostro o básico que valida tudo (mapa/registro/condição por escrito). O que você quer ve…</p>
+        <p><strong>Agressiva:</strong> Você prefere validar por documento agora ou por visita? Se a validação ficar ok, você avança?</p>
+      </div>
+      <div class="actions">
+        <button class="miniBtn" onclick="editObjection(6)">Editar</button>
+        <button class="miniBtn danger" onclick="removeObjection(6)">Remover</button>
+      </div>
+    </div></div>
           </div>
         </div>
       </div>
 
       <!-- USERS TAB -->
-      <div id="viewUsers" style="display:none">
+      <div id="viewUsers" style="display: none;">
         <div class="notice">
           <strong>Administrador fixo:</strong> conta de administrador do sistema (não removível).
           <br>Usuários abaixo só podem <strong>usar</strong> (não editam).
@@ -867,11 +993,11 @@ Av. André Maggi"></textarea>
             <div class="formGrid two">
               <div>
                 <label>Login</label>
-                <input id="uLogin" type="text" placeholder="ex: vendedor1" />
+                <input id="uLogin" type="text" placeholder="ex: vendedor1">
               </div>
               <div>
                 <label>Senha</label>
-                <input id="uPass" type="password" placeholder="••••••" />
+                <input id="uPass" type="password" placeholder="••••••">
               </div>
             </div>
 
@@ -888,16 +1014,42 @@ Av. André Maggi"></textarea>
               <h3>Usuários cadastrados</h3>
               <p class="subtitle">Exceto admin, você pode remover/editar.</p>
             </div>
-            <span class="chip" id="countUsers">0</span>
+            <span class="chip" id="countUsers">3</span>
           </div>
           <div class="body">
-            <div class="list" id="usersList"></div>
+            <div class="list" id="usersList"><div class="item">
+    <div style="min-width:0">
+      <h5>Administrador <span class="chip good" style="margin-left:8px">Admin</span></h5>
+      <p>Conta fixa do sistema (pode editar tudo).</p>
+    </div>
+    <div class="actions">
+      <button class="miniBtn" disabled="" title="Admin fixo">Fixado</button>
+    </div>
+  </div><div class="item">
+      <div style="min-width:0">
+        <h5>vendedor <span class="chip" style="margin-left:8px">Usuário</span></h5>
+        <p>Sem acesso ao painel Admin.</p>
+      </div>
+      <div class="actions">
+        <button class="miniBtn" onclick="editUser(0)">Editar</button>
+        <button class="miniBtn danger" onclick="removeUser(0)">Remover</button>
+      </div>
+    </div><div class="item">
+      <div style="min-width:0">
+        <h5>luciana <span class="chip" style="margin-left:8px">Usuário</span></h5>
+        <p>Sem acesso ao painel Admin.</p>
+      </div>
+      <div class="actions">
+        <button class="miniBtn" onclick="editUser(1)">Editar</button>
+        <button class="miniBtn danger" onclick="removeUser(1)">Remover</button>
+      </div>
+    </div></div>
           </div>
         </div>
       </div>
 
       <!-- EXPORT TAB -->
-      <div id="viewExport" style="display:none">
+      <div id="viewExport" style="display: block;">
         <div class="success">
           <strong>Fluxo simples:</strong> Clique em <strong>Código atualizado</strong> → copie o <code>index.html</code> completo → no GitHub abra <code>index.html</code> → Ctrl+A → apagar → colar → salvar.
           <br><span class="muted" style="display:inline-block; margin-top:6px">Obs: esta função já embute a base no <code>DEFAULT_BASE</code> e incrementa a versão local (BUILD_ID) para evitar base antiga presa no <code>localStorage</code>.</span>
@@ -965,7 +1117,7 @@ Av. André Maggi"></textarea>
 <!-- TOAST -->
 <div class="toast" id="toast">
   <span class="mini"></span>
-  <span id="toastText">OK</span>
+  <span id="toastText">Usuário criado</span>
 </div>
 
 <script>
@@ -1132,13 +1284,17 @@ const DEFAULT_BASE = {
     {
       "login": "vendedor",
       "pass": "1234"
+    },
+    {
+      "login": "luciana",
+      "pass": "2023"
     }
   ]
 };
 
 /* ===================== VERSÃO DO ARQUIVO (novo) ===================== */
 /* Essa versão é atualizada automaticamente pelo botão "Código atualizado". */
-const BUILD_ID = "2026-01-25T00:00:00.000Z";
+const BUILD_ID = "2026-01-25T12:43:00.862Z";
 
 /* ===================== STORAGE ===================== */
 /* NOVO: LS_BASE versionado por BUILD_ID para evitar base antiga presa no localStorage */
@@ -2001,5 +2157,6 @@ window.addEventListener("keydown", (e)=>{
 })();
 </script>
 
-</body>
-</html>
+
+
+</body></html>

@@ -40,7 +40,6 @@
       var(--bg);
   }
 
-  /* Header */
   header{
     position:sticky; top:0; z-index:5;
     background:rgba(255,255,255,.86);
@@ -57,6 +56,7 @@
   .brand h1{margin:0; font-size:18px; letter-spacing:.2px}
   .brand span{font-size:12px; color:var(--muted)}
   .statusline{display:flex; align-items:center; gap:10px; flex-wrap:wrap}
+
   .pill{
     display:inline-flex; align-items:center; gap:8px;
     padding:7px 10px;
@@ -80,7 +80,6 @@
     color:#374151;
   }
 
-  /* Layout */
   main{max-width:1200px; margin:0 auto; padding:18px}
   .grid{
     display:grid;
@@ -89,7 +88,6 @@
     align-items:start;
   }
 
-  /* Cards */
   .card{
     background:var(--panel);
     border:1px solid var(--border);
@@ -136,14 +134,12 @@
   }
   .updated-badge.show{display:inline-flex}
 
-  /* Product */
   .productName{font-size:16px; margin:0; line-height:1.2}
   .productMeta{padding:10px 14px 14px; display:flex; flex-direction:column; gap:10px}
   .infoList{margin:0; padding-left:18px}
   .infoList li{margin:6px 0; font-size:13px; line-height:1.35}
   .hint{font-size:12px; color:var(--muted); margin:0}
 
-  /* Input */
   .inputWrap{display:flex; flex-direction:column; gap:10px}
   textarea{
     width:100%;
@@ -203,13 +199,11 @@
     color:#1f2a9a;
   }
 
-  /* Responses */
   .responsesGrid{display:flex; flex-direction:column; gap:12px}
   .responseCard .body{padding-top:12px; display:flex; flex-direction:column; gap:10px}
   .responseText{margin:0; font-size:14px; line-height:1.55; white-space:pre-wrap}
   .responseFooter{display:flex; align-items:center; justify-content:space-between; gap:10px; flex-wrap:wrap}
 
-  /* Effects */
   .fx{position:relative}
   .fxPulse{animation: pulseGlow 650ms ease-out 1}
   .fxSlideFade{animation: slideFadeIn 260ms ease-out 1}
@@ -221,7 +215,6 @@
   }
   .highlightBorder{border-color: rgba(76,91,212,.45) !important}
 
-  /* Toast */
   .toast{
     position: fixed;
     right: 16px;
@@ -242,7 +235,6 @@
   .toast.show{display:flex}
   .toast .mini{width:10px; height:10px; border-radius:999px; background: var(--good)}
 
-  /* Overlays (Welcome/Login/Admin) */
   .overlay{
     position:fixed; inset:0;
     background:rgba(17,24,39,.55);
@@ -264,7 +256,6 @@
   .modal .mBody{padding:14px 18px 18px; color:#374151; line-height:1.55; font-size:14px}
   .modal-actions{display:flex; justify-content:flex-end; gap:10px; padding:0 18px 18px; flex-wrap:wrap}
 
-  /* Admin drawer */
   .drawer{
     position:fixed; inset:0;
     display:none;
@@ -320,7 +311,7 @@
   .formGrid.two{grid-template-columns: 1fr 1fr}
   .formGrid.three{grid-template-columns: 1fr 1fr 1fr}
   label{font-size:12px; color:var(--muted); font-weight:800}
-  input[type="text"], input[type="password"], textarea.smallArea, select{
+  input[type="text"], input[type="password"], textarea.smallArea{
     width:100%;
     padding:10px 12px;
     border-radius:12px;
@@ -331,7 +322,7 @@
     line-height:1.4;
   }
   textarea.smallArea{min-height:92px; resize:vertical}
-  input[type="text"]:focus, input[type="password"]:focus, textarea.smallArea:focus, select:focus{
+  input[type="text"]:focus, input[type="password"]:focus, textarea.smallArea:focus{
     border-color: rgba(76,91,212,.45);
     box-shadow: 0 0 0 4px var(--ring);
   }
@@ -378,7 +369,6 @@
     line-height:1.4;
   }
 
-  /* Mobile */
   @media (max-width: 980px){
     .grid{grid-template-columns: 1fr; gap:14px}
     .area-product{order:1}
@@ -393,7 +383,7 @@
 
 <body>
 
-<!-- WELCOME (aparece 1x por dispositivo) -->
+<!-- WELCOME -->
 <div id="welcome" class="overlay" style="display:none">
   <div class="modal">
     <div class="mHead">
@@ -404,9 +394,7 @@
       Digite (ou dite) a fala do cliente. O sistema identifica <strong>produto</strong> e <strong>objeção</strong> por palavras no texto
       e mostra 3 respostas (leve, média, agressiva).
       <br><br>
-      <strong>Importante:</strong> Microfone é manual (liga/desliga) e não fica em “escuta infinita”.
-      <br><br>
-      Você verá um destaque “Atualizado” quando o produto ou a objeção mudar.
+      <strong>Novo:</strong> a caixa de diálogo limpa automaticamente após processar, para manter leve e sempre atualizando.
     </div>
     <div class="modal-actions">
       <button onclick="closeWelcome()">Entendi</button>
@@ -438,11 +426,8 @@
           <input type="checkbox" id="rememberMe" />
           Lembrar neste dispositivo
         </label>
-        <span class="chip" id="loginHint">Admin: edson / 2026</span>
+        <span class="chip">Admin: edson / 2026</span>
       </div>
-      <p class="muted" style="margin-top:10px">
-        Dica: Se você quer que tudo fique igual em todos os dispositivos, você atualiza este <code>index.html</code> no GitHub com a base exportada.
-      </p>
       <div id="loginError" class="notice" style="display:none; margin-top:10px">
         Login ou senha inválidos.
       </div>
@@ -489,7 +474,7 @@
       <div class="head">
         <div class="title">
           <h2>Produto ativo</h2>
-          <p class="subtitle">Agora identifica por palavras-chave + informações do produto (ex.: “André Maggi”). “Sinop” é ignorado.</p>
+          <p class="subtitle">Identifica por palavras-chave + informações do produto (ex.: “André Maggi”). “Sinop” é ignorado.</p>
         </div>
         <div class="updated-badge" id="prodBadge">✨ Atualizado</div>
       </div>
@@ -498,10 +483,10 @@
         <h3 class="productName" id="prod-name">Produto não identificado</h3>
         <div class="row">
           <span class="chip good" id="prodChip">—</span>
-          <span class="chip" id="prodHintChip">Ex.: morada, cedros, búfalo, andré maggi, mt 140...</span>
+          <span class="chip" style="color:var(--muted)">Entrada limpa automaticamente</span>
         </div>
         <ul class="infoList" id="prod-info"></ul>
-        <p class="hint">Quanto mais específica a informação (ex.: “Av André Maggi”), melhor o reconhecimento.</p>
+        <p class="hint">Dica: infos específicas ajudam a detectar por frases como “André Maggi” mesmo sem citar o nome do produto.</p>
       </div>
     </aside>
 
@@ -509,8 +494,8 @@
     <section class="card area-input fx" id="inputCard">
       <div class="head">
         <div class="title">
-          <h3>Fala do cliente</h3>
-          <p class="subtitle">Digite ou dite. O sistema identifica objeção e sugere respostas (leve / média / agressiva).</p>
+          <h3>Caixa de diálogo</h3>
+          <p class="subtitle">Digite ou dite. Ao processar, o texto é limpo automaticamente para manter desempenho.</p>
         </div>
         <div class="updated-badge" id="objBadge">⚡ Atualizado</div>
       </div>
@@ -597,7 +582,7 @@
     <div class="panelHeader">
       <div>
         <h2>Admin — Gerenciar base (Produtos / Objeções / Usuários)</h2>
-        <p class="subtitle" style="margin-top:4px">Só o admin pode editar. Ao final, exporte a base para atualizar seu GitHub com Ctrl+A → apagar → colar.</p>
+        <p class="subtitle" style="margin-top:4px">Só o admin pode editar. Ao final, exporte a base e substitua este index.html no GitHub.</p>
       </div>
       <button class="danger" onclick="closeAdmin()">Fechar</button>
     </div>
@@ -643,7 +628,7 @@ Av. André Maggi"></textarea>
                 <button class="ghost" onclick="resetProductForm()">Limpar</button>
                 <button class="primary" onclick="saveProduct()">Salvar produto</button>
               </div>
-              <p class="muted">Dica: infos específicas ajudam a detectar por frases como “André Maggi” mesmo sem citar o nome do produto.</p>
+              <p class="muted">Dica: infos específicas detectam frases como “André Maggi” mesmo sem citar o nome do produto.</p>
             </div>
           </div>
         </div>
@@ -748,7 +733,6 @@ Av. André Maggi"></textarea>
               <button class="ghost" onclick="resetUserForm()">Limpar</button>
               <button class="primary" onclick="saveUser()">Salvar usuário</button>
             </div>
-            <p class="muted">Esses usuários ficam na base. Para distribuir para todos, exporte e atualize este mesmo index.html no GitHub.</p>
           </div>
         </div>
 
@@ -769,16 +753,14 @@ Av. André Maggi"></textarea>
       <!-- EXPORT TAB -->
       <div id="viewExport" style="display:none">
         <div class="success">
-          <strong>Melhor fluxo para você:</strong> clique em <em>Exportar base completa</em>, copie o conteúdo,
-          e depois no GitHub você abre o <code>index.html</code> e substitui este mesmo arquivo (Ctrl+A → apagar → colar).
-          Assim todos os dispositivos passam a ver a versão atualizada.
+          <strong>Fluxo simples:</strong> Exportar base completa → copiar → no GitHub abrir <code>index.html</code> → Ctrl+A → apagar → colar → salvar.
         </div>
 
         <div class="card">
           <div class="head">
             <div class="title">
               <h3>Exportar base completa</h3>
-              <p class="subtitle">Produtos + Objeções + Usuários (exceto admin fixo).</p>
+              <p class="subtitle">Produtos + Objeções + Usuários (admin é fixo).</p>
             </div>
             <button class="primary" onclick="exportBase()">Exportar</button>
           </div>
@@ -807,13 +789,12 @@ Av. André Maggi"></textarea>
               <button class="danger" onclick="resetToDefaults()">Restaurar padrão</button>
               <span class="chip" id="importStatus">—</span>
             </div>
-            <p class="muted">Isso altera a base neste dispositivo. Para “virar oficial” e todos terem, você atualiza o index.html no GitHub.</p>
           </div>
         </div>
       </div>
-    </div>
-  </div>
-</div>
+    </div><!-- panelBody -->
+  </div><!-- panel -->
+</div><!-- drawer -->
 
 <!-- TOAST -->
 <div class="toast" id="toast">
@@ -822,9 +803,7 @@ Av. André Maggi"></textarea>
 </div>
 
 <script>
-/* ===================== BASE PADRÃO =====================
-   Você pode substituir aqui no futuro (Ctrl+A → colar) quando exportar uma base completa.
-*/
+/* ===================== BASE PADRÃO ===================== */
 const DEFAULT_BASE = {
   products: [
     {name:"MORADA BRASIL", keys:["morada"], info:["Loteamento residencial","Parcelas a partir de R$ 713","Entrada: não","Av. André Maggi"]},
@@ -868,83 +847,33 @@ const DEFAULT_BASE = {
       a:"Justíssimo. Medo de quê exatamente: documentação, localização ou experiência passada?",
       b:"Pra você ficar tranquilo: eu te mostro o básico que valida tudo (mapa/registro/condição por escrito). O que você quer ver primeiro?",
       c:"Você prefere validar por documento agora ou por visita? Se a validação ficar ok, você avança?"
-    },
-    { keys:["contrato","cláusula","clausula","papelada","documento","documentação"],
-      a:"Perfeito você olhar isso. Qual parte te preocupa mais no contrato: prazos, multas ou garantias?",
-      b:"Se você me disser o ponto, eu explico de forma simples e objetiva (sem juridiquês).",
-      c:"Se eu deixar isso 100% claro agora, você segue com a próxima etapa ou ainda vai travar?"
-    },
-    { keys:["juros","taxa","financiamento","muito juros","juros alto"],
-      a:"Entendo. Você prefere otimizar parcela menor ou reduzir o total pago no fim?",
-      b:"A melhor forma é escolher um equilíbrio: prazo que não te aperte e condição que não encareça. Qual faixa mensal é segura pra você?",
-      c:"Se eu te mostrar o cenário mais inteligente (sem te apertar), você toma decisão hoje?"
-    },
-    { keys:["apertar","não cabe","não dá","pesa","pesado","parcela alta"],
-      a:"Entendi. Qual valor mensal você considera tranquilo sem estresse?",
-      b:"Se a gente ajustar entrada/parcela/prazo pra caber, você fica confortável em avançar?",
-      c:"Se não encaixar no seu bolso, eu te digo na hora. Mas antes: você quer que eu tente encaixar agora?"
-    },
-    { keys:["desconto","abaixa","baixar","melhorar valor","melhora","negociar","negociação"],
-      a:"Posso te ajudar nisso. Você quer melhorar mais a entrada, a parcela ou o valor final?",
-      b:"Geralmente dá pra melhorar com troca: fechar mais rápido ou ajustar formato. O que faz mais sentido pra você?",
-      c:"Se eu te entregar a melhor condição possível hoje, você fecha hoje? Pra eu travar isso pra você."
-    },
-    { keys:["não conheço","nunca ouvi","não sei","não conheço o lugar","não conheço esse"],
-      a:"Normal não conhecer. O que te daria mais segurança agora: localização no mapa ou documentação?",
-      b:"Eu posso te mandar um resumo em 30 segundos: onde fica, como é o acesso e qual o diferencial. Quer?",
-      c:"Se eu te mostrar tudo de forma objetiva e fizer sentido, você avança ou quer só conhecer por curiosidade?"
-    },
-    { keys:["tempo","sem tempo","correria","ocupado","agora não posso"],
-      a:"Tranquilo. Você prefere que eu te mande um resumo rápido por mensagem ou você quer falar em outro horário?",
-      b:"Pra facilitar: qual é melhor — hoje à noite ou amanhã? E você quer focar em parcela ou localização?",
-      c:"Se eu te mandar tudo bem objetivo e você gostar, você me dá um ok pra eu reservar o próximo passo?"
-    },
-    { keys:["esperar","vou esperar","aguardar","vou aguardar","vou juntar"],
-      a:"Entendo. Você vai esperar por grana ou por condição melhor?",
-      b:"Só um ponto: quando você for voltar, pode ter mudado preço/condição. O que você precisa pra considerar agora?",
-      c:"Se eu conseguir manter a melhor condição hoje, você prefere garantir agora ou correr o risco de pagar mais depois?"
-    },
-    { keys:["localização","longe","distante","onde fica","fica onde","bairro ruim"],
-      a:"Boa pergunta. O que é “boa localização” pra você: perto do centro, trabalho ou comércio?",
-      b:"Se eu te mostrar no mapa e explicar o acesso (tempo real), isso já resolve sua dúvida?",
-      c:"Se a localização te agradar e a condição couber, você fecha ou ainda tem outro ponto travando?"
-    },
-    { keys:["visita","ver pessoalmente","ir lá","quero ver"],
-      a:"Perfeito. Ver ajuda muito. Você quer agendar em qual período: manhã, tarde ou fim de tarde?",
-      b:"Pra visita ser objetiva: você quer avaliar terreno/localização ou tirar dúvidas de condição/documentação?",
-      c:"Se você curtir na visita e a condição estiver ok, você já deixa encaminhado pra garantir?"
-    },
-    { keys:["investir","investimento","valorizar","valorização","revender"],
-      a:"Legal. Você pensa em investir pra revender ou pra construir depois?",
-      b:"Valorização costuma vir de 3 fatores: crescimento ao redor, acesso e procura. Qual você quer que eu comprove primeiro?",
-      c:"Se eu te mostrar que o caminho de valorização é claro, você garante agora ou prefere entrar quando já estiver mais caro?"
-    },
-    { keys:["aluguel","pagar aluguel","prefiro alugar"],
-      a:"Entendo. Hoje o aluguel te incomoda mais pelo valor ou por ser um gasto sem retorno?",
-      b:"Se a parcela ficar parecida com o que você já paga, a lógica muda: você prefere pagar aluguel ou construir patrimônio?",
-      c:"Se eu te mostrar uma condição que caiba e faça sentido financeiramente, você encara ou ainda quer continuar no aluguel?"
     }
   ],
   users: [
-    // usuários comuns (admin é fixo no login: edson / 2026)
     { login:"vendedor", pass:"1234" }
   ]
 };
 
 /* ===================== STORAGE ===================== */
-const LS_BASE = "copiloto_base_v4";
+const LS_BASE = "copiloto_base_v5";
 const LS_SESSION = "copiloto_session_v2";
 const LS_WELCOME = "copiloto_welcome_seen_v1";
 
+/* ===================== AUTO-LIMPAR ENTRADA (NOVO) ===================== */
+const AUTO_CLEAR_ENABLED = true;
+const AUTO_CLEAR_TYPING_MS = 900; // após parar de digitar
+let autoClearTimer = null;
+
 /* ===================== ESTADO GLOBAL ===================== */
 let base = { products:[], objections:[], users:[] };
-let currentUser = null;     // {login, role:'admin'|'user'}
+let currentUser = null;
+
 let editingProductIndex = null;
 let editingObjectionIndex = null;
 let editingUserIndex = null;
 
-let lastProduct = null;     // mantém último produto ativo
-let lastObjection = null;   // mantém última objeção
+let lastProduct = null;      // mantém último produto ativo
+let lastObjection = null;    // mantém última objeção (assinatura)
 let lastObjectionKey = "";
 let lastTextProcessed = "";
 
@@ -982,7 +911,7 @@ const loginError = document.getElementById("loginError");
 
 const welcome = document.getElementById("welcome");
 
-/* Admin Drawer elements */
+/* Admin drawer */
 const adminDrawer = document.getElementById("adminDrawer");
 const viewProducts = document.getElementById("viewProducts");
 const viewObjections = document.getElementById("viewObjections");
@@ -1057,9 +986,25 @@ function normalizeText(str){
     .trim();
 }
 
+/* ===================== AUTO-CLEAR (NOVO) ===================== */
+function clearInputNow(){
+  input.value = "";
+  lastTextProcessed = ""; // garante que a próxima entrada sempre processe
+}
+function scheduleAutoClearAfterTyping(){
+  if(!AUTO_CLEAR_ENABLED) return;
+  clearTimeout(autoClearTimer);
+  autoClearTimer = setTimeout(()=>{
+    // só limpa se ainda tiver conteúdo (evita "piscar" desnecessário)
+    if((input.value || "").trim()){
+      clearInputNow();
+    }
+  }, AUTO_CLEAR_TYPING_MS);
+}
+
 /* ===================== MATCH DE PRODUTO (keys + info, ignorando "sinop") ===================== */
 const PRODUCT_IGNORE_TERMS = new Set(["sinop"]);
-const INFO_PREFIX_IGNORE = new Set(["av","avenida","rua","rodovia","br","mt","km","santa","carmem"]); // leve ajuda, sem exagero
+const INFO_PREFIX_IGNORE = new Set(["av","avenida","rua","rodovia","br","mt","km","santa","carmem"]);
 
 function buildProductTerms(product){
   const raw = [
@@ -1071,20 +1016,13 @@ function buildProductTerms(product){
 
   for(const line of raw){
     if(!line) continue;
-
-    // ignora termos exatamente proibidos
     if(PRODUCT_IGNORE_TERMS.has(line)) continue;
 
-    // guarda a linha inteira (se não for genérica demais)
     if(line.length >= 4) terms.add(line);
 
-    // cria "sub-termos" por n-gram (para achar "andre maggi" mesmo vindo de "av andre maggi")
     const words = line.split(" ").filter(Boolean);
-
-    // remove palavras muito genéricas no início (ex.: "av", "rua") para gerar sub-termos melhores
     const cleaned = words.filter(w => w.length >= 3 && !PRODUCT_IGNORE_TERMS.has(w) && !INFO_PREFIX_IGNORE.has(w));
 
-    // adiciona combinações de 2 a 4 palavras (ex.: "andre maggi", "posto bufalo")
     for(let n=2; n<=4; n++){
       for(let i=0; i<=cleaned.length-n; i++){
         const gram = cleaned.slice(i, i+n).join(" ");
@@ -1092,7 +1030,6 @@ function buildProductTerms(product){
       }
     }
 
-    // também adiciona palavras isoladas com >=4 (ex.: "bufalo", "canario") — mas evita "sinop"
     for(const w of cleaned){
       if(w.length >= 4 && !PRODUCT_IGNORE_TERMS.has(w)) terms.add(w);
     }
@@ -1107,6 +1044,9 @@ function productMatchesText(product, textNorm){
 }
 
 /* ===================== BASE LOAD/SAVE ===================== */
+function structuredClone(obj){
+  return JSON.parse(JSON.stringify(obj));
+}
 function loadBase(){
   const saved = localStorage.getItem(LS_BASE);
   if(saved){
@@ -1123,10 +1063,6 @@ function loadBase(){
 }
 function saveBase(){
   localStorage.setItem(LS_BASE, JSON.stringify(base));
-}
-
-function structuredClone(obj){
-  return JSON.parse(JSON.stringify(obj));
 }
 
 /* ===================== LOGIN ===================== */
@@ -1168,7 +1104,7 @@ function doLogin(){
     return;
   }
 
-  // usuário comum (na base)
+  // usuário comum
   const found = (base.users || []).find(x => (x.login || "").toLowerCase() === u.toLowerCase() && String(x.pass || "") === p);
   if(found){
     currentUser = {login: found.login, role:"user"};
@@ -1183,19 +1119,14 @@ function doLogin(){
 
 function afterLogin(){
   loginOverlay.style.display = "none";
-
   rolePill.textContent = `Acesso: ${currentUser.role === "admin" ? "Admin" : "Usuário"} (${currentUser.login})`;
   adminBtn.style.display = (currentUser.role === "admin") ? "inline-flex" : "none";
 
-  // welcome 1x por dispositivo
   if(!localStorage.getItem(LS_WELCOME)){
     welcome.style.display = "flex";
   }
 
-  // render admin lists
   renderAdminAll();
-
-  // foco
   setTimeout(()=> input.focus(), 120);
 }
 
@@ -1225,23 +1156,17 @@ function openAdmin(){
 function closeAdmin(){
   adminDrawer.classList.remove("show");
 }
-
 function setTab(tab){
-  const tabs = ["products","objections","users","export"];
-  for(const t of tabs){
-    document.getElementById("tab"+t[0].toUpperCase()+t.slice(1)).classList.remove("active");
-  }
-  if(tab === "products") tabProducts.classList.add("active");
-  if(tab === "objections") tabObjections.classList.add("active");
-  if(tab === "users") tabUsers.classList.add("active");
-  if(tab === "export") tabExport.classList.add("active");
+  tabProducts.classList.toggle("active", tab==="products");
+  tabObjections.classList.toggle("active", tab==="objections");
+  tabUsers.classList.toggle("active", tab==="users");
+  tabExport.classList.toggle("active", tab==="export");
 
   viewProducts.style.display = (tab==="products") ? "block" : "none";
   viewObjections.style.display = (tab==="objections") ? "block" : "none";
   viewUsers.style.display = (tab==="users") ? "block" : "none";
   viewExport.style.display = (tab==="export") ? "block" : "none";
 }
-
 function renderAdminAll(){
   renderProductsList();
   renderObjectionsList();
@@ -1259,7 +1184,6 @@ function resetProductForm(){
   pKeys.value = "";
   pInfo.value = "";
 }
-
 function saveProduct(){
   if(!currentUser || currentUser.role !== "admin") return;
 
@@ -1267,14 +1191,8 @@ function saveProduct(){
   const keys = (pKeys.value || "").split(",").map(s=>s.trim()).filter(Boolean);
   const info = (pInfo.value || "").split("\n").map(s=>s.trim()).filter(Boolean);
 
-  if(!name){
-    showToast("Informe o nome do produto");
-    return;
-  }
-  if(keys.length === 0 && info.length === 0){
-    showToast("Adicione pelo menos 1 keyword ou 1 informação");
-    return;
-  }
+  if(!name){ showToast("Informe o nome do produto"); return; }
+  if(keys.length === 0 && info.length === 0){ showToast("Adicione pelo menos 1 keyword ou 1 informação"); return; }
 
   const obj = {name, keys, info};
 
@@ -1291,7 +1209,6 @@ function saveProduct(){
   countProducts.textContent = String(base.products.length);
   resetProductForm();
 }
-
 function editProduct(i){
   const p = base.products[i];
   if(!p) return;
@@ -1301,7 +1218,6 @@ function editProduct(i){
   pKeys.value = (p.keys || []).join(", ");
   pInfo.value = (p.info || []).join("\n");
 }
-
 function removeProduct(i){
   if(!confirm("Remover este produto?")) return;
   base.products.splice(i,1);
@@ -1309,12 +1225,9 @@ function removeProduct(i){
   renderProductsList();
   countProducts.textContent = String(base.products.length);
   showToast("Produto removido");
-
-  // se removeu o que estava ativo, limpa estado de produto
   lastProduct = null;
   processText(true);
 }
-
 function renderProductsList(){
   const arr = base.products || [];
   productsList.innerHTML = "";
@@ -1351,7 +1264,6 @@ function resetObjectionForm(){
   oB.value = "";
   oC.value = "";
 }
-
 function saveObjection(){
   if(!currentUser || currentUser.role !== "admin") return;
 
@@ -1360,14 +1272,8 @@ function saveObjection(){
   const b = (oB.value || "").trim();
   const c = (oC.value || "").trim();
 
-  if(keys.length === 0){
-    showToast("Informe as palavras-chave da objeção");
-    return;
-  }
-  if(!a || !b || !c){
-    showToast("Preencha as 3 respostas (leve/média/agressiva)");
-    return;
-  }
+  if(keys.length === 0){ showToast("Informe as palavras-chave da objeção"); return; }
+  if(!a || !b || !c){ showToast("Preencha as 3 respostas (leve/média/agressiva)"); return; }
 
   const obj = {keys, a, b, c};
 
@@ -1384,7 +1290,6 @@ function saveObjection(){
   countObjections.textContent = String(base.objections.length);
   resetObjectionForm();
 }
-
 function editObjection(i){
   const o = base.objections[i];
   if(!o) return;
@@ -1395,7 +1300,6 @@ function editObjection(i){
   oB.value = o.b || "";
   oC.value = o.c || "";
 }
-
 function removeObjection(i){
   if(!confirm("Remover esta objeção?")) return;
   base.objections.splice(i,1);
@@ -1403,12 +1307,10 @@ function removeObjection(i){
   renderObjectionsList();
   countObjections.textContent = String(base.objections.length);
   showToast("Objeção removida");
-
   lastObjection = null;
   lastObjectionKey = "";
   processText(true);
 }
-
 function renderObjectionsList(){
   const arr = base.objections || [];
   objectionsList.innerHTML = "";
@@ -1443,39 +1345,24 @@ function resetUserForm(){
   uLogin.value = "";
   uPass.value = "";
 }
-
 function saveUser(){
   if(!currentUser || currentUser.role !== "admin") return;
 
   const login = (uLogin.value || "").trim();
   const pass = (uPass.value || "").trim();
 
-  if(!login){
-    showToast("Informe o login");
-    return;
-  }
-  if(login.toLowerCase() === "edson"){
-    showToast("“edson” é reservado para o admin fixo");
-    return;
-  }
-  if(!pass){
-    showToast("Informe a senha");
-    return;
-  }
+  if(!login){ showToast("Informe o login"); return; }
+  if(login.toLowerCase() === "edson"){ showToast("“edson” é reservado para o admin fixo"); return; }
+  if(!pass){ showToast("Informe a senha"); return; }
 
   const existsIndex = (base.users || []).findIndex(u => (u.login||"").toLowerCase() === login.toLowerCase());
-
   const obj = {login, pass};
 
   if(editingUserIndex === null){
-    if(existsIndex !== -1){
-      showToast("Já existe um usuário com esse login");
-      return;
-    }
+    if(existsIndex !== -1){ showToast("Já existe um usuário com esse login"); return; }
     base.users.push(obj);
     showToast("Usuário criado");
   }else{
-    // edit
     base.users[editingUserIndex] = obj;
     showToast("Usuário atualizado");
   }
@@ -1485,7 +1372,6 @@ function saveUser(){
   countUsers.textContent = String((base.users||[]).length + 1);
   resetUserForm();
 }
-
 function editUser(i){
   const u = base.users[i];
   if(!u) return;
@@ -1494,7 +1380,6 @@ function editUser(i){
   uLogin.value = u.login || "";
   uPass.value = u.pass || "";
 }
-
 function removeUser(i){
   const u = base.users[i];
   if(!u) return;
@@ -1505,10 +1390,8 @@ function removeUser(i){
   countUsers.textContent = String((base.users||[]).length + 1);
   showToast("Usuário removido");
 }
-
 function renderUsersList(){
   usersList.innerHTML = "";
-  // Admin fixo
   const adminEl = document.createElement("div");
   adminEl.className = "item";
   adminEl.innerHTML = `
@@ -1550,10 +1433,7 @@ function renderUsersList(){
 /* ===================== EXPORT/IMPORT ===================== */
 function exportBase(){
   if(!currentUser || currentUser.role !== "admin") return;
-  const out = structuredClone(base);
-
-  // garante que não exporta admin fixo (ele é fixo no código)
-  exportOut.value = JSON.stringify(out, null, 2);
+  exportOut.value = JSON.stringify(structuredClone(base), null, 2);
   showToast("Base exportada (copie tudo)");
   importStatus.textContent = "—";
 }
@@ -1562,7 +1442,6 @@ function copyExport(){
   if(!txt){ showToast("Nada para copiar"); return; }
   navigator.clipboard.writeText(txt).then(()=> showToast("Copiado ✅")).catch(()=> showToast("Não foi possível copiar"));
 }
-
 function importBase(){
   if(!currentUser || currentUser.role !== "admin") return;
   const txt = (importIn.value || "").trim();
@@ -1578,7 +1457,6 @@ function importBase(){
     renderAdminAll();
     importStatus.textContent = "Base aplicada ✅";
     showToast("Base importada");
-    // atualiza interface principal
     lastProduct = null; lastObjection = null; lastObjectionKey = "";
     processText(true);
   }catch(e){
@@ -1587,7 +1465,7 @@ function importBase(){
 }
 function resetToDefaults(){
   if(!currentUser || currentUser.role !== "admin") return;
-  if(!confirm("Restaurar a base padrão? (Substitui produtos/objeções/usuários locais)")) return;
+  if(!confirm("Restaurar a base padrão?")) return;
   base = structuredClone(DEFAULT_BASE);
   saveBase();
   renderAdminAll();
@@ -1597,7 +1475,7 @@ function resetToDefaults(){
   processText(true);
 }
 
-/* ===================== CORE (processText) ===================== */
+/* ===================== CORE ===================== */
 function processText(force){
   const tRaw = input.value || "";
   const tNorm = normalizeText(tRaw);
@@ -1605,7 +1483,7 @@ function processText(force){
   if(!force && tNorm === lastTextProcessed) return;
   lastTextProcessed = tNorm;
 
-  // Produto: match por keys + info
+  // Produto
   const products = base.products || [];
   const p = products.find(prod => productMatchesText(prod, tNorm));
 
@@ -1618,13 +1496,11 @@ function processText(force){
       flashUpdated(prodBadge);
       animateUpdate(prodCard);
     }else{
-      // mesmo produto, mantém
       prodNameEl.textContent = lastProduct.name;
       prodInfoEl.innerHTML = (lastProduct.info || []).map(i => "<li>"+escapeHtml(i)+"</li>").join("");
       prodChip.textContent = "Ativo";
     }
   }else{
-    // mantém último produto ativo
     if(lastProduct){
       prodNameEl.textContent = lastProduct.name;
       prodInfoEl.innerHTML = (lastProduct.info || []).map(i => "<li>"+escapeHtml(i)+"</li>").join("");
@@ -1636,7 +1512,7 @@ function processText(force){
     }
   }
 
-  // Objeção: match por keywords
+  // Objeção
   const objections = base.objections || [];
   const o = objections.find(obj => (obj.keys || []).some(k => tNorm.includes(normalizeText(k))));
 
@@ -1678,7 +1554,6 @@ function copy(id){
 function clearAll(){
   input.value = "";
   lastTextProcessed = "";
-  // reseta estados
   lastProduct = null;
   lastObjection = null;
   lastObjectionKey = "";
@@ -1711,7 +1586,7 @@ function startListening(){
 
   recognition = new webkitSpeechRecognition();
   recognition.lang = "pt-BR";
-  recognition.continuous = false; // manual, sem infinito
+  recognition.continuous = false;
   recognition.interimResults = false;
 
   recognition.onstart = () => {
@@ -1737,9 +1612,15 @@ function startListening(){
   recognition.onresult = (e) => {
     const transcript = e.results?.[0]?.[0]?.transcript || "";
     if(transcript){
-      input.value = (input.value ? (input.value + " ") : "") + transcript;
+      // processa o trecho novo
+      input.value = transcript;
       processText(true);
       animateUpdate(document.getElementById("inputCard"));
+
+      // NOVO: limpa imediatamente após receber do microfone
+      if(AUTO_CLEAR_ENABLED){
+        clearInputNow();
+      }
     }
   };
 
@@ -1750,7 +1631,12 @@ function stopListening(){
 }
 
 /* ===================== EVENTOS ===================== */
-input.addEventListener("input", ()=> processText(false));
+input.addEventListener("input", ()=>{
+  // processa (para mostrar produto/objeção)
+  processText(false);
+  // NOVO: auto-limpa depois que parar de digitar (mantém leve)
+  scheduleAutoClearAfterTyping();
+});
 
 // Ctrl+K limpar
 window.addEventListener("keydown", (e)=>{
@@ -1761,7 +1647,6 @@ window.addEventListener("keydown", (e)=>{
     clearAll();
   }
   if(e.key === "Enter" && loginOverlay.style.display !== "none"){
-    // enter no login
     doLogin();
   }
 });
@@ -1770,7 +1655,6 @@ window.addEventListener("keydown", (e)=>{
 (function init(){
   loadBase();
 
-  // sessão
   const sess = getSession();
   if(sess){
     currentUser = sess;
@@ -1779,7 +1663,6 @@ window.addEventListener("keydown", (e)=>{
     loginOverlay.style.display = "flex";
   }
 
-  // inicia UI principal
   processText(true);
 })();
 </script>

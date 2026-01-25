@@ -899,7 +899,27 @@ Av. André Maggi"></textarea>
       <!-- EXPORT TAB -->
       <div id="viewExport" style="display:none">
         <div class="success">
-          <strong>Fluxo simples:</strong> Exportar base completa → copiar → no GitHub abrir <code>index.html</code> → Ctrl+A → apagar → colar → salvar.
+          <strong>Fluxo simples:</strong> Clique em <strong>Código atualizado</strong> → copie o <code>index.html</code> completo → no GitHub abra <code>index.html</code> → Ctrl+A → apagar → colar → salvar.
+          <br><span class="muted" style="display:inline-block; margin-top:6px">Obs: esta função já embute a base no <code>DEFAULT_BASE</code> e incrementa a versão local (BUILD_ID) para evitar base antiga presa no <code>localStorage</code>.</span>
+        </div>
+
+        <!-- NOVO: CÓDIGO ATUALIZADO -->
+        <div class="card">
+          <div class="head">
+            <div class="title">
+              <h3>Código atualizado</h3>
+              <p class="subtitle">Gera o <code>index.html</code> completo com a base atual embutida no <code>DEFAULT_BASE</code>.</p>
+            </div>
+            <button class="primary" onclick="generateUpdatedCode()">Código atualizado</button>
+          </div>
+          <div class="body">
+            <label>index.html gerado (copie tudo)</label>
+            <textarea id="codeOut" class="smallArea" style="min-height:320px" placeholder="Clique em “Código atualizado” para gerar o index.html completo..."></textarea>
+            <div class="row" style="justify-content:flex-end; margin-top:10px">
+              <button onclick="copyCodeOut()">Copiar código</button>
+            </div>
+            <p class="muted">Dica: depois de colar no GitHub Pages, atualize a página (Ctrl+F5) para validar.</p>
+          </div>
         </div>
 
         <div class="card">
@@ -951,57 +971,178 @@ Av. André Maggi"></textarea>
 <script>
 /* ===================== BASE PADRÃO ===================== */
 const DEFAULT_BASE = {
-  products: [
-    {name:"MORADA BRASIL", keys:["morada"], info:["Loteamento residencial","Parcelas a partir de R$ 713","Entrada: não","Av. André Maggi"]},
-    {name:"CASA PRONTA – SINOP", keys:["casa","mcmv"], info:["Casa 2 quartos","Parcelas a partir de R$ 699","Entrada: R$ 1.500","Financiamento Caixa"]},
-    {name:"CHÁCARAS – SANTA CARMEM", keys:["chacara","chácara"], info:["1.800 m²","Parcelas a partir de R$ 695","Entrada: não","6 km de Santa Carmem"]},
-    {name:"GRAN CANÁRIO", keys:["canario","gran"], info:["Loteamento urbano","Parcelas a partir de R$ 595","Entrada: sim / não","MT-140"]},
-    {name:"CEDROS JARDINS", keys:["cedros","búfalo"], info:["Lotes 200 m²","Parcelas a partir de R$ 753","Entrada: não","Posto Búfalo"]}
-  ],
-  objections: [
-    { keys:["caro","muito caro","valor alto","preço alto"],
-      a:"Entendo totalmente. Só pra eu te orientar certo: quando você diz caro, é pelo valor total ou pela parcela?",
-      b:"Caro comparado com qual opção? Se for só condição, eu consigo te mostrar o melhor encaixe pro seu bolso.",
-      c:"Se eu ajustar pra caber sem te apertar (entrada/parcela/prazo), você avança agora ou ainda fica em dúvida?"
+  "products": [
+    {
+      "name": "MORADA BRASIL",
+      "keys": [
+        "morada"
+      ],
+      "info": [
+        "Loteamento residencial",
+        "Parcelas a partir de R$ 713",
+        "Entrada: não",
+        "Av. André Maggi"
+      ]
     },
-    { keys:["orçamento","sem orçamento","estourado","limite","apertado"],
-      a:"Faz sentido cuidar do orçamento. Qual faixa mensal fica confortável pra você hoje?",
-      b:"O ponto é a parcela ou o prazo? Se me disser o limite, eu te passo a melhor configuração.",
-      c:"Se eu encaixar dentro do seu limite sem surpresa, você dá o próximo passo ou prefere encerrar?"
+    {
+      "name": "CASA PRONTA – SINOP",
+      "keys": [
+        "casa",
+        "mcmv"
+      ],
+      "info": [
+        "Casa 2 quartos",
+        "Parcelas a partir de R$ 699",
+        "Entrada: R$ 1.500",
+        "Financiamento Caixa"
+      ]
     },
-    { keys:["vou pensar","pensar","analisar","vou analisar","ver depois","vou ver"],
-      a:"Perfeito, analisar é o certo. O que você quer avaliar primeiro: preço, condição ou localização?",
-      b:"Pra sua análise não virar só “deixar pra depois”: o que precisa acontecer pra virar um sim?",
-      c:"Se nada mudar nas condições, sua resposta tende mais pra sim ou pra não? Só pra eu não te prender aqui."
+    {
+      "name": "CHÁCARAS – SANTA CARMEM",
+      "keys": [
+        "chacara",
+        "chácara"
+      ],
+      "info": [
+        "1.800 m²",
+        "Parcelas a partir de R$ 695",
+        "Entrada: não",
+        "6 km de Santa Carmem"
+      ]
     },
-    { keys:["depois","mais pra frente","não agora","agora não","outro momento","não é o momento"],
-      a:"Tudo bem. O que faz não ser o momento: grana, prioridade ou insegurança?",
-      b:"Só pra eu te ajudar: quando seria um bom timing? Semana que vem, mês que vem… o que você tem em mente?",
-      c:"Se a condição mudar e ficar pior depois, tudo bem pra você? Ou prefere garantir agora e ir ajustando no caminho?"
+    {
+      "name": "GRAN CANÁRIO",
+      "keys": [
+        "canario",
+        "gran"
+      ],
+      "info": [
+        "Loteamento urbano",
+        "Parcelas a partir de R$ 595",
+        "Entrada: sim / não",
+        "MT-140"
+      ]
     },
-    { keys:["esposa","marido","familia","família","minha mulher","meu marido"],
-      a:"Claro, faz sentido alinhar. O que ela(e) costuma perguntar primeiro: parcela, localização ou segurança?",
-      b:"Me diz a dúvida principal dele(a) que eu te mando uma mensagem curta pronta pra você encaminhar.",
-      c:"Se ele(a) disser ok com a condição, você fecha? Porque aí eu te ajudo a conduzir do jeito mais rápido."
-    },
-    { keys:["comparar","comparando","vou ver outro","outros","mais barato em outro lugar","tem outro"],
-      a:"Normal comparar. Você tá comparando mais pelo preço ou pela localização?",
-      b:"Pra comparar certo, olha 3 pontos: documentação, acesso/local e potencial de valorização. Qual deles te chama mais atenção?",
-      c:"Se eu te provar que aqui faz mais sentido no conjunto (não só no preço), você decide por aqui?"
-    },
-    { keys:["medo","receio","inseguro","insegurança","não confio","desconfio","golpe"],
-      a:"Justíssimo. Medo de quê exatamente: documentação, localização ou experiência passada?",
-      b:"Pra você ficar tranquilo: eu te mostro o básico que valida tudo (mapa/registro/condição por escrito). O que você quer ver primeiro?",
-      c:"Você prefere validar por documento agora ou por visita? Se a validação ficar ok, você avança?"
+    {
+      "name": "CEDROS JARDINS",
+      "keys": [
+        "cedros",
+        "búfalo"
+      ],
+      "info": [
+        "Lotes 200 m²",
+        "Parcelas a partir de R$ 753",
+        "Entrada: não",
+        "Posto Búfalo"
+      ]
     }
   ],
-  users: [
-    { login:"vendedor", pass:"1234" }
+  "objections": [
+    {
+      "keys": [
+        "caro",
+        "muito caro",
+        "valor alto",
+        "preço alto"
+      ],
+      "a": "Entendo totalmente. Só pra eu te orientar certo: quando você diz caro, é pelo valor total ou pela parcela?",
+      "b": "Caro comparado com qual opção? Se for só condição, eu consigo te mostrar o melhor encaixe pro seu bolso.",
+      "c": "Se eu ajustar pra caber sem te apertar (entrada/parcela/prazo), você avança agora ou ainda fica em dúvida?"
+    },
+    {
+      "keys": [
+        "orçamento",
+        "sem orçamento",
+        "estourado",
+        "limite",
+        "apertado"
+      ],
+      "a": "Faz sentido cuidar do orçamento. Qual faixa mensal fica confortável pra você hoje?",
+      "b": "O ponto é a parcela ou o prazo? Se me disser o limite, eu te passo a melhor configuração.",
+      "c": "Se eu encaixar dentro do seu limite sem surpresa, você dá o próximo passo ou prefere encerrar?"
+    },
+    {
+      "keys": [
+        "vou pensar",
+        "pensar",
+        "analisar",
+        "vou analisar",
+        "ver depois",
+        "vou ver"
+      ],
+      "a": "Perfeito, analisar é o certo. O que você quer avaliar primeiro: preço, condição ou localização?",
+      "b": "Pra sua análise não virar só “deixar pra depois”: o que precisa acontecer pra virar um sim?",
+      "c": "Se nada mudar nas condições, sua resposta tende mais pra sim ou pra não? Só pra eu não te prender aqui."
+    },
+    {
+      "keys": [
+        "depois",
+        "mais pra frente",
+        "não agora",
+        "agora não",
+        "outro momento",
+        "não é o momento"
+      ],
+      "a": "Tudo bem. O que faz não ser o momento: grana, prioridade ou insegurança?",
+      "b": "Só pra eu te ajudar: quando seria um bom timing? Semana que vem, mês que vem… o que você tem em mente?",
+      "c": "Se a condição mudar e ficar pior depois, tudo bem pra você? Ou prefere garantir agora e ir ajustando no caminho?"
+    },
+    {
+      "keys": [
+        "esposa",
+        "marido",
+        "familia",
+        "família",
+        "minha mulher",
+        "meu marido"
+      ],
+      "a": "Claro, faz sentido alinhar. O que ela(e) costuma perguntar primeiro: parcela, localização ou segurança?",
+      "b": "Me diz a dúvida principal dele(a) que eu te mando uma mensagem curta pronta pra você encaminhar.",
+      "c": "Se ele(a) disser ok com a condição, você fecha? Porque aí eu te ajudo a conduzir do jeito mais rápido."
+    },
+    {
+      "keys": [
+        "comparar",
+        "comparando",
+        "vou ver outro",
+        "outros",
+        "mais barato em outro lugar",
+        "tem outro"
+      ],
+      "a": "Normal comparar. Você tá comparando mais pelo preço ou pela localização?",
+      "b": "Pra comparar certo, olha 3 pontos: documentação, acesso/local e potencial de valorização. Qual deles te chama mais atenção?",
+      "c": "Se eu te provar que aqui faz mais sentido no conjunto (não só no preço), você decide por aqui?"
+    },
+    {
+      "keys": [
+        "medo",
+        "receio",
+        "inseguro",
+        "insegurança",
+        "não confio",
+        "desconfio",
+        "golpe"
+      ],
+      "a": "Justíssimo. Medo de quê exatamente: documentação, localização ou experiência passada?",
+      "b": "Pra você ficar tranquilo: eu te mostro o básico que valida tudo (mapa/registro/condição por escrito). O que você quer ver primeiro?",
+      "c": "Você prefere validar por documento agora ou por visita? Se a validação ficar ok, você avança?"
+    }
+  ],
+  "users": [
+    {
+      "login": "vendedor",
+      "pass": "1234"
+    }
   ]
 };
 
+/* ===================== VERSÃO DO ARQUIVO (novo) ===================== */
+/* Essa versão é atualizada automaticamente pelo botão "Código atualizado". */
+const BUILD_ID = "2026-01-25T00:00:00.000Z";
+
 /* ===================== STORAGE ===================== */
-const LS_BASE = "copiloto_base_v5";
+/* NOVO: LS_BASE versionado por BUILD_ID para evitar base antiga presa no localStorage */
+const LS_BASE = "copiloto_base_v5__" + BUILD_ID;
 const LS_SESSION = "copiloto_session_v2";
 const LS_WELCOME = "copiloto_welcome_seen_v1";
 
@@ -1096,6 +1237,9 @@ const uPass = document.getElementById("uPass");
 const exportOut = document.getElementById("exportOut");
 const importIn = document.getElementById("importIn");
 const importStatus = document.getElementById("importStatus");
+
+/* NOVO: output do código atualizado */
+const codeOut = document.getElementById("codeOut");
 
 /* ===================== UTIL ===================== */
 function showToast(msg){
@@ -1619,6 +1763,50 @@ function resetToDefaults(){
   importStatus.textContent = "Padrão restaurado";
   lastProduct = null; lastObjection = null; lastObjectionKey = "";
   processText(true);
+}
+
+/* ===================== NOVO: CÓDIGO ATUALIZADO (Admin) ===================== */
+function safeJSONStringifyForScript(obj){
+  // JSON é válido como literal JS, mas protegemos contra "</script" dentro de textos.
+  let json = JSON.stringify(obj, null, 2);
+  json = json.replace(/<\/script/gi, "<\\/script");
+  return json;
+}
+function generateUpdatedCode(){
+  if(!currentUser || currentUser.role !== "admin") return;
+
+  const baseToEmbed = structuredClone(base);
+  const newBuild = new Date().toISOString();
+
+  // Pega o HTML atual inteiro (offline, sem fetch)
+  let html = "<!DOCTYPE html>\n" + document.documentElement.outerHTML;
+
+  // Atualiza BUILD_ID (para versionar o LS_BASE e evitar base antiga presa no localStorage)
+  const buildRe = /const\s+BUILD_ID\s*=\s*"[^"]*";/;
+  if(buildRe.test(html)){
+    html = html.replace(buildRe, `const BUILD_ID = "${newBuild}";`);
+  }else{
+    // Se por algum motivo não encontrar, ainda segue (não trava)
+  }
+
+  // Substitui o bloco do DEFAULT_BASE pelo JSON atual
+  const baseJson = safeJSONStringifyForScript(baseToEmbed);
+  const defRe = /const\s+DEFAULT_BASE\s*=\s*{[\s\S]*?};/;
+
+  if(!defRe.test(html)){
+    showToast("Não encontrei DEFAULT_BASE no código");
+    return;
+  }
+
+  html = html.replace(defRe, `const DEFAULT_BASE = ${baseJson};`);
+
+  codeOut.value = html;
+  showToast("Código atualizado gerado ✅");
+}
+function copyCodeOut(){
+  const txt = (codeOut.value || "").trim();
+  if(!txt){ showToast("Nada para copiar"); return; }
+  navigator.clipboard.writeText(txt).then(()=> showToast("Copiado ✅")).catch(()=> showToast("Não foi possível copiar"));
 }
 
 /* ===================== CORE ===================== */

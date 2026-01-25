@@ -1,17 +1,15 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>COPILOTO — Assistente de Objeções em Tempo Real</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>COPILOTO — Assistente de Objeções</title>
 
 <style>
-/* ======================================================
-   DESIGN SYSTEM — SaaS MODERNO
-====================================================== */
+/* ===================== DESIGN ===================== */
 :root{
   --bg:#f6f7fb;
-  --panel:#ffffff;
+  --panel:#fff;
   --text:#0f172a;
   --muted:#475569;
   --border:#e5e7eb;
@@ -25,28 +23,24 @@
   --bad:#ef4444;
 
   --radius:18px;
-  --radius-lg:22px;
 }
 
 *{box-sizing:border-box}
-html,body{height:100%}
 body{
   margin:0;
-  font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;
+  font-family:Inter,system-ui,Segoe UI,Roboto,Arial,sans-serif;
   background:var(--bg);
   color:var(--text);
 }
 
-/* ======================================================
-   HEADER
-====================================================== */
 header{
   position:sticky;
   top:0;
-  z-index:10;
   background:#fff;
   border-bottom:1px solid var(--border);
+  z-index:10;
 }
+
 .topbar{
   max-width:1200px;
   margin:auto;
@@ -54,53 +48,48 @@ header{
   display:flex;
   justify-content:space-between;
   align-items:center;
-  gap:14px;
+  gap:12px;
 }
-.brand h1{
-  margin:0;
-  font-size:20px;
-  font-weight:900;
-}
-.brand span{
-  font-size:13px;
-  color:var(--muted);
-}
-.statusline{
-  display:flex;
-  gap:10px;
-  align-items:center;
-  flex-wrap:wrap;
-}
+
+.brand h1{margin:0;font-size:20px;font-weight:900}
+.brand span{font-size:13px;color:var(--muted)}
+
+.statusline{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+
 .pill{
   padding:8px 12px;
-  font-size:12px;
   border-radius:999px;
   border:1px solid var(--border);
-  background:#fff;
+  font-size:12px;
   font-weight:700;
+  background:#fff;
 }
-.pill.good{background:rgba(22,163,74,.12);border-color:rgba(22,163,74,.3);color:#065f46}
 
-/* ======================================================
-   LAYOUT
-====================================================== */
-main{
-  max-width:1200px;
-  margin:auto;
-  padding:18px;
+button{
+  padding:12px 16px;
+  border-radius:14px;
+  border:1px solid var(--border);
+  font-weight:800;
+  background:#fff;
+  cursor:pointer;
 }
+
+.primary{
+  background:linear-gradient(180deg,var(--primary),var(--primary2));
+  color:#fff;border:none
+}
+.danger{background:rgba(239,68,68,.12);border-color:rgba(239,68,68,.3);color:#7f1d1d}
+.ghost{background:rgba(76,91,212,.08);border-color:rgba(76,91,212,.25)}
+
+main{max-width:1200px;margin:auto;padding:18px}
+
 .grid{
   display:grid;
   grid-template-columns:320px 1fr 420px;
   gap:18px;
 }
-@media(max-width:980px){
-  .grid{grid-template-columns:1fr}
-}
+@media(max-width:980px){.grid{grid-template-columns:1fr}}
 
-/* ======================================================
-   CARDS
-====================================================== */
 .card{
   background:#fff;
   border:1px solid var(--border);
@@ -108,38 +97,22 @@ main{
   box-shadow:0 12px 28px rgba(0,0,0,.06);
   overflow:hidden;
 }
+
 .card .head{
   padding:16px;
   border-bottom:1px solid var(--border);
   display:flex;
   justify-content:space-between;
-  align-items:flex-start;
   gap:10px;
 }
 .card .body{padding:16px}
-.subtitle{
-  margin-top:4px;
-  font-size:13px;
-  color:var(--muted);
-  line-height:1.4;
-}
 
-/* ======================================================
-   PRODUTO
-====================================================== */
-.productName{
-  font-size:22px;
-  font-weight:900;
-}
+.subtitle{font-size:13px;color:var(--muted);line-height:1.4}
+
+.productName{font-size:22px;font-weight:900}
 .infoList{padding-left:18px}
-.infoList li{
-  font-size:15px;
-  margin:6px 0;
-}
+.infoList li{margin:6px 0;font-size:15px}
 
-/* ======================================================
-   INPUT
-====================================================== */
 textarea{
   width:100%;
   min-height:220px;
@@ -149,96 +122,46 @@ textarea{
   border-radius:16px;
   border:1px solid var(--border);
 }
+
 textarea:focus{
   outline:none;
   border-color:var(--primary);
   box-shadow:0 0 0 5px var(--ring);
 }
 
-/* ======================================================
-   BOTÕES
-====================================================== */
-button{
-  padding:14px 18px;
-  font-size:15px;
-  font-weight:800;
-  border-radius:14px;
-  border:1px solid var(--border);
-  background:#fff;
-  cursor:pointer;
-}
-.primary{
-  background:linear-gradient(180deg,var(--primary),var(--primary2));
-  color:#fff;
-  border:none;
-}
-.danger{
-  background:rgba(239,68,68,.12);
-  border-color:rgba(239,68,68,.3);
-  color:#7f1d1d;
-}
-.ghost{
-  background:rgba(76,91,212,.08);
-  border-color:rgba(76,91,212,.25);
-  color:#1e293b;
-}
-
-/* ======================================================
-   RESPOSTAS
-====================================================== */
 .responseText{
   font-size:17px;
   line-height:1.65;
   white-space:pre-wrap;
 }
 
-/* ======================================================
-   EFEITOS FORTES DE ATUALIZAÇÃO
-====================================================== */
+/* ===== EFEITOS FORTES ===== */
 .fxUpdate{
-  animation:updatePulse .85s ease-out;
+  animation:pulse .85s ease-out;
 }
-@keyframes updatePulse{
-  0%{
-    box-shadow:0 0 0 0 rgba(76,91,212,0);
-    background:#fff;
-    transform:translateY(0);
-  }
-  35%{
-    box-shadow:0 0 0 12px rgba(76,91,212,.28);
-    background:rgba(76,91,212,.05);
-    transform:translateY(-4px);
-  }
-  100%{
-    box-shadow:0 0 0 0 rgba(76,91,212,0);
-    background:#fff;
-    transform:translateY(0);
-  }
+@keyframes pulse{
+  0%{box-shadow:0 0 0 0 rgba(76,91,212,0)}
+  35%{box-shadow:0 0 0 14px rgba(76,91,212,.3);background:rgba(76,91,212,.05)}
+  100%{box-shadow:0 0 0 0 rgba(76,91,212,0)}
 }
 
-/* ======================================================
-   LOGIN
-====================================================== */
+/* ===== LOGIN ===== */
 .overlay{
-  position:fixed;
-  inset:0;
+  position:fixed;inset:0;
   background:rgba(15,23,42,.65);
   display:flex;
   align-items:center;
   justify-content:center;
   z-index:50;
 }
+
 .modal{
   background:#fff;
-  width:min(460px,100%);
-  border-radius:22px;
   padding:26px;
+  border-radius:22px;
+  width:min(460px,100%);
 }
-.modal h1{
-  margin:0;
-  font-size:24px;
-  font-weight:900;
-}
+
 input{
   width:100%;
   padding:14px;
@@ -248,9 +171,6 @@ input{
   margin-top:10px;
 }
 
-/* ======================================================
-   MOBILE
-====================================================== */
 @media(max-width:600px){
   .productName{font-size:24px}
   .responseText{font-size:18px}
@@ -267,19 +187,17 @@ input{
     <h1>Entrar no COPILOTO</h1>
     <p class="subtitle">Acesso restrito</p>
 
-    <input id="loginUser" type="text" placeholder="Login">
+    <input id="loginUser" placeholder="Login">
     <input id="loginPass" type="password" placeholder="Senha">
 
-    <label style="display:flex;align-items:center;gap:8px;margin-top:12px;font-size:14px">
+    <label style="display:flex;gap:8px;margin-top:10px;font-size:14px">
       <input type="checkbox" id="rememberMe">
       Salvar neste dispositivo
     </label>
 
-    <p id="loginError" class="subtitle" style="color:#b91c1c;display:none;margin-top:10px">
-      Login ou senha inválidos
-    </p>
+    <p id="loginError" style="color:#b91c1c;display:none;font-size:13px">Login inválido</p>
 
-    <button class="primary" style="margin-top:18px;width:100%" onclick="doLogin()">Entrar</button>
+    <button class="primary" style="margin-top:16px;width:100%" onclick="doLogin()">Entrar</button>
   </div>
 </div>
 
@@ -291,6 +209,8 @@ input{
     </div>
     <div class="statusline">
       <span class="pill" id="rolePill">Acesso: —</span>
+      <button id="adminBtn" class="ghost" style="display:none" onclick="openAdmin()">⚙️ Admin</button>
+      <button class="danger" onclick="logout()">Sair</button>
     </div>
   </div>
 </header>
@@ -307,8 +227,8 @@ input{
     </div>
   </div>
   <div class="body">
-    <div class="productName" id="prodName">Produto não identificado</div>
-    <ul class="infoList" id="prodInfo"></ul>
+    <div id="prodName" class="productName">Produto não identificado</div>
+    <ul id="prodInfo" class="infoList"></ul>
   </div>
 </aside>
 
@@ -330,10 +250,8 @@ input{
 </section>
 
 <!-- RESPOSTAS -->
-<section class="card" id="responsesCard">
-  <div class="head">
-    <h3>Respostas</h3>
-  </div>
+<section class="card" id="responsesWrap">
+  <div class="head"><h3>Respostas</h3></div>
   <div class="body">
     <p id="r1" class="responseText">—</p>
     <p id="r2" class="responseText">—</p>
@@ -345,31 +263,22 @@ input{
 </main>
 
 <script>
-/* ======================================================
-   BASE ORIGINAL — PERGUNTAS E RESPOSTAS
-====================================================== */
-const DEFAULT_BASE = {
-  objections: [
-    {
-      keys:["caro","muito caro","preço alto","valor alto"],
-      a:"Entendo totalmente. Só pra eu te orientar certo: quando você diz caro, é pelo valor total ou pela parcela?",
-      b:"Caro comparado com qual opção? Se for condição, eu consigo ajustar.",
-      c:"Se eu encaixar pra caber no seu bolso, você avança agora?"
-    },
-    {
-      keys:["vou pensar","analisar","ver depois"],
-      a:"Perfeito, pensar é o certo. O que você quer analisar primeiro?",
-      b:"O que precisa acontecer pra virar um sim?",
-      c:"Se nada mudar, sua resposta tende mais pra sim ou não?"
-    }
-  ]
+/* ===================== BASE ===================== */
+const BASE = {
+  products:[
+    {name:"CEDROS JARDINS",keys:["cedros","búfalo"],info:["Lotes 200 m²","Av. André Maggi","Posto Búfalo"]},
+    {name:"MORADA BRASIL",keys:["morada"],info:["Av. André Maggi","Sem entrada"]}
+  ],
+  objections:[
+    {keys:["caro","preço alto"],a:"Entendo. É mais pelo valor total ou parcela?",b:"Comparado com qual opção?",c:"Se couber no bolso você fecha agora?"},
+    {keys:["vou pensar","analisar"],a:"Perfeito. O que você quer analisar?",b:"O que falta pra virar sim?",c:"Se nada mudar, sua resposta tende mais pra sim ou não?"}
+  ],
+  users:[{login:"vendedor",pass:"1234"}]
 };
 
-/* ======================================================
-   LOGIN
-====================================================== */
+/* ===================== LOGIN ===================== */
 const ADMIN={login:"edson",pass:"2026"};
-const LS_SESSION="copiloto_session";
+const LS="copiloto_session";
 let currentUser=null;
 
 function doLogin(){
@@ -378,72 +287,97 @@ function doLogin(){
   loginError.style.display="none";
 
   if(u===ADMIN.login && p===ADMIN.pass){
-    currentUser={login:u};
-    const store=rememberMe.checked?localStorage:sessionStorage;
-    store.setItem(LS_SESSION,JSON.stringify(currentUser));
-    afterLogin();
-    return;
+    currentUser={login:u,role:"admin"};
+  }else{
+    const found=BASE.users.find(x=>x.login===u&&x.pass===p);
+    if(!found){loginError.style.display="block";return;}
+    currentUser={login:u,role:"user"};
   }
-  loginError.style.display="block";
+
+  const store=rememberMe.checked?localStorage:sessionStorage;
+  store.setItem(LS,JSON.stringify(currentUser));
+  afterLogin();
 }
 
 function afterLogin(){
   loginOverlay.style.display="none";
-  rolePill.textContent="Acesso: "+currentUser.login;
+  rolePill.textContent=`Acesso: ${currentUser.role} (${currentUser.login})`;
+  adminBtn.style.display=currentUser.role==="admin"?"inline-flex":"none";
 }
 
-(function init(){
-  const s=localStorage.getItem(LS_SESSION)||sessionStorage.getItem(LS_SESSION);
-  if(s){
-    currentUser=JSON.parse(s);
-    afterLogin();
-  }
-})();
+function logout(){
+  localStorage.removeItem(LS);
+  sessionStorage.removeItem(LS);
+  location.reload();
+}
 
-/* ======================================================
-   CORE SIMPLIFICADO (MATCH)
-====================================================== */
+/* ===================== MATCH ===================== */
 const input=document.getElementById("input");
 const r1=document.getElementById("r1");
 const r2=document.getElementById("r2");
 const r3=document.getElementById("r3");
-const responsesCard=document.getElementById("responsesCard");
+const prodName=document.getElementById("prodName");
+const prodInfo=document.getElementById("prodInfo");
 
-input.addEventListener("input",()=>{
-  const t=input.value.toLowerCase();
-  const o=DEFAULT_BASE.objections.find(o=>o.keys.some(k=>t.includes(k)));
+let lastProduct=null;
+let clearTimer=null;
+
+function norm(t){
+  return t.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g,"").replace(/[^a-z0-9\s]/g," ");
+}
+
+function processText(){
+  const t=norm(input.value);
+
+  // PRODUTO
+  const p=BASE.products.find(p=>
+    [...p.keys,...p.info].some(k=>t.includes(norm(k))) && !t.includes("sinop")
+  );
+  if(p){
+    lastProduct=p;
+    prodName.textContent=p.name;
+    prodInfo.innerHTML=p.info.map(i=>"<li>"+i+"</li>").join("");
+    productCard.classList.add("fxUpdate");
+    setTimeout(()=>productCard.classList.remove("fxUpdate"),900);
+  }else if(lastProduct){
+    prodName.textContent=lastProduct.name;
+    prodInfo.innerHTML=lastProduct.info.map(i=>"<li>"+i+"</li>").join("");
+  }
+
+  // OBJEÇÃO
+  const o=BASE.objections.find(o=>o.keys.some(k=>t.includes(norm(k))));
   if(o){
     r1.textContent=o.a;
     r2.textContent=o.b;
     r3.textContent=o.c;
-    responsesCard.classList.add("fxUpdate");
-    setTimeout(()=>responsesCard.classList.remove("fxUpdate"),900);
+    responsesWrap.classList.add("fxUpdate");
+    setTimeout(()=>responsesWrap.classList.remove("fxUpdate"),900);
   }
-  setTimeout(()=>input.value="",900);
-});
 
-function clearAll(){
-  input.value="";
-  r1.textContent=r2.textContent=r3.textContent="—";
+  clearTimeout(clearTimer);
+  clearTimer=setTimeout(()=>input.value="",900);
 }
 
-/* ======================================================
-   MICROFONE MANUAL
-====================================================== */
+input.addEventListener("input",processText);
+
+/* ===================== MICROFONE ===================== */
 let rec=null;
 function toggleListening(){
-  if(!('webkitSpeechRecognition'in window)){
-    alert("Navegador não suporta microfone");
-    return;
-  }
+  if(!('webkitSpeechRecognition'in window)){alert("Sem suporte");return;}
   rec=new webkitSpeechRecognition();
   rec.lang="pt-BR";
   rec.onresult=e=>{
     input.value=e.results[0][0].transcript;
-    input.dispatchEvent(new Event("input"));
+    processText();
   };
   rec.start();
 }
+
+/* ===================== INIT ===================== */
+(function(){
+  const s=localStorage.getItem(LS)||sessionStorage.getItem(LS);
+  if(s){currentUser=JSON.parse(s);afterLogin();}
+})();
 </script>
 
 </body>

@@ -1,187 +1,213 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>COPILOTO — Assistente de Objeções em Tempo Real</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>COPILOTO PRO — Fechamento Imobiliário</title>
 
 <style>
-/* ===================== DESIGN SYSTEM ===================== */
+/* ================== THEME ================== */
 :root{
-  --bg:#f6f7fb;
+  --bg:#f5f7fb;
   --panel:#ffffff;
-  --text:#111827;
-  --muted:#6b7280;
+  --text:#0f172a;
+  --muted:#64748b;
   --border:#e5e7eb;
 
-  --primary:#4c5bd4;
-  --primary2:#3f4bd0;
-  --ring: rgba(76,91,212,.18);
+  --primary:#4f46e5;
+  --primary-strong:#4338ca;
 
-  --good:#16a34a;
-  --warn:#f59e0b;
-  --bad:#ef4444;
+  --neon:#22c55e;
+  --danger:#ef4444;
 
-  --chip:#f3f4f6;
-  --radius:14px;
-  --radius2:18px;
+  --radius:16px;
+  --shadow:0 10px 30px rgba(0,0,0,.08);
 }
 
-/* ===================== BASE ===================== */
+[data-theme="dark"]{
+  --bg:#020617;
+  --panel:#020617;
+  --text:#e5e7eb;
+  --muted:#94a3b8;
+  --border:#1e293b;
+  --shadow:0 12px 40px rgba(0,0,0,.55);
+}
+
+/* ================== RESET ================== */
 *{box-sizing:border-box}
-html,body{height:100%}
 body{
   margin:0;
-  font-family: Inter, system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+  font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,Arial;
+  background:var(--bg);
   color:var(--text);
-  background:
-    radial-gradient(900px 400px at 12% 0%, rgba(76,91,212,.10), transparent 55%),
-    radial-gradient(900px 520px at 92% 12%, rgba(245,158,11,.09), transparent 55%),
-    var(--bg);
 }
 
-/* ===================== HEADER ===================== */
+/* ================== HEADER ================== */
 header{
-  position:sticky; top:0; z-index:5;
-  background:rgba(255,255,255,.86);
-  backdrop-filter: blur(10px);
+  position:sticky;
+  top:0;
+  z-index:10;
+  background:var(--panel);
   border-bottom:1px solid var(--border);
+  box-shadow:var(--shadow);
 }
-.topbar{
-  display:flex; justify-content:space-between; align-items:center;
-  padding:14px 18px; max-width:1200px; margin:0 auto; gap:12px;
+.top{
+  max-width:1400px;
+  margin:auto;
+  padding:16px 20px;
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  gap:16px;
 }
-.brand h1{margin:0;font-size:18px}
-.brand span{font-size:12px;color:var(--muted)}
-
-.statusline{display:flex; gap:10px; align-items:center; flex-wrap:wrap}
-
-/* ===================== COMPONENTS ===================== */
-.pill{
-  display:inline-flex; align-items:center; gap:8px;
-  padding:7px 10px;
-  border:1px solid var(--border);
-  border-radius:999px;
-  background:#fff;
+.brand h1{
+  margin:0;
+  font-size:20px;
+  font-weight:900;
+}
+.brand span{
   font-size:12px;
   color:var(--muted);
 }
-.dot{width:8px;height:8px;border-radius:50%;background:#cbd5e1}
-.dot.on{background:var(--good)}
 
-.chip{
-  display:inline-flex; gap:6px; align-items:center;
-  padding:6px 9px;
-  border-radius:999px;
-  background:var(--chip);
-  border:1px solid var(--border);
-  font-size:12px;
-}
-.chip.good{background:rgba(22,163,74,.10);border-color:rgba(22,163,74,.25);color:#065f46}
-.chip.warn{background:rgba(245,158,11,.12);border-color:rgba(245,158,11,.25);color:#7c2d12}
-.chip.bad{background:rgba(239,68,68,.12);border-color:rgba(239,68,68,.25);color:#7f1d1d}
-
-button{
-  border:1px solid var(--border);
-  background:#fff;
-  padding:10px 12px;
+/* ================== BUTTONS ================== */
+.btn{
+  padding:10px 14px;
   border-radius:12px;
+  border:1px solid var(--border);
+  background:var(--panel);
   cursor:pointer;
-  font-weight:700;
+  font-weight:800;
 }
-button.primary{
-  background:linear-gradient(180deg,var(--primary),var(--primary2));
-  color:#fff;border:none;
+.btn-primary{
+  background:linear-gradient(180deg,var(--primary),var(--primary-strong));
+  color:#fff;
+  border:none;
 }
-button.danger{
+.btn-neon{
+  background:rgba(34,197,94,.15);
+  color:var(--neon);
+  border:1px solid rgba(34,197,94,.5);
+  box-shadow:0 0 18px rgba(34,197,94,.35);
+}
+.btn-danger{
   background:rgba(239,68,68,.12);
-  border-color:rgba(239,68,68,.25);
-  color:#7f1d1d;
+  color:var(--danger);
+  border:1px solid rgba(239,68,68,.4);
 }
 
-/* ===================== LAYOUT ===================== */
-main{max-width:1200px;margin:0 auto;padding:18px}
+/* ================== MAIN GRID ================== */
+main{
+  max-width:1400px;
+  margin:auto;
+  padding:24px;
+}
 .grid{
   display:grid;
-  grid-template-columns: 300px 1fr 420px;
-  gap:16px;
-}
-@media(max-width:980px){
-  .grid{grid-template-columns:1fr}
+  grid-template-columns:320px 1fr 420px;
+  gap:20px;
 }
 
+/* ================== CARD ================== */
 .card{
   background:var(--panel);
   border:1px solid var(--border);
   border-radius:var(--radius);
-  box-shadow:0 6px 16px rgba(17,24,39,.07);
+  box-shadow:var(--shadow);
 }
-.card .head{padding:14px;border-bottom:1px solid var(--border)}
-.card .body{padding:14px}
+.card header{
+  padding:16px;
+  border-bottom:1px solid var(--border);
+}
+.card header h2{
+  margin:0;
+  font-size:15px;
+}
+.card header p{
+  margin:6px 0 0;
+  font-size:12px;
+  color:var(--muted);
+}
+.card .body{
+  padding:16px;
+}
 
+/* ================== PRODUCT ================== */
+.product-name{
+  font-size:18px;
+  font-weight:900;
+}
+.product-list{
+  margin:14px 0 0;
+  padding-left:18px;
+}
+.product-list li{
+  font-size:13px;
+  margin:6px 0;
+}
+
+/* ================== INPUT ================== */
 textarea{
   width:100%;
   min-height:220px;
   padding:14px;
-  border-radius:12px;
-  border:1px solid var(--border);
   font-size:14px;
+  border-radius:14px;
+  border:1px solid var(--border);
+  background:var(--panel);
+  color:var(--text);
+  resize:vertical;
+}
+textarea:focus{
+  outline:none;
+  border-color:var(--primary);
 }
 
-/* ===================== LOGIN ===================== */
-.overlay{
-  position:fixed; inset:0;
-  background:rgba(17,24,39,.55);
-  display:flex; align-items:center; justify-content:center;
-  z-index:50;
+/* ================== RESPONSES ================== */
+.response{
+  margin-bottom:14px;
 }
-.modal{
-  background:#fff;
-  border-radius:18px;
-  width:min(520px,100%);
-  padding:18px;
+.response strong{
+  font-size:13px;
 }
-label{font-size:12px;font-weight:700;color:var(--muted)}
-input{
-  width:100%;padding:10px;border-radius:10px;border:1px solid var(--border);
+.response p{
+  font-size:14px;
+  line-height:1.55;
+  margin:6px 0 0;
 }
 
-/* ===================== JS BASE ===================== */
+/* ================== GRAPH ================== */
+.graph-box{
+  height:220px;
+  border-radius:14px;
+  border:1px dashed var(--border);
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-size:13px;
+  color:var(--muted);
+}
+
+/* ================== MOBILE ================== */
+@media(max-width:1100px){
+  .grid{grid-template-columns:1fr}
+}
 </style>
 </head>
 
-<body>
-
-<!-- LOGIN -->
-<div id="loginOverlay" class="overlay">
-  <div class="modal">
-    <h2>COPILOTO</h2>
-    <p class="chip">Admin: edson / 2026</p>
-
-    <label>Login</label>
-    <input id="loginUser" type="text" />
-
-    <label>Senha</label>
-    <input id="loginPass" type="password" />
-
-    <div style="margin-top:12px;display:flex;gap:10px;justify-content:flex-end">
-      <button class="primary" onclick="doLogin()">Entrar</button>
-    </div>
-    <p id="loginError" style="color:red;display:none">Login inválido</p>
-  </div>
-</div>
+<body data-theme="light">
 
 <header>
-  <div class="topbar">
+  <div class="top">
     <div class="brand">
-      <h1>COPILOTO</h1>
-      <span>Assistente de Objeções em Tempo Real</span>
+      <h1>COPILOTO PRO</h1>
+      <span>Fechamento imobiliário em tempo real</span>
     </div>
-    <div class="statusline">
-      <div class="pill"><span class="dot" id="micDot"></span><span id="micLabel">Microfone desligado</span></div>
-      <div class="pill" id="rolePill">Acesso: —</div>
-      <button id="adminBtn" style="display:none">⚙️ Admin</button>
-      <button class="danger" onclick="logout()">Sair</button>
+
+    <div style="display:flex;gap:10px">
+      <button class="btn btn-neon" id="btnRates">📊 Taxas</button>
+      <button class="btn" id="toggleTheme">🌙 / ☀️</button>
+      <button class="btn btn-danger">Sair</button>
     </div>
   </div>
 </header>
@@ -191,239 +217,220 @@ input{
 
     <!-- PRODUTO -->
     <aside class="card">
-      <div class="head"><strong>Produto ativo</strong></div>
+      <header>
+        <h2>Produto ativo</h2>
+        <p>Todas as informações do loteamento</p>
+      </header>
       <div class="body">
-        <h3 id="prodName">—</h3>
-        <ul id="prodInfo"></ul>
-        <span class="chip good" id="prodConfidence">Confiança: —</span>
+        <div class="product-name" id="productName">Produto não identificado</div>
+        <ul class="product-list" id="productInfo"></ul>
       </div>
     </aside>
 
     <!-- INPUT -->
     <section class="card">
-      <div class="head"><strong>Fala do cliente</strong></div>
+      <header>
+        <h2>Fala do cliente</h2>
+        <p>Digite ou use o microfone</p>
+      </header>
       <div class="body">
-        <textarea id="input" placeholder="Digite ou dite o que o cliente falou..."></textarea>
-        <div style="margin-top:10px;display:flex;gap:10px">
-          <button class="primary" onclick="toggleMic()">🎙️ Microfone</button>
-          <button onclick="clearAll()">Limpar</button>
+        <textarea id="inputText" placeholder="Digite ou dite o que o cliente falou..."></textarea>
+        <div style="display:flex;gap:10px;margin-top:12px">
+          <button class="btn btn-primary">🎙️ Microfone</button>
+          <button class="btn btn-danger">Limpar</button>
         </div>
-        <span class="chip" id="objTag">Objeção: —</span>
-        <span class="chip" id="leadTag">Lead: —</span>
       </div>
     </section>
 
-    <!-- RESPOSTAS -->
+    <!-- RESPOSTAS + GRÁFICO -->
     <section>
+
       <div class="card">
-        <div class="head"><strong>Resposta Leve</strong></div>
+        <header>
+          <h2>Respostas sugeridas</h2>
+          <p>Baseadas na objeção detectada</p>
+        </header>
         <div class="body">
-          <p id="r1">—</p>
-          <button onclick="copy('r1')">Copiar</button>
+          <div class="response">
+            <strong>Leve</strong>
+            <p id="r1">—</p>
+          </div>
+          <div class="response">
+            <strong>Média</strong>
+            <p id="r2">—</p>
+          </div>
+          <div class="response">
+            <strong>Agressiva</strong>
+            <p id="r3">—</p>
+          </div>
         </div>
       </div>
 
-      <div class="card" style="margin-top:10px">
-        <div class="head"><strong>Resposta Média</strong></div>
+      <div class="card" style="margin-top:20px">
+        <header>
+          <h2>Valorização do investimento</h2>
+          <p>Visual para apresentação ao cliente</p>
+        </header>
         <div class="body">
-          <p id="r2">—</p>
-          <button onclick="copy('r2')">Copiar</button>
+          <div class="graph-box">
+            Gráfico será carregado aqui
+          </div>
         </div>
       </div>
 
-      <div class="card" style="margin-top:10px">
-        <div class="head"><strong>Resposta Agressiva</strong></div>
-        <div class="body">
-          <p id="r3">—</p>
-          <button onclick="copy('r3')">Copiar</button>
-        </div>
-      </div>
     </section>
 
   </div>
 </main>
+
+</body>
+</html>
 <script>
-/* ===================== BASE PADRÃO ===================== */
-const DEFAULT_BASE = {
-  products: [
-    {name:"CEDROS JARDINS", keys:["cedros","búfalo","posto búfalo"], info:["Lotes 200 m²","Parcelas a partir de R$ 753","Sem entrada"]},
-    {name:"MORADA BRASIL", keys:["morada","andré maggi"], info:["Lotes 240 m²","Parcelas a partir de R$ 713","Sem entrada"]},
-    {name:"CASA PRONTA SINOP", keys:["casa","mcmv"], info:["2 quartos","Parcelas a partir de R$ 699","Financiamento Caixa"]}
-  ],
-  objections: [
-    {
-      keys:["caro","preço alto","valor alto"],
-      a:"Entendo. Quando você diz caro, é pelo valor total ou pela parcela?",
-      b:"Se eu ajustar a condição pra caber no seu orçamento, faz sentido pra você?",
-      c:"Caro é perder a oportunidade. Se eu resolver isso agora, você decide?"
-    },
-    {
-      keys:["vou pensar","analisar","ver depois"],
-      a:"Perfeito, pensar é importante. O que você quer avaliar primeiro?",
-      b:"Se nada mudar, sua decisão tende mais pra sim ou pra não?",
-      c:"Quem pensa demais costuma pagar mais caro depois. Vamos resolver agora?"
-    },
-    {
-      keys:["sem dinheiro","apertado","sem grana"],
-      a:"Entendo. Hoje pesa mais a entrada ou a parcela?",
-      b:"Se eu montar algo que caiba no mês, você considera avançar?",
-      c:"Apertado todo mundo tá. A diferença é apertar pagando aluguel ou patrimônio."
-    }
-  ],
-  users: [
-    {login:"vendedor", pass:"1234"}
-  ]
+/* ===================== THEME ===================== */
+const themeBtn = document.getElementById("toggleTheme");
+const bodyEl = document.body;
+
+const savedTheme = localStorage.getItem("copiloto_theme");
+if(savedTheme) bodyEl.setAttribute("data-theme", savedTheme);
+
+themeBtn.onclick = () => {
+  const current = bodyEl.getAttribute("data-theme") || "light";
+  const next = current === "light" ? "dark" : "light";
+  bodyEl.setAttribute("data-theme", next);
+  localStorage.setItem("copiloto_theme", next);
 };
 
-/* ===================== STORAGE ===================== */
-const LS_BASE = "copiloto_base_v1";
-const LS_SESSION = "copiloto_session_v1";
+/* ===================== BASE PRODUTOS ===================== */
+const PRODUCTS = [
+  {
+    name:"CEDROS JARDINS",
+    value:150000,
+    valorizacao:18,
+    info:[
+      "Lotes a partir de 200 m²",
+      "Parcelas a partir de R$ 753",
+      "Sem entrada",
+      "Próximo ao Posto Búfalo"
+    ]
+  },
+  {
+    name:"MORADA BRASIL",
+    value:170000,
+    valorizacao:18,
+    info:[
+      "Parcelas a partir de R$ 713",
+      "Até 240x",
+      "Av. André Maggi"
+    ]
+  }
+];
 
-/* ===================== ESTADO ===================== */
-let base = {};
-let currentUser = null;
+let activeProduct = null;
 
 /* ===================== ELEMENTOS ===================== */
-const loginOverlay = document.getElementById("loginOverlay");
-const loginUser = document.getElementById("loginUser");
-const loginPass = document.getElementById("loginPass");
-const loginError = document.getElementById("loginError");
+const productName = document.getElementById("productName");
+const productInfo = document.getElementById("productInfo");
+const inputText = document.getElementById("inputText");
 
-const rolePill = document.getElementById("rolePill");
-const adminBtn = document.getElementById("adminBtn");
-
-const input = document.getElementById("input");
 const r1 = document.getElementById("r1");
 const r2 = document.getElementById("r2");
 const r3 = document.getElementById("r3");
 
-const prodName = document.getElementById("prodName");
-const prodInfo = document.getElementById("prodInfo");
-const prodConfidence = document.getElementById("prodConfidence");
+const ratesBtn = document.getElementById("btnRates");
 
-const objTag = document.getElementById("objTag");
-const leadTag = document.getElementById("leadTag");
-
-/* ===================== UTIL ===================== */
-function normalize(t){
-  return (t||"").toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g,"");
-}
-function saveBase(){
-  localStorage.setItem(LS_BASE, JSON.stringify(base));
-}
-function loadBase(){
-  const b = localStorage.getItem(LS_BASE);
-  base = b ? JSON.parse(b) : JSON.parse(JSON.stringify(DEFAULT_BASE));
-  saveBase();
-}
-function copy(id){
-  const t = document.getElementById(id).innerText;
-  navigator.clipboard.writeText(t);
+/* ===================== ECONOMIA (BCB) ===================== */
+async function getBCB(code){
+  const url = `https://api.bcb.gov.br/dados/serie/bcdata.sgs.${code}/dados/ultimos/12?formato=json`;
+  const res = await fetch(url);
+  const data = await res.json();
+  return data.reduce((a,b)=>a+Number(b.valor),0);
 }
 
-/* ===================== LOGIN ===================== */
-function doLogin(){
-  const u = loginUser.value.trim();
-  const p = loginPass.value.trim();
-  loginError.style.display="none";
+async function loadEconomy(){
+  try{
+    const ipca = await getBCB(433);
+    const igpm = await getBCB(189);
+    const selic = await getBCB(4189);
 
-  if(u==="edson" && p==="2026"){
-    currentUser={login:"edson",role:"admin"};
-  } else {
-    const f = base.users.find(x=>x.login===u && x.pass===p);
-    if(!f){
-      loginError.style.display="block";
-      return;
-    }
-    currentUser={login:f.login,role:"user"};
+    alert(
+`📊 ECONOMIA – 12 MESES
+IPCA: ${ipca.toFixed(2)}%
+IGP-M: ${igpm.toFixed(2)}%
+SELIC: ${selic.toFixed(2)}%`
+    );
+  }catch(e){
+    alert("Erro ao carregar taxas econômicas");
   }
-
-  localStorage.setItem(LS_SESSION, JSON.stringify(currentUser));
-  loginOverlay.style.display="none";
-  rolePill.innerText="Acesso: "+currentUser.login;
-  adminBtn.style.display = currentUser.role==="admin"?"inline-block":"none";
 }
 
-function logout(){
-  localStorage.removeItem(LS_SESSION);
-  location.reload();
+ratesBtn.onclick = loadEconomy;
+
+/* ===================== DETECTAR PRODUTO ===================== */
+function detectProduct(text){
+  const t = text.toLowerCase();
+  return PRODUCTS.find(p => t.includes(p.name.toLowerCase().split(" ")[0]));
 }
 
-/* ===================== CORE ===================== */
+function showProduct(p){
+  activeProduct = p;
+  productName.textContent = p.name;
+  productInfo.innerHTML = p.info.map(i=>`<li>${i}</li>`).join("");
+}
+
+/* ===================== CALCULADORA PERDA ===================== */
+function calcLoss(value, rate, months){
+  const monthly = rate / 12 / 100;
+  return value * Math.pow(1+monthly, months) - value;
+}
+
+/* ===================== OBJEÇÕES ===================== */
 function processText(){
-  const txt = normalize(input.value);
-  if(!txt) return;
+  const text = inputText.value.toLowerCase();
+  if(!text) return;
 
-  /* Produto */
-  let foundProd = null;
-  for(const p of base.products){
-    if(p.keys.some(k=>txt.includes(normalize(k)))){
-      foundProd = p;
-      break;
-    }
-  }
-  if(foundProd){
-    prodName.innerText = foundProd.name;
-    prodInfo.innerHTML = foundProd.info.map(i=>"<li>"+i+"</li>").join("");
-    prodConfidence.innerText="Confiança: Alta";
-  }
+  const prod = detectProduct(text);
+  if(prod) showProduct(prod);
 
-  /* Objeção */
-  let foundObj = null;
-  for(const o of base.objections){
-    if(o.keys.some(k=>txt.includes(normalize(k)))){
-      foundObj = o;
-      break;
-    }
-  }
-  if(foundObj){
-    r1.innerText = foundObj.a;
-    r2.innerText = foundObj.b;
-    r3.innerText = foundObj.c;
-    objTag.innerText="Objeção: detectada";
+  if(!activeProduct) return;
+
+  if(text.includes("pensar") || text.includes("depois")){
+    const loss6 = calcLoss(activeProduct.value, activeProduct.valorizacao, 6);
+    r1.textContent = "Tudo bem analisar. O que você quer avaliar primeiro?";
+    r2.textContent = "Só pra alinhar: o que precisa acontecer pra virar um sim?";
+    r3.textContent =
+      `Esperar 6 meses pode custar cerca de R$ ${loss6.toFixed(0)} nesse lote. Prefere garantir agora ou pagar mais depois?`;
   }
 
-  /* Lead score simples */
-  if(txt.includes("comprar") || txt.includes("fechar")){
-    leadTag.innerText="Lead: 🔥 Quente";
-  }else if(foundObj){
-    leadTag.innerText="Lead: 😐 Morno";
-  }else{
-    leadTag.innerText="Lead: 🧊 Frio";
+  if(text.includes("caro")){
+    r1.textContent = "Entendo. Quando você diz caro, é pela parcela ou pelo valor final?";
+    r2.textContent = "Comparando com qual opção? Posso te mostrar o melhor encaixe.";
+    r3.textContent =
+      "O que encarece de verdade é esperar. Esse tipo de lote valoriza acima da média.";
   }
-
-  /* Auto-clear */
-  setTimeout(()=> input.value="", 900);
 }
 
-/* ===================== MICROFONE ===================== */
-let rec=null;
-function toggleMic(){
-  if(!("webkitSpeechRecognition"in window)) return alert("Sem suporte");
-  rec = new webkitSpeechRecognition();
-  rec.lang="pt-BR";
-  rec.onresult=e=>{
-    input.value=e.results[0][0].transcript;
-    processText();
-  };
-  rec.start();
+inputText.addEventListener("input", processText);
+
+/* ===================== GRÁFICO SIMPLES ===================== */
+const graphBox = document.querySelector(".graph-box");
+
+function renderGraph(){
+  if(!activeProduct) return;
+  const months = [0,6,12];
+  const values = months.map(m =>
+    activeProduct.value + calcLoss(activeProduct.value, activeProduct.valorizacao, m)
+  );
+
+  graphBox.innerHTML = `
+    <div style="width:100%">
+      ${months.map((m,i)=>`
+        <div style="margin-bottom:6px">
+          <strong>${m} meses:</strong> R$ ${values[i].toFixed(0)}
+        </div>
+      `).join("")}
+    </div>
+  `;
 }
 
-/* ===================== EVENTS ===================== */
-input.addEventListener("input", processText);
-
-/* ===================== BOOT ===================== */
-(function(){
-  loadBase();
-  const s = localStorage.getItem(LS_SESSION);
-  if(s){
-    currentUser=JSON.parse(s);
-    loginOverlay.style.display="none";
-    rolePill.innerText="Acesso: "+currentUser.login;
-    adminBtn.style.display = currentUser.role==="admin"?"inline-block":"none";
-  }
-})();
+setInterval(renderGraph, 2000);
 </script>
-
-</body>
-</html>

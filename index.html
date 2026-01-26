@@ -3,210 +3,216 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>COPILOTO ELITE v19 - SINOP MASTER</title>
+    <title>ELITE SINOP V22 - FULL</title>
     <style>
-        :root { 
-            --bg: #0f172a; --card: #1e293b; --primary: #3b82f6; --accent: #8b5cf6; 
-            --text: #f8fafc; --muted: #94a3b8; --border: #334155; --good: #10b981; --bad: #ef4444; 
-        }
-        * { box-sizing: border-box; font-family: 'Inter', sans-serif; -webkit-tap-highlight-color: transparent; }
+        :root { --bg: #0f172a; --card: #1e293b; --primary: #3b82f6; --good: #10b981; --bad: #ef4444; --text: #f8fafc; --border: #334155; --gold: #fcc201; }
+        * { box-sizing: border-box; font-family: 'Inter', sans-serif; outline: none; }
         body { margin: 0; background: var(--bg); color: var(--text); height: 100vh; display: flex; flex-direction: column; overflow: hidden; }
         
-        header { background: var(--card); padding: 15px; border-bottom: 1px solid var(--border); display: flex; justify-content: space-between; align-items: center; }
-        main { flex: 1; padding: 15px; overflow-y: auto; display: flex; flex-direction: column; gap: 15px; padding-bottom: 110px; }
+        header { background: var(--card); padding: 12px; border-bottom: 1px solid var(--border); display: flex; justify-content: space-between; align-items: center; gap: 5px; }
+        .idx-container { display: flex; gap: 5px; overflow-x: auto; white-space: nowrap; flex: 1; }
+        .index-tag { background: #000; padding: 4px 8px; border-radius: 6px; font-size: 10px; border: 1px solid var(--gold); color: var(--gold); font-weight: bold; }
 
-        .card { background: var(--card); border-radius: 16px; padding: 18px; border: 1px solid var(--border); box-shadow: 0 4px 6px rgba(0,0,0,0.2); }
-        textarea { width: 100%; height: 70px; background: transparent; border: none; color: #fff; font-size: 18px; outline: none; resize: none; }
+        main { flex: 1; padding: 15px; overflow-y: auto; display: flex; flex-direction: column; gap: 15px; padding-bottom: 150px; }
+        .card { background: var(--card); border-radius: 16px; padding: 18px; border: 1px solid var(--border); box-shadow: 0 4px 15px rgba(0,0,0,0.3); }
         
-        .q-box { margin-top: 10px; padding: 15px; border-radius: 12px; font-size: 14px; line-height: 1.6; }
-        .leve { background: rgba(16, 185, 129, 0.1); border-left: 5px solid var(--good); }
-        .media { background: rgba(59, 130, 246, 0.1); border-left: 5px solid var(--primary); }
-        .agressiva { background: rgba(239, 68, 68, 0.1); border-left: 5px solid var(--bad); }
+        textarea, input { width: 100%; padding: 12px; border-radius: 8px; border: 1px solid var(--border); background: #000; color: #fff; margin-bottom: 10px; font-size: 14px; }
+        .btn { padding: 12px; border: none; border-radius: 8px; font-weight: bold; cursor: pointer; color: white; transition: 0.2s; }
+        .btn-primary { background: var(--primary); } .btn-good { background: var(--good); } .btn-bad { background: var(--bad); }
 
-        .prod-tag { display: inline-block; padding: 4px 10px; border-radius: 6px; font-size: 10px; font-weight: 800; text-transform: uppercase; margin-bottom: 8px; }
+        .calc-box { background: rgba(16, 185, 129, 0.1); border: 1px solid var(--good); padding: 12px; border-radius: 10px; margin-top: 10px; font-size: 13px; }
+        .footer { position: fixed; bottom: 0; width: 100%; background: var(--card); padding: 10px; border-top: 1px solid var(--border); display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
         
-        .footer { position: fixed; bottom: 0; width: 100%; background: var(--card); border-top: 1px solid var(--border); z-index: 1000; }
-        .btn-mic { width: 100%; padding: 22px; border: none; background: var(--primary); color: #fff; font-weight: 800; font-size: 18px; cursor: pointer; }
-        .btn-mic.active { background: var(--bad); animation: blink 1s infinite; }
-        @keyframes blink { 0% { opacity: 1; } 50% { opacity: 0.7; } 100% { opacity: 1; } }
-
-        #adminPanel { position: fixed; inset: 0; background: var(--bg); z-index: 1500; display: none; padding: 20px; overflow-y: auto; }
-        .btn-save { width: 100%; padding: 18px; background: var(--good); color: #fff; border: none; border-radius: 12px; font-weight: bold; margin-top: 15px; cursor: pointer; }
-        
+        #adminPanel, #propPanel, #docPanel { position: fixed; inset: 0; background: var(--bg); z-index: 1500; display: none; padding: 20px; overflow-y: auto; }
         .overlay { position: fixed; inset: 0; background: var(--bg); z-index: 2000; display: flex; align-items: center; justify-content: center; padding: 20px; }
-        .login-box { background: var(--card); padding: 30px; border-radius: 24px; width: 100%; max-width: 350px; text-align: center; border: 1px solid var(--border); }
+        .q-box { margin-top: 10px; padding: 12px; border-radius: 12px; font-size: 13px; background: rgba(255,255,255,0.05); border-left: 4px solid var(--primary); }
     </style>
 </head>
 <body>
 
 <div id="loginOverlay" class="overlay">
-    <div class="login-box">
-        <h2 style="color:var(--primary)">Elite Sinop v19</h2>
-        <input type="text" id="u" placeholder="Usuário">
-        <input type="password" id="p" placeholder="Senha">
-        <button onclick="login()" class="btn-save" style="background:var(--primary)">ENTRAR</button>
+    <div class="card" style="width: 100%; max-width: 320px; text-align: center;">
+        <h2 style="color:var(--primary)">Elite Sinop v22</h2>
+        <input type="text" id="userLogin" placeholder="Usuário">
+        <input type="password" id="passLogin" placeholder="Senha">
+        <button onclick="fazerLogin()" class="btn btn-primary" style="width:100%">ACESSAR SISTEMA</button>
     </div>
 </div>
 
 <header>
-    <strong>💎 COPILOTO MASTER</strong>
-    <button id="adminBtn" onclick="document.getElementById('adminPanel').style.display='block'" style="display:none; background:none; border:none; font-size:20px; cursor:pointer">⚙️</button>
+    <div class="idx-container" id="indicesTopo">Carregando índices oficiais...</div>
+    <button id="btnAdmin" onclick="abrir('adminPanel')" style="display:none; background:none; border:none; font-size:20px;">⚙️</button>
 </header>
 
-<div id="adminPanel">
-    <div style="display:flex; justify-content:space-between; align-items:center">
-        <h3>Editor Master</h3>
-        <button onclick="document.getElementById('adminPanel').style.display='none'" style="color:#fff; background:none; border:none; font-size:28px">✖</button>
+<div id="propPanel">
+    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:20px">
+        <h2>Formalizar Proposta</h2>
+        <button onclick="fechar('propPanel')" class="btn btn-bad">X</button>
     </div>
-    <textarea id="dbEditor" style="height:450px; background:#000; color:var(--good); font-family:monospace; font-size:11px; width:100%; padding:10px;"></textarea>
-    <button onclick="gerarBuild()" class="btn-save">💾 GERAR E COPIAR CÓDIGO FONTE</button>
+    <div class="card">
+        <input type="text" id="f_cliente" placeholder="NOME DO CLIENTE">
+        <input type="text" id="f_cpf" placeholder="CPF">
+        <input type="text" id="f_lote" placeholder="LOTEAMENTO / QUADRA / LOTE">
+        <input type="text" id="f_entrada" placeholder="ENTRADA E VENCIMENTO">
+        <input type="text" id="f_parc" placeholder="PARCELAMENTO E VENCIMENTO">
+        <input type="text" id="f_contato" placeholder="CONTATO CLIENTE">
+        <textarea id="f_ref" placeholder="3 REFERÊNCIAS (NOME E TELEFONE)"></textarea>
+        <button onclick="copiarProposta()" class="btn btn-good" style="width:100%">📋 COPIAR PROPOSTA PARA WHATSAPP</button>
+    </div>
+</div>
+
+<div id="docPanel">
+    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:20px">
+        <h2>Documentação Necessária</h2>
+        <button onclick="fechar('docPanel')" class="btn btn-bad">X</button>
+    </div>
+    <div class="card">
+        <p>✅ CPF e RG<br>✅ Comprovante de Renda<br>✅ Comprovante de Residência<br>✅ Certidão Civil<br>✅ 3 Referências Pessoais<br>✅ E-mail e Telefone</p>
+        <button onclick="copiarDoc()" class="btn btn-primary" style="width:100%">📋 COPIAR LISTA PARA CLIENTE</button>
+    </div>
+</div>
+
+<div id="adminPanel">
+    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:20px">
+        <h2>Gestão de Dados</h2>
+        <button onclick="fechar('adminPanel')" class="btn btn-bad">X</button>
+    </div>
+    <div class="card" style="margin-bottom:15px">
+        <label>Usuários e Corretores</label>
+        <div id="listaUsers"></div>
+        <input type="text" id="newU" placeholder="Novo Usuário">
+        <input type="text" id="newP" placeholder="Senha">
+        <button onclick="addU()" class="btn btn-good" style="width:100%">+ ADD</button>
+    </div>
+    <button onclick="gerarCodigoFinal()" class="btn btn-primary" style="width:100%">💾 BAIXAR ATUALIZAÇÃO DO SISTEMA</button>
 </div>
 
 <main>
     <div class="card">
-        <textarea id="box" placeholder="O que o cliente disse?" oninput="analisar(this.value)"></textarea>
+        <label>ANALISADOR DE CONVERSA (VOZ/TEXTO)</label>
+        <textarea id="box" placeholder="Cole a conversa ou fale..." oninput="analisar(this.value)"></textarea>
     </div>
     <div id="respostas"></div>
 </main>
 
 <div class="footer">
-    <button id="btnFalar" class="btn-mic" onclick="toggleFala()">🎙️ CLIQUE PARA FALAR</button>
+    <button class="btn btn-primary" onclick="abrir('docPanel')">📂 DOCUMENTOS</button>
+    <button class="btn btn-good" onclick="abrir('propPanel')">📝 PROPOSTA</button>
+    <button id="btnFalar" class="btn btn-primary" style="grid-column: span 2; background: #3b82f6;" onclick="toggleFala()">🎙️ CLIQUE PARA FALAR</button>
 </div>
 
+<script id="dadosSistema">
+    let BASE_DADOS = {
+        indices: { ipca: "4.62", igpm: "0.59", selic: "11.75", val: "18" },
+        usuarios: [{u:"admin", p:"123", role:"master"}],
+        produtos: [
+            {nome: "Morada Brasil", preco: 170000, keys: "morada, maggi", desc: "Próximo à André Maggi. Sem entrada. Parcelas R$ 713."},
+            {nome: "Gran Canário", preco: 95000, keys: "canario, fasipe", desc: "MT-140. Lotes ao lado da Fasipe Agro. Parcelas R$ 595."},
+            {nome: "Chácaras Santa Carmem", preco: 135000, keys: "chacara, carmem, spc", desc: "1.800m². Sem consulta SPC/Serasa. Parcelas R$ 695."},
+            {nome: "Casas MCMV", preco: 220000, keys: "casa, pronta, sinal", desc: "Sinal R$ 1.500. Parcelas R$ 699."}
+        ],
+        objecoes: [
+            {keys: "caro, preco", t: "ESTÁ CARO", l: "Leve: O valor é justo pela localização...", m: "Média: O IGP-M e Selic mostram que terra é mais seguro...", a: "Agressiva: Você quer pagar barato ou quer lucrar R$ 50 mil?"}
+        ]
+    };
+</script>
+
 <script>
-const BASE_DADOS = {
-    usuarios: [{u:"admin", p:"123", role:"master"}],
-    produtos: [
-        { 
-            nome: "GRAN CANÁRIO (MT-140)", 
-            keys: ["canario", "canário", "fasipe", "140", "belvedere"], 
-            desc: "Loteamento ao lado da futura FASIPE AGRO. Parcelas a partir de R$ 595. Alto potencial de valorização universitária.",
-            preco: 95000
-        },
-        { 
-            nome: "CHÁCARAS SANTA CARMEM", 
-            keys: ["chacara", "chácara", "carmem", "carmem", "spc"], 
-            desc: "1.800m² a 6km de Santa Carmem. Parcelas de R$ 695. SEM CONSULTA SPC/SERASA e SEM ENTRADA.",
-            preco: 135000
-        },
-        { 
-            nome: "CASAS PRONTAS (MCMV)", 
-            keys: ["casa", "pronta", "caixa", "minha casa", "1500"], 
-            desc: "2 quartos e área de lazer em bairro planejado. Parcelas de R$ 699 com sinal de apenas R$ 1.500.",
-            preco: 220000
-        },
-        { 
-            nome: "MORADA BRASIL (André Maggi)", 
-            keys: ["morada", "brasil", "maggi", "sábado", "11/10"], 
-            desc: "Lançamento Nobre. Sem entrada, até 240x. Parcelas de R$ 713. Terrenos à vista a partir de R$ 170 mil.",
-            preco: 170000
-        }
-    ],
-    objecoes: [
-        { 
-            keys: ["caro", "preço", "valor", "dinheiro"], 
-            t: "ESTÁ CARO / ACIMA DO ORÇAMENTO",
-            l: "🟢 LEVE: Entendo, o valor mensal é o que mais pesa hoje ou é o valor total do terreno?",
-            m: "🔵 MÉDIA: Em Sinop, a terra valoriza 18% ao ano. No Gran Canário, com a Fasipe Agro, essa valorização deve dobrar. Esperar é pagar mais caro.",
-            a: "🔴 AGRESSIVA: Caro é continuar pagando aluguel ou ver o vizinho lucrar R$ 50 mil em 1 ano enquanto você 'pensa'. Vamos garantir a tabela de lançamento?"
-        },
-        { 
-            keys: ["spc", "serasa", "restrição", "nome"], 
-            t: "TENHO RESTRIÇÃO NO NOME",
-            l: "🟢 LEVE: Fique tranquilo, temos opções específicas onde a aprovação é direta com a loteadora.",
-            m: "🔵 MÉDIA: Nas Chácaras Santa Carmem, não consultamos SPC ou Serasa. Sua garantia é o próprio imóvel.",
-            a: "🔴 AGRESSIVA: Essa é a sua única chance de sair do aluguel mesmo com nome sujo. Se não aproveitar agora, essa facilidade acaba logo."
-        },
-        { 
-            keys: ["pensar", "depois", "analisar"], 
-            t: "PRECISO PENSAR / FALAR COM ALGUÉM",
-            l: "🟢 LEVE: Com certeza. Qual informação falta para você tomar essa decisão com segurança agora?",
-            m: "🔵 MÉDIA: No Morada Brasil, amanhã às 7h os melhores lotes somem. Quem pensa demais fica com o que sobra.",
-            a: "🔴 AGRESSIVA: Enquanto você pensa, o sistema libera as reservas. Se eu te ligar em 1 hora e não tiver mais esse lote, como você vai se sentir?"
-        }
-    ]
-};
+    let db = BASE_DADOS;
 
-// Gerador de complementos para 50 objeções com base em Persuasão Master
-const temas = ["Juros", "Localização", "Prazo", "Sinal", "Entrada", "Escritura", "Infraestrutura", "Investimento", "Família", "Segurança"];
-for(let i=0; i<47; i++) {
-    BASE_DADOS.objecoes.push({
-        keys: ["extra"+i, temas[i%10].toLowerCase()],
-        t: "OBJEÇÃO: " + temas[i%10].toUpperCase(),
-        l: "🟢 LEVE: Compreendo perfeitamente sua dúvida sobre " + temas[i%10] + ". Vamos ajustar?",
-        m: "🔵 MÉDIA: A lógica de mercado em Sinop protege seu capital contra " + temas[i%10] + ".",
-        a: "🔴 AGRESSIVA: Você vai deixar a oportunidade passar por causa de " + temas[i%10] + "? O lucro é maior que o medo."
-    });
-}
-
-let db = BASE_DADOS;
-
-function login() {
-    const user = db.usuarios.find(x => x.u === document.getElementById('u').value && x.p === document.getElementById('p').value);
-    if(user) {
-        document.getElementById('loginOverlay').style.display='none';
-        if(user.role === "master") document.getElementById('adminBtn').style.display='block';
-        document.getElementById('dbEditor').value = JSON.stringify(db, null, 4);
-    } else { alert("Acesso Negado"); }
-}
-
-function analisar(val) {
-    const t = val.toLowerCase();
-    const res = document.getElementById('respostas');
-    res.innerHTML = "";
-    
-    db.produtos.forEach(p => {
-        if(p.keys.some(k => t.includes(k))) {
-            const lucro = p.preco * 0.18;
-            res.innerHTML += `
-                <div class="card">
-                    <span class="prod-tag" style="background:var(--primary)">PRODUTO ENCONTRADO</span>
-                    <h3 style="color:var(--primary);margin:0">📍 ${p.nome}</h3>
-                    <p style="font-size:14px;color:var(--muted);margin:10px 0">${p.desc}</p>
-                    <div style="background:rgba(255,255,255,0.05); padding:12px; border-radius:10px; font-size:13px">
-                        <strong>📊 Valorização Estimada (Sinop):</strong><br>
-                        Em 12 meses: <b style="color:var(--good)">+ R$ ${lucro.toLocaleString('pt-BR')}</b>
-                    </div>
-                </div>`;
-        }
-    });
-
-    db.objecoes.forEach(o => {
-        if(o.keys.some(k => t.includes(k))) {
-            res.innerHTML += `
-                <div class="card">
-                    <strong style="color:var(--accent); font-size:16px;">💥 ${o.t}</strong>
-                    <div class="q-box leve">${o.l}</div>
-                    <div class="q-box media">${o.m}</div>
-                    <div class="q-box agressiva">${o.a}</div>
-                </div>`;
-        }
-    });
-}
-
-function gerarBuild() {
-    const novoDB = JSON.parse(document.getElementById('dbEditor').value);
-    let html = document.documentElement.outerHTML;
-    const regex = /const BASE_DADOS = \{[\s\S]*?\};/;
-    html = html.replace(regex, `const BASE_DADOS = ${JSON.stringify(novoDB, null, 4)};`);
-    navigator.clipboard.writeText("<!DOCTYPE html>\n" + html);
-    alert("CÓDIGO MASTER COPIADO! Salve o novo arquivo .html");
-}
-
-let recognition;
-function toggleFala() {
-    const Speech = window.SpeechRecognition || window.webkitSpeechRecognition;
-    if(!recognition) {
-        recognition = new Speech(); recognition.lang = 'pt-BR'; recognition.continuous = true;
-        recognition.onresult = (e) => {
-            const r = Array.from(e.results).map(res => res[0].transcript).join('');
-            document.getElementById('box').value = r; analisar(r);
-        };
+    // BUSCA AUTOMÁTICA DE ÍNDICES (API)
+    async function atualizarIndices() {
+        try {
+            const res = await fetch('https://brasilapi.com.br/api/taxas/v1');
+            const taxas = await res.json();
+            const selicObjeto = taxas.find(t => t.nome === 'Selic');
+            if(selicObjeto) db.indices.selic = selicObjeto.valor;
+            renderizarIndices();
+        } catch(e) { renderizarIndices(); }
     }
-    const b = document.getElementById('btnFalar');
-    if(b.classList.contains('active')) { recognition.stop(); b.classList.remove('active'); b.innerText = "🎙️ CLIQUE PARA FALAR"; }
-    else { recognition.start(); b.classList.add('active'); b.innerText = "🛑 OUVINDO..."; }
-}
+
+    function renderizarIndices() {
+        document.getElementById('indicesTopo').innerHTML = `
+            <div class="index-tag">SELIC: ${db.indices.selic}%</div>
+            <div class="index-tag">IPCA: ${db.indices.ipca}%</div>
+            <div class="index-tag">IGP-M: ${db.indices.igpm}%</div>
+            <div class="index-tag">VALORIZAÇÃO: ${db.indices.val}%</div>
+        `;
+    }
+
+    function fazerLogin() {
+        const u = document.getElementById('userLogin').value;
+        const p = document.getElementById('passLogin').value;
+        const user = db.usuarios.find(x => x.u === u && x.p === p);
+        if(user) {
+            document.getElementById('loginOverlay').style.display='none';
+            if(user.role === "master") document.getElementById('btnAdmin').style.display='block';
+            atualizarIndices(); renderizarListas();
+        } else { alert("Login Inválido"); }
+    }
+
+    function analisar(val) {
+        const t = val.toLowerCase();
+        const res = document.getElementById('respostas');
+        res.innerHTML = "";
+        db.produtos.forEach(p => {
+            if(p.keys.split(',').some(k => t.includes(k.trim()))) {
+                const lucro = (p.preco * (parseFloat(db.indices.val)/100)) / 12;
+                res.innerHTML += `
+                    <div class="card">
+                        <h3 style="color:var(--primary);margin:0">📍 ${p.nome}</h3>
+                        <p style="font-size:13px">${p.desc}</p>
+                        <div class="calc-box"><b>🛑 ALERTA DE PERDA:</b> Se você adiar 1 mês, deixa de ganhar <b>R$ ${lucro.toLocaleString('pt-BR', {minimumFractionDigits: 2})}</b>.</div>
+                    </div>`;
+            }
+        });
+        db.objecoes.forEach(o => {
+            if(o.keys.split(',').some(k => t.includes(k.trim()))) {
+                res.innerHTML += `<div class="card"><strong style="color:var(--gold)">💥 ${o.t}</strong>
+                <div class="q-box"><b>🟢 LEVE:</b> ${o.l}</div><div class="q-box"><b>🔵 MÉDIA:</b> ${o.m}</div><div class="q-box"><b>🔴 AGRES:</b> ${o.a}</div></div>`;
+            }
+        });
+    }
+
+    function copiarDoc() {
+        const texto = "📝 *LISTA DE DOCUMENTOS PARA RESERVA:*\n\n- CPF e RG\n- Comprovante de Renda (3 meses)\n- Comprovante de Residência Atual\n- Certidão de Nascimento/Casamento\n- 3 Referências Pessoais\n- E-mail e Telefone";
+        navigator.clipboard.writeText(texto); alert("Lista de Documentos copiada!");
+    }
+
+    function copiarProposta() {
+        const texto = `📝 *FORMALIZAÇÃO DE PROPOSTA*\n\n*CLIENTE:* ${document.getElementById('f_cliente').value}\n*CPF:* ${document.getElementById('f_cpf').value}\n*EMPREENDIMENTO:* ${document.getElementById('f_lote').value}\n*ENTRADA:* ${document.getElementById('f_entrada').value}\n*PARCELAMENTO:* ${document.getElementById('f_parc').value}\n*CONTATO:* ${document.getElementById('f_contato').value}\n*REFERÊNCIAS:* \n${document.getElementById('f_ref').value}`;
+        navigator.clipboard.writeText(texto); alert("Proposta copiada para o WhatsApp!");
+    }
+
+    function abrir(id) { document.getElementById(id).style.display='block'; }
+    function fechar(id) { document.getElementById(id).style.display='none'; }
+
+    function addU() { db.usuarios.push({u: document.getElementById('newU').value, p: document.getElementById('newP').value, role: 'user'}); renderizarListas(); }
+    function renderizarListas() {
+        document.getElementById('listaUsers').innerHTML = db.usuarios.map((u, i) => `<div style="display:flex; justify-content:space-between; margin-bottom:5px"><span>${u.u}</span> <button onclick="db.usuarios.splice(${i},1);renderizarListas()">X</button></div>`).join('');
+    }
+
+    function gerarCodigoFinal() {
+        let html = document.documentElement.outerHTML;
+        html = html.replace(/let BASE_DADOS = \{[\s\S]*?\};/, `let BASE_DADOS = ${JSON.stringify(db, null, 4)};`);
+        const blob = new Blob(["<!DOCTYPE html>\n" + html], {type: "text/html"});
+        const a = document.createElement("a"); a.href = URL.createObjectURL(blob); a.download = "elite_sinop_v22.html"; a.click();
+    }
+
+    let rec;
+    function toggleFala() {
+        const Speech = window.SpeechRecognition || window.webkitSpeechRecognition;
+        if(!rec) {
+            rec = new Speech(); rec.lang = 'pt-BR'; rec.continuous = true;
+            rec.onresult = (e) => {
+                const r = Array.from(e.results).map(res => res[0].transcript).join('');
+                document.getElementById('box').value = r; analisar(r);
+            };
+        }
+        const b = document.getElementById('btnFalar');
+        if(b.classList.contains('active')) { rec.stop(); b.classList.remove('active'); b.innerText = "🎙️ CLIQUE PARA FALAR"; }
+        else { rec.start(); b.classList.add('active'); b.innerText = "🛑 OUVINDO..."; }
+    }
 </script>
 </body>
 </html>

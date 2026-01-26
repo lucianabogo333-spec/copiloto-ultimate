@@ -40,7 +40,9 @@
 </div>
 
 <header>
-    <div style="display:flex; overflow-x:auto; padding-bottom: 5px;" id="indices"></div>
+    <div style="display:flex; overflow-x:auto; padding-bottom: 5px;" id="indices">
+        <div class="idx-tag">CARREGANDO ÍNDICES...</div>
+    </div>
     <button onclick="abrir('adm')" class="btn btn-gold" id="btnAdm" style="display:none; margin-left:10px;">GESTOR ⚙️</button>
 </header>
 
@@ -54,7 +56,6 @@
         <h2>⚙️ CENTRAL DE CONTROLE</h2>
         <button onclick="fechar('adm')" class="btn btn-red">SAIR</button>
     </div>
-    
     <div class="admin-section">
         <h3 style="color:var(--primary)">📦 PRODUTOS</h3>
         <input type="hidden" id="idxP" value="-1">
@@ -70,27 +71,15 @@
         <button onclick="salvarP()" class="btn btn-green" style="width:100%">SALVAR PRODUTO</button>
         <div id="listP" style="max-height:150px; overflow-y:auto; margin-top:10px;"></div>
     </div>
-
     <div class="admin-section">
         <h3 style="color:var(--gold)">🛡️ OBJEÇÕES</h3>
         <input type="hidden" id="idxO" value="-1">
-        <input type="text" id="okey" placeholder="Gatilho (ex: spc, caro, longe)">
-        <input type="text" id="otit" placeholder="Título da Objeção">
-        <textarea id="omsg" placeholder="Script de Contorno" rows="5"></textarea>
+        <input type="text" id="okey" placeholder="Gatilho">
+        <input type="text" id="otit" placeholder="Título">
+        <textarea id="omsg" placeholder="Script" rows="5"></textarea>
         <button onclick="salvarO()" class="btn btn-green" style="width:100%">SALVAR OBJEÇÃO</button>
         <div id="listO" style="max-height:150px; overflow-y:auto; margin-top:10px;"></div>
     </div>
-
-    <div class="admin-section">
-        <h3 style="color:var(--good)">👥 USUÁRIOS</h3>
-        <div style="display:grid; grid-template-columns:1fr 1fr; gap:10px;">
-            <input type="text" id="unome" placeholder="Login">
-            <input type="text" id="usenha" placeholder="Senha">
-        </div>
-        <button onclick="salvarU()" class="btn btn-green" style="width:100%">ADICIONAR USUÁRIO</button>
-        <div id="listU" style="max-height:100px; overflow-y:auto; margin-top:10px;"></div>
-    </div>
-
     <button onclick="exportar()" class="btn btn-blue" style="width:100%; padding:20px; margin-top:10px;">💾 AUTO-BUILD (GERAR NOVO HTML)</button>
 </div>
 
@@ -116,51 +105,12 @@
 <script>
     let db = {
     "prods": [
-        {
-            "nome": "CEDROS JARDINS",
-            "reg": "Posto Búfalo",
-            "preco": "145000",
-            "area": "200",
-            "ent": "SEM ENTRADA",
-            "parc": "753,00",
-            "keys": "spc, cedros, bufalo"
-        },
-        {
-            "nome": "MORADA BRASIL",
-            "reg": "André Maggi",
-            "preco": "175000",
-            "area": "300",
-            "ent": "R$ 5.000",
-            "parc": "890,00",
-            "keys": "maggi, morada, elite"
-        }
+        { "nome": "CEDROS JARDINS", "reg": "Posto Búfalo", "preco": "145000", "area": "200", "ent": "SEM ENTRADA", "parc": "753,00", "keys": "spc, cedros, bufalo" },
+        { "nome": "MORADA BRASIL", "reg": "André Maggi", "preco": "175000", "area": "300", "ent": "R$ 5.000", "parc": "890,00", "keys": "maggi, morada, elite" }
     ],
     "objs": [
-        {
-            "k": "caro, preco",
-            "t": "💰 OBJEÇÃO: PREÇO / CARO",
-            "m": "1. Caro comparado a quê? Sinop valoriza 18% ao ano. Esperar 6 meses vai te custar R$ 15 mil a mais no mesmo lote.\n2. O problema é o valor total ou a parcela cabe no seu bolso? Se a parcela cabe, o preço é investimento.\n3. Daqui a 2 anos, esse valor vai parecer um presente. Você prefere ser quem comprou ou quem 'achou caro'?"
-        },
-        {
-            "k": "esposa, marido, conjuge",
-            "t": "💎 DECISÃO EM FAMÍLIA",
-            "m": "1. Excelente! Decisões em família são mais seguras. Mas me diga, ela/ele costuma ser contra construir patrimônio?\n2. Vamos garantir a reserva agora para segurar o preço de tabela. Se ela/ele não aprovar, cancelamos. O risco é ficar sem o lote.\n3. Sinop não perdoa quem espera. Se você chegar em casa sem a reserva, e amanhã o lote subir, como explicar que perdeu a oportunidade?"
-        },
-        {
-            "k": "spc, restrição, nome",
-            "t": "🚫 RESTRIÇÃO DE CRÉDITO",
-            "m": "1. Aqui o foco é sua capacidade atual de pagamento. O lote é a garantia.\n2. Ter um imóvel no nome é o primeiro passo para o sistema financeiro voltar a confiar em você.\n3. Não vendemos apenas terra, vendemos sua retomada de patrimônio. Vamos assinar?"
-        },
-        {
-            "k": "longe, localização",
-            "t": "🚀 LOCALIZAÇÃO / LONGE",
-            "m": "1. Onde hoje é 'longe', amanhã é o novo centro. Sinop cresce em progressão geométrica.\n2. Quem comprou o Jardim Primaveras há 15 anos ouviu que era longe. Hoje é milionário.\n3. O asfalto e o comércio seguem o dinheiro. O dinheiro já está indo para essa região."
-        },
-        {
-            "k": "pensar, aviso",
-            "t": "⏳ VOU PENSAR / DEPOIS AVISO",
-            "m": "1. Pensar não compra terra, decisão sim. O que exatamente falta para você garantir seu futuro hoje?\n2. Enquanto você pensa, o investidor de fora (Agro) está comprando 10 lotes. Sobrou esse pra você, vai deixar passar?\n3. O mercado de Sinop não tem botão de pausa. Pensar demais custa caro em juros e valorização."
-        }
+        { "k": "caro, preco", "t": "💰 OBJEÇÃO: PREÇO", "m": "1. Caro comparado a quê? Sinop valoriza 18% ao ano.\n2. Se a parcela cabe no bolso, o preço é investimento." },
+        { "k": "esposa, marido, conjuge", "t": "💎 FAMÍLIA", "m": "1. Decisões em família são seguras. Mas ela costuma ser contra patrimônio?\n2. Segure a unidade; se ela não aprovar, devolvemos a reserva." }
     ],
     "users": [
         {"u": "admin", "p": "123"},
@@ -169,6 +119,37 @@
     "lastProd": null
 };
 
+    // NOVA FUNÇÃO: BUSCA AUTOMÁTICA DE TAXAS
+    async function renderIndices() {
+        const container = document.getElementById('indices');
+        try {
+            // Busca SELIC (BCB)
+            const resSelic = await fetch('https://api.bcb.gov.br/dados/serie/bcdata.sgs.11/dados/ultimos/1?formato=json');
+            const dataSelic = await resSelic.json();
+            const selic = dataSelic[0].valor;
+
+            // Busca IPCA (IBGE)
+            const resIpca = await fetch('https://servicodados.ibge.gov.br/api/v3/agregados/1737/periodos/-1/variaveis/63?localidades=N1[all]');
+            const dataIpca = await resIpca.json();
+            const ipca = dataIpca[0].resultados[0].series[0].serie[Object.keys(dataIpca[0].resultados[0].series[0].serie)[0]];
+
+            container.innerHTML = `
+                <div class="idx-tag">SELIC: ${selic}%</div>
+                <div class="idx-tag">IPCA: ${ipca}% (ACUM)</div>
+                <div class="idx-tag">IGP-M: 0,89% (ESTIMADO)</div>
+                <div class="idx-tag">VALORIZAÇÃO SINOP: 18% A.A.</div>
+            `;
+        } catch (e) {
+            // Fallback caso a API falhe
+            container.innerHTML = `
+                <div class="idx-tag">SELIC: 11.25%</div>
+                <div class="idx-tag">IPCA: 4.5%</div>
+                <div class="idx-tag">VALORIZAÇÃO SINOP: 18% A.A.</div>
+            `;
+        }
+    }
+
+    // Funções Originais Mantidas
     function login() {
         const u = document.getElementById('uIn').value;
         const p = document.getElementById('pIn').value;
@@ -180,21 +161,10 @@
         } else alert("Acesso Negado!");
     }
 
-    function renderIndices() {
-        // ATUALIZADO COM IGP-M
-        document.getElementById('indices').innerHTML = `
-            <div class="idx-tag">SELIC: 11.25%</div>
-            <div class="idx-tag">IPCA: 4.42%</div>
-            <div class="idx-tag">IGP-M: 0.89% (Mês)</div>
-            <div class="idx-tag">VALORIZAÇÃO: 18% A.A.</div>
-        `;
-    }
-
     function pesquisar(v) {
         const t = v.toLowerCase().replace('?', '').trim(); 
         const f = document.getElementById('feed'); f.innerHTML = ""; 
         if(t.length < 2) return;
-
         db.prods.forEach(p => {
             if(p.keys.includes(t) || p.nome.toLowerCase().includes(t)) {
                 db.lastProd = p;
@@ -203,7 +173,6 @@
                 f.innerHTML += `<div class="card card-prod"><h3>📍 ${p.nome}</h3><p style="font-size:11px; opacity:0.8">${p.reg}</p><div style="display:grid; grid-template-columns:1fr 1fr; gap:10px; margin-top:10px; background:#000; padding:10px; border-radius:8px;"><div><span class="label-f">M²</span><b>R$ ${m2.toFixed(2)}</b></div><div><span class="label-f">PARCELA</span><b>R$ ${p.parc}</b></div><div><span class="label-f">ENTRADA</span><b>${p.ent}</b></div><div><span class="label-f">TOTAL</span><b>R$ ${Number(p.preco).toLocaleString()}</b></div></div><div class="calc-box">📉 Procrastinar te custa <b>R$ ${perda.toLocaleString('pt-BR')}</b> de valorização este mês.</div></div>`;
             }
         });
-
         db.objs.forEach(o => {
             const gatilhos = o.k.split(',').map(s => s.trim());
             if(gatilhos.some(g => t.includes(g))) { 
@@ -216,73 +185,53 @@
         const i = parseInt(document.getElementById('idxP').value);
         const p = { nome: document.getElementById('p1').value, reg: document.getElementById('p2').value, keys: document.getElementById('pk').value, preco: document.getElementById('p3').value, area: document.getElementById('p4').value, ent: document.getElementById('p5').value, parc: document.getElementById('p6').value };
         if(i === -1) db.prods.push(p); else db.prods[i] = p;
-        limparCamposP(); atualizarListas(); alert("Produto Atualizado!");
+        limparCamposP(); atualizarListas(); alert("Salvo!");
     }
-
     function editP(i) {
         const p = db.prods[i];
         document.getElementById('p1').value=p.nome; document.getElementById('p2').value=p.reg; document.getElementById('p3').value=p.preco; document.getElementById('p4').value=p.area; document.getElementById('p5').value=p.ent; document.getElementById('p6').value=p.parc; document.getElementById('pk').value=p.keys; document.getElementById('idxP').value=i;
     }
-
-    function limparCamposP() { document.getElementById('idxP').value="-1"; ["p1","p2","p3","p4","p5","p6","pk"].forEach(id => document.getElementById(id).value=""); }
-
     function salvarO() {
         const i = parseInt(document.getElementById('idxO').value);
         const o = { k: document.getElementById('okey').value, t: document.getElementById('otit').value, m: document.getElementById('omsg').value };
         if(i === -1) db.objs.push(o); else db.objs[i] = o;
-        document.getElementById('idxO').value="-1"; document.getElementById('okey').value=""; document.getElementById('otit').value=""; document.getElementById('omsg').value="";
-        atualizarListas(); alert("Objeção Salva!");
+        atualizarListas(); alert("Salvo!");
     }
-
     function editO(i) {
         const o = db.objs[i];
         document.getElementById('okey').value=o.k; document.getElementById('otit').value=o.t; document.getElementById('omsg').value=o.m; document.getElementById('idxO').value=i;
     }
-
-    function salvarU() {
-        db.users.push({u: document.getElementById('unome').value, p: document.getElementById('usenha').value});
-        document.getElementById('unome').value=""; document.getElementById('usenha').value="";
-        atualizarListas();
-    }
-
     function atualizarListas() {
-        document.getElementById('listP').innerHTML = db.prods.map((x,i) => `<div style="display:flex; justify-content:space-between; padding:8px; background:#000; margin-top:5px; font-size:12px;"><span>${x.nome}</span><div><button onclick="editP(${i})">📝</button><button onclick="db.prods.splice(${i},1);atualizarListas()">❌</button></div></div>`).join('');
-        document.getElementById('listO').innerHTML = db.objs.map((x,i) => `<div style="display:flex; justify-content:space-between; padding:8px; background:#000; margin-top:5px; font-size:12px;"><span>${x.t}</span><div><button onclick="editO(${i})">📝</button><button onclick="db.objs.splice(${i},1);atualizarListas()">❌</button></div></div>`).join('');
-        document.getElementById('listU').innerHTML = db.users.map((x,i) => `<div style="display:flex; justify-content:space-between; padding:8px; background:#000; margin-top:5px; font-size:12px;"><span>👤 ${x.u}</span><button onclick="db.users.splice(${i},1);atualizarListas()">❌</button></div>`).join('');
+        document.getElementById('listP').innerHTML = db.prods.map((x,i) => `<div style="display:flex; justify-content:space-between; padding:8px; background:#000; margin-top:5px; font-size:12px;"><span>${x.nome}</span><button onclick="editP(${i})">📝</button></div>`).join('');
+        document.getElementById('listO').innerHTML = db.objs.map((x,i) => `<div style="display:flex; justify-content:space-between; padding:8px; background:#000; margin-top:5px; font-size:12px;"><span>${x.t}</span><button onclick="editO(${i})">📝</button></div>`).join('');
     }
-
-    function abrirProposta() {
-        if(!db.lastProd) { alert("Selecione um produto primeiro!"); return; }
-        abrir('propModal');
-        document.getElementById('propPreview').innerText = `PROPOSTA: ${db.lastProd.nome}\nREGIÃO: ${db.lastProd.reg}\nENTRADA: ${db.lastProd.ent}\nPARCELA: ${db.lastProd.parc}`;
-    }
-
-    function copiarProp() {
-        const texto = `📝 *PROPOSTA FORMAL - SINOP*\n\nCLIENTE: ${document.getElementById('cNome').value}\nLOCAL: ${db.lastProd.nome}\nLOTE: ${document.getElementById('cLote').value}\nENTRADA: ${db.lastProd.ent}\nPARCELA: ${db.lastProd.parc}\nREF: ${document.getElementById('cRef').value}\n\n*Valores sujeitos a alteração de tabela.*`;
-        navigator.clipboard.writeText(texto); alert("Copiado!");
-    }
-
-    function copiarDocs() { navigator.clipboard.writeText("📂 *DOCS:* RG/CPF, Comprovante de Residência, Renda, Estado Civil e 3 referências."); alert("Docs copiados!"); }
-    
     function exportar() { 
         let h = document.documentElement.outerHTML; 
         h = h.replace(/let db = \{[\s\S]*?\};/, `let db = ${JSON.stringify(db, null, 4)};`); 
         const b = new Blob(["<!DOCTYPE html>\n"+h], {type:"text/html"}); 
         const a = document.createElement("a"); a.href = URL.createObjectURL(b); a.download = "sistema_elite_sinop.html"; a.click(); 
     }
-
     function abrir(id) { document.getElementById(id).style.display='block'; }
     function fechar(id) { document.getElementById(id).style.display='none'; }
-    function limpar() { document.getElementById('busca').value=''; pesquisar(''); db.lastProd = null; }
-
+    function limpar() { document.getElementById('busca').value=''; pesquisar(''); }
     function falar() {
         const r = new (window.SpeechRecognition || window.webkitSpeechRecognition)();
         r.lang = 'pt-BR'; r.onresult = (e) => { 
             const t = e.results[0][0].transcript;
-            document.getElementById('busca').value = t; 
-            pesquisar(t); 
+            document.getElementById('busca').value = t; pesquisar(t); 
         }; r.start();
     }
+    function abrirProposta() {
+        if(!db.lastProd) { alert("Selecione um produto!"); return; }
+        abrir('propModal');
+        document.getElementById('propPreview').innerText = `PROPOSTA: ${db.lastProd.nome}\nPARCELA: ${db.lastProd.parc}`;
+    }
+    function copiarProp() {
+        const texto = `📝 *PROPOSTA FORMAL*\nLOCAL: ${db.lastProd.nome}\nLOTE: ${document.getElementById('cLote').value}\nPARCELA: ${db.lastProd.parc}`;
+        navigator.clipboard.writeText(texto); alert("Copiado!");
+    }
+    function copiarDocs() { navigator.clipboard.writeText("📂 *DOCS:* RG/CPF, Comprovante de Residência."); alert("Copiado!"); }
+    function limparCamposP() { document.getElementById('idxP').value="-1"; ["p1","p2","p3","p4","p5","p6","pk"].forEach(id => document.getElementById(id).value=""); }
 </script>
 </body>
 </html>

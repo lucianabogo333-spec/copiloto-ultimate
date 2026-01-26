@@ -121,7 +121,140 @@
 <script>
     let db = {
         "prods": [],
-        "objs": [],
+        "objs": [
+  {"k":"vou pensar,pensar,analisar,depois,ver depois","t":"Vou pensar / depois eu vejo","m":"1) Fechado: pensar é inteligente. Só me diz: você está pensando no preço ou no medo de decidir errado?\n\n2) Top. Se eu te provar em 30 segundos que essa condição é a melhor da semana, você decide hoje?\n\n3) A verdade: quem ‘pensa demais’ paga mais depois. Quer garantir a condição agora e eu te mando tudo certinho?"},
+
+  {"k":"caro,preço alto,muito caro,valor alto","t":"Tá caro","m":"1) ‘Caro’ comparado a quê: aluguel, carro, ou ao lote que vai subir mês que vem?\n\n2) Se eu reduzir o custo da dúvida: você quer pagar menos no total ou pagar mais leve por mês?\n\n3) Vamos ser justos: caro é perder valorização. Com essa condição, você trava o preço hoje. Vamos travar?"},
+
+  {"k":"sem dinheiro,sem grana,to sem,apertado","t":"Tô sem dinheiro agora","m":"1) Perfeito. Então vamos falar de entrada e parcela: o que pesa mais pra você hoje?\n\n2) Se eu deixar o plano “do jeito que cabe”, você segue? Simples.\n\n3) Apertado todo mundo tá. A pergunta é: você prefere apertar com patrimônio ou apertar pagando aluguel?"},
+
+  {"k":"spc,nome sujo,restrição,serasa,negativado","t":"Tô com nome sujo / SPC","m":"1) Ótimo você falar isso agora. Seu nome sujo impede crédito, não impede estratégia. Qual é o nível da restrição?\n\n2) Se eu te mostrar um caminho de aprovação/alternativa sem te expor, você topa avançar?\n\n3) O pior cenário é você esperar ‘limpar’ e perder a condição. Vamos garantir a reserva e ajustar o caminho?"},
+
+  {"k":"entrada alta,sem entrada,entrada","t":"A entrada tá alta","m":"1) Entendi. Você quer reduzir entrada ou diluir entrada?\n\n2) Se eu diluir a entrada e manter a parcela segura, fecha?\n\n3) Entrada é alavanca. Quanto menor a entrada, maior o risco de perder oportunidade. Vamos montar a entrada inteligente."},
+
+  {"k":"parcela alta,parcela pesada,mensalidade alta","t":"Parcela tá alta","m":"1) Parcela alta comparada ao quê: aluguel ou ao que você gasta em coisas que somem?\n\n2) Se eu encaixar a parcela no seu limite real, você decide hoje?\n\n3) Parcela não é custo, é construção de patrimônio. Vamos calibrar o prazo pra te deixar confortável."},
+
+  {"k":"juros,reajuste,igpm,ipca,selic","t":"Medo do reajuste/juros","m":"1) Justo. Reajuste existe pra acompanhar economia. O que te assusta: previsibilidade ou valor final?\n\n2) Se eu te explicar o reajuste com cenário conservador (pior caso), você segue seguro?\n\n3) Reajuste é inevitável. O que você controla é entrar cedo e pegar o menor preço. Vamos entrar no melhor ponto."},
+
+  {"k":"localização longe,é longe,muito longe,distante","t":"É longe / localização","m":"1) Longe de onde: do centro ou da sua rotina? Me diz seu ponto de referência.\n\n2) Se eu te provar que o vetor de crescimento está indo pra lá, muda sua visão?\n\n3) Todo bairro bom já foi ‘longe’. Quem compra antes, ganha depois. Vamos te colocar na frente do movimento."},
+
+  {"k":"quero ver primeiro,ver pessoalmente,visitar","t":"Quero ver primeiro","m":"1) Certíssimo. Ver é obrigatório. Me diz: manhã ou tarde? (pra eu travar o melhor horário)\n\n2) Antes de você ir, eu alinho 3 pontos do lote ideal. Pra não perder tempo. Fechado?\n\n3) Enquanto você agenda, eu já deixo a condição reservada. Visita sem pressão, mas com vantagem."},
+
+  {"k":"minha esposa,meu marido,falar com,preciso conversar","t":"Preciso falar com a esposa/marido","m":"1) Perfeito. Quem decide junto, erra menos. O que você acha que ele(a) vai questionar primeiro?\n\n2) Eu te mando um áudio de 30s explicando a oportunidade pra você encaminhar. Mando agora?\n\n3) Vamos fazer o seguinte: você chama ele(a) pra 5 minutos comigo e eu resolvo as dúvidas. Sem enrolação."},
+
+  {"k":"não confio,golpe,medo,tenho receio","t":"Tenho receio / não confio","m":"1) Justo. Confiança não se pede, se prova. O que você precisa ver pra ficar 100% seguro?\n\n2) Eu te mostro documentação, histórico e passo a passo. Se estiver ok, você segue?\n\n3) Medo é normal. O que não pode é você perder a melhor condição por insegurança. Vamos validar e avançar."},
+
+  {"k":"vou comparar,comparar,outros lugares,outro loteamento","t":"Vou comparar com outros","m":"1) Compare. Mas compare certo: preço/m², entrada, localização e potencial de valorização. Qual você quer priorizar?\n\n2) Se eu ganhar em 2 desses 4 pontos, você fecha comigo?\n\n3) Quem compara demais compra por último. Eu te coloco na frente: me diz o concorrente e eu te mostro a diferença."},
+
+  {"k":"não é o momento,agora não,depois","t":"Agora não é o momento","m":"1) Entendi. O que falta pra virar o momento: dinheiro, segurança ou decisão em casa?\n\n2) Se eu remover o principal obstáculo hoje, vira momento?\n\n3) ‘Não é o momento’ costuma ser medo fantasiado. Vamos tratar o fato real e destravar."},
+
+  {"k":"medo de não pagar,inadimplência,apertar","t":"Medo de não conseguir pagar","m":"1) Perfeito você ser responsável. Me diz o valor mensal seguro pra você (sem sufoco).\n\n2) Se eu montar um plano que caiba nesse valor, você se compromete?\n\n3) Pior do que parcela é ficar sem patrimônio. Vamos fazer do jeito certo: confortável e sustentável."},
+
+  {"k":"quero desconto,desconto,abaixar,melhorar valor","t":"Quero desconto","m":"1) Claro. Desconto vem de decisão rápida. Você fecha hoje se eu melhorar X?\n\n2) Me diz: você quer desconto no total ou condição melhor (entrada/parcela)?\n\n3) Eu consigo ‘melhorar’ pra quem decide. Sem drama: me dá o sim e eu destravo o melhor."},
+
+  {"k":"documentos,contrato,cartório,escritura","t":"Dúvida de documentação/escritura","m":"1) Boa. Documento é o que separa compra de dor de cabeça. Você quer ver contrato ou matrícula primeiro?\n\n2) Eu te mando a lista de documentos e o fluxo certinho. Se estiver ok, a gente formaliza.\n\n3) Transparência total: eu só avanço com você quando tudo estiver claro. Vamos validar agora."},
+
+  {"k":"taxas,cartório,registro,custos extras","t":"E as taxas/custos extras?","m":"1) Ótimo. Custos existem. Prefere que eu te passe o cenário ‘tudo incluso’ (pior caso) pra você não ser pego de surpresa?\n\n2) Se o custo total fechar dentro do que você imaginou, você segue?\n\n3) Quem pergunta de taxa é comprador sério. Vamos colocar isso no papel e travar a condição."},
+
+  {"k":"prefiro casa,ap,to pensando em casa","t":"Prefiro casa/ap em vez de lote","m":"1) Casa é bom. Mas lote é alavanca: você compra mais barato, valoriza e escolhe o padrão depois.\n\n2) Se eu te mostrar que o lote hoje custa menos que a entrada de um ap, muda?\n\n3) Casa prende. Lote te dá opção e lucro. Vamos jogar o jogo inteligente."},
+
+  {"k":"aluguel,to pagando aluguel","t":"Eu pago aluguel / não sobra","m":"1) Justamente. Aluguel é taxa de não-ter patrimônio.\n\n2) Se a parcela do lote ficar perto do aluguel, você migra pra construir patrimônio?\n\n3) Você já paga todo mês. A diferença é: quer pagar pra você ou pros outros?"},
+
+  {"k":"tenho medo de cair,desvalorizar,bolha","t":"Medo de desvalorizar","m":"1) Justo. Me diz: você tem medo de bairro ruim ou de timing?\n\n2) Eu te mostro histórico da região e por que ela valoriza. Se fizer sentido, você segue.\n\n3) Terra boa não “cai”, ela oscila e sobe. Quem compra certo, ganha. Vamos comprar certo."},
+
+  {"k":"não conheço a região,desconheço","t":"Não conheço a região","m":"1) Perfeito. Então eu te posiciono: 3 pontos de referência e o mapa mental do crescimento.\n\n2) Se eu te mandar um áudio com rota e vizinhança, você avalia hoje?\n\n3) Desconhecido assusta. Depois que entende, fica óbvio. Vamos tornar óbvio em 2 minutos."},
+
+  {"k":"vou esperar baixar,esperar,baixar","t":"Vou esperar baixar","m":"1) Esperar baixar é apostar contra o mercado. Você já viu lote bom baixar em lançamento?\n\n2) Se eu te mostrar por que tende a subir, você para de esperar e age?\n\n3) A única coisa que baixa é sua vantagem. Vamos travar hoje e você agradece depois."},
+
+  {"k":"quero o melhor lote,melhor lote,escolher lote","t":"Quero escolher o melhor lote","m":"1) Excelente. Melhor lote depende do seu objetivo: morar, investir ou revender?\n\n2) Me dá 2 preferências (esquina/miolo, sol, frente), que eu te separo os 3 melhores.\n\n3) Os melhores somem primeiro. Vamos garantir prioridade agora e você escolhe com calma."},
+
+  {"k":"medo de pegar lote ruim,lote ruim","t":"E se eu pegar um lote ruim?","m":"1) Ótima preocupação. Lote ruim é o que não bate com seu objetivo. Qual é o seu objetivo?\n\n2) Eu te mando um checklist de lote bom. Se bater, você fecha?\n\n3) Você não vai escolher no escuro. Eu conduzo a escolha como especialista. Vamos fazer certo."},
+
+  {"k":"prazo longo,muito tempo","t":"Prazo é longo","m":"1) Prazo longo é liberdade: parcela menor e você ganha tempo.\n\n2) Se eu reduzir o prazo e ajustar a parcela no seu limite, resolve?\n\n3) Prazo é ferramenta. O objetivo é encaixar sem sufoco e deixar o patrimônio crescer."},
+
+  {"k":"prazo curto,pouco tempo","t":"Prazo é curto","m":"1) Prazo curto é vantagem pra quem quer quitar rápido. Você quer velocidade ou conforto?\n\n2) Se eu alongar um pouco e aliviar a mensal, você segue?\n\n3) O melhor plano é o que você cumpre. Vamos calibrar pra ficar ‘pagável’."},
+
+  {"k":"não tenho certeza,incerto,duvida","t":"Não tenho certeza","m":"1) Normal. Incerteza some com clareza. O que está nebuloso: condição, região ou segurança?\n\n2) Me dá 1 dúvida principal. Eu resolvo agora.\n\n3) Decisão boa não é sem medo. É com informação. Vamos fechar a informação e decidir."},
+
+  {"k":"tá corrido,sem tempo,ocupado","t":"Tô sem tempo","m":"1) Perfeito. Eu resolvo em 2 minutos: objetivo, orçamento e região. Bora?\n\n2) Me manda só: quanto de entrada e quanto de parcela. Eu te devolvo a melhor opção.\n\n3) Sem tempo é motivo pra eu ser direto. Você quer perder oportunidade ou quer que eu agilize?"},
+
+  {"k":"me manda por escrito,manda mensagem,texto","t":"Me manda por escrito","m":"1) Mando. Só antes: qual ponto você quer que eu destaque pra você decidir?\n\n2) Eu mando resumo + proposta pronta pra você encaminhar pra família.\n\n3) Te mando agora e já deixo reservado. Se fizer sentido, você só me dá o ok."},
+
+  {"k":"prefiro audio,manda audio","t":"Prefiro áudio","m":"1) Fechado. Me confirma: você quer entender condição ou localização primeiro?\n\n2) Vou te mandar 2 áudios curtos: ‘oportunidade’ e ‘próximos passos’.\n\n3) Áudio é bom porque tira ruído. Te mando e você me responde com um ‘sim’ ou ‘não’."},
+
+  {"k":"tenho medo de golpe no pix,pix","t":"Medo de pagar / PIX / golpe","m":"1) Certíssimo. Pagamento só com orientação, contrato e canal oficial. Sem improviso.\n\n2) Se eu te mandar os dados oficiais e o passo a passo, você fica seguro?\n\n3) Segurança primeiro. A gente faz tudo rastreável. Do jeito certo e sem risco."},
+
+  {"k":"qual garantia,garantia","t":"Qual a garantia disso?","m":"1) Garantia é contrato + histórico + regra do jogo. O que você quer garantir: entrega, valorização ou documentação?\n\n2) Eu te explico o que é garantido por contrato e o que é expectativa de mercado.\n\n3) Se você quer 0 risco, você paga caro. Se quer vantagem, você compra bem e documentado. Vamos pelo certo."},
+
+  {"k":"vou falar com gerente,banco,financiamento","t":"Vou ver com banco/financiamento","m":"1) Perfeito. Enquanto isso, eu travo a condição aqui. Pode ser?\n\n2) Me diga seu score/faixa, eu já te digo o caminho mais provável.\n\n3) Banco decide rápido quando você apresenta certo. Eu te ajudo a apresentar certo."},
+
+  {"k":"tô esperando receber,13,bonus,salario","t":"Tô esperando receber","m":"1) Ok. Data exata? Porque eu consigo segurar condição até X.\n\n2) Se eu reservar hoje e você paga na data, resolve?\n\n3) Quem espera receber geralmente compra mais caro. Vamos travar agora e você paga quando cair."},
+
+  {"k":"quero só informação,informação apenas","t":"Quero só informação","m":"1) Claro. Só que informação sem direção vira enrolação. Qual seu objetivo: morar ou investir?\n\n2) Me diz sua faixa de parcela e entrada que eu te mando a informação certa.\n\n3) Eu te informo, mas vou te conduzir: você quer perder tempo ou quer acertar de primeira?"},
+
+  {"k":"não quero compromisso,compromisso,reserva","t":"Não quero compromisso agora","m":"1) Beleza. Reserva não é casamento, é proteger sua vantagem.\n\n2) Se a reserva for sem dor de cabeça e te garantir condição, você topa?\n\n3) Sem compromisso você fica exposto a subir preço e perder lote. Reserva é inteligência."},
+
+  {"k":"quero investir depois,agora não invisto","t":"Depois eu invisto","m":"1) Investidor bom entra antes da massa, não depois.\n\n2) Se eu te mostrar o gatilho de valorização, você entra agora?\n\n3) Depois é mais caro. Investimento é timing. Vamos pegar o melhor timing."},
+
+  {"k":"medo de obra,infraestrutura,asfalto,água,luz","t":"Infraestrutura/obra/entrega","m":"1) Boa. O que você quer entender: cronograma, infraestrutura ou padrão de entrega?\n\n2) Eu te passo o status real e o que está no contrato.\n\n3) Obra assusta, mas é aí que mora a valorização. Vamos te colocar do lado certo do ciclo."},
+
+  {"k":"não quero falar no telefone,ligar","t":"Não quero ligação","m":"1) Tranquilo. Eu resolvo por aqui. Só preciso de 2 informações: entrada e parcela.\n\n2) Eu te mando tudo resumido em 5 linhas. Sem ligação.\n\n3) Só não deixa a oportunidade escapar. Me responde e eu agilizo sem telefone."},
+
+  {"k":"qual o m2,metro quadrado,m²","t":"Quanto é o m²?","m":"1) Pergunta de comprador esperto. M² bom é o que valoriza e tem liquidez.\n\n2) Eu te passo o m² e comparo com a região. Se estiver abaixo, você decide?\n\n3) Quando o m² tá bom, você não negocia: você garante. Vamos calcular agora."},
+
+  {"k":"quero esquina,esquina","t":"Quero lote de esquina","m":"1) Esquina é premium. Você quer pra comércio, projeto diferenciado ou revenda?\n\n2) Eu separo as melhores esquinas disponíveis agora. Quer mais movimento ou mais privacidade?\n\n3) Esquina some rápido. Me dá o ok e eu travo uma pra você escolher."},
+
+  {"k":"quero perto do mercado,escola,centro","t":"Quero perto de tudo","m":"1) Perfeito. Me diz 2 prioridades: centro, escola, mercado, trabalho.\n\n2) Se eu te posicionar a 5-10 min do que importa, fecha?\n\n3) Perto de tudo custa mais. Se você quer valorização, pega antes e fica ‘perto’ depois. Vamos inteligente."},
+
+  {"k":"já tenho terreno,ja tenho lote","t":"Já tenho um terreno","m":"1) Excelente. Então você entende o jogo. A pergunta é: você quer diversificar ou trocar por algo melhor?\n\n2) Se eu te mostrar um lote com potencial maior que o seu, você considera?\n\n3) Quem já tem lote, compra o segundo pra ganhar dinheiro. Vamos te colocar nessa posição."},
+
+  {"k":"não quero dívida,dívida","t":"Não quero dívida","m":"1) Justo. Então não chama de dívida: chama de parcela de patrimônio.\n\n2) Se a parcela ficar dentro do seu confortável, ainda é ‘dívida’ pra você?\n\n3) Dívida ruim é a que não te devolve nada. Essa te devolve terra + valorização."},
+
+  {"k":"vou esperar promoção,black friday,promoção","t":"Vou esperar promoção melhor","m":"1) Promoção em lote é agora (fase inicial). Depois chama ‘reajuste’.\n\n2) Se eu te provar que essa é a melhor janela, você entra?\n\n3) Quem espera ‘promoção’ compra do repasse mais caro. Vamos comprar do jeito certo."},
+
+  {"k":"meu score é baixo,score baixo","t":"Meu score é baixo","m":"1) Ok. Score baixo pede estratégia: entrada, prazo e perfil.\n\n2) Se eu te colocar no caminho com maior chance, você topa avançar?\n\n3) Score não é sentença. É cenário. Vamos trabalhar com o cenário e não perder a oportunidade."},
+
+  {"k":"tem multa,desistir,desistência","t":"E se eu desistir?","m":"1) Pergunta madura. Existe regra de desistência e isso fica no contrato.\n\n2) Eu te explico o cenário real pra você entrar consciente.\n\n3) Você não vai entrar no escuro. Eu prefiro cliente seguro do que cliente empolgado."},
+
+  {"k":"tá caro pro meu orçamento,fora do orçamento","t":"Fora do meu orçamento","m":"1) Show. Então me dá seu teto real de parcela e entrada.\n\n2) Se eu encaixar exatamente no seu teto, você decide hoje?\n\n3) Orçamento é limite. Eu trabalho dentro dele. Só não dá pra querer ‘premium’ pagando ‘mínimo’. Vamos ajustar certo."},
+
+  {"k":"não entendi,explica melhor,confuso","t":"Não entendi direito","m":"1) Eu simplifico: 3 pontos — valor, entrada, parcela. Qual você quer primeiro?\n\n2) Eu te mando um resumo em 20 segundos. Sem enrolação.\n\n3) Confusão é inimiga de compra. Eu tiro a confusão e você decide com clareza."},
+
+  {"k":"me manda localização,onde fica,localização","t":"Onde fica exatamente?","m":"1) Te mando agora. Antes: você quer mais perto do centro ou mais perto de acesso rápido?\n\n2) Vou te mandar: mapa + pontos de referência + rota.\n\n3) Se a localização te agradar, a gente fecha a condição hoje. Combinado?"},
+
+  {"k":"posso negociar,negociar,negociação","t":"Dá pra negociar?","m":"1) Dá, sim. Negociação boa troca: decisão por condição. Você decide hoje?\n\n2) Me diz qual ponto você quer melhorar: entrada, parcela ou total.\n\n3) Eu negocio pra quem é sério. Se você está pronto, eu destravo o melhor."},
+
+  {"k":"não quero pagar corretor,comissão","t":"Não quero pagar corretor/comissão","m":"1) Você não paga corretor — você paga segurança, estratégia e acesso à melhor condição.\n\n2) Se eu te economizar tempo e dinheiro evitando erro, faz sentido?\n\n3) Meu trabalho é fazer você comprar certo. Isso vale mais do que qualquer comissão."},
+
+  {"k":"já estou com outro corretor,outro corretor","t":"Já tô com outro corretor","m":"1) Tranquilo. Só não deixa faltar informação. Ele te mostrou comparação de m² e janela de valorização?\n\n2) Se eu te mostrar um ângulo que ele não mostrou, você considera?\n\n3) Eu não brigo por ego. Eu brigo pra você fazer o melhor negócio. Me deixa te dar 1 insight."},
+
+  {"k":"quero ver contrato,contrato","t":"Quero ver o contrato antes","m":"1) Certíssimo. Contrato primeiro, emoção depois.\n\n2) Eu te mando os pontos-chave e explico o que olhar. Se estiver ok, você segue.\n\n3) Transparência total. Vamos ler junto e fechar sem ruído."},
+
+  {"k":"tenho medo de golpe na internet,online","t":"Comprar online me dá medo","m":"1) Medo válido. Então a gente faz com validação: documentos, dados oficiais e registro.\n\n2) Se eu te conduzir passo a passo e você validar tudo, você segue?\n\n3) Online ou presencial, o que protege é processo. Eu tenho processo. Vamos fazer certo."},
+
+  {"k":"quero só um lote barato,barato","t":"Quero o mais barato","m":"1) Beleza. Só cuidado: ‘barato’ pode ser caro depois. Você quer barato ou bom negócio?\n\n2) Se eu te mostrar o melhor custo-benefício (não o menor preço), você aceita?\n\n3) Lobo compra valor, não preço. Vamos pegar o lote certo que valoriza."},
+
+  {"k":"quero investir pra revender,revender","t":"Quero pra revender","m":"1) Perfeito. Então vamos direto: liquidez, posição e preço de entrada.\n\n2) Se eu te indicar os 3 lotes com maior liquidez, você trava um?\n\n3) Revenda boa começa na compra certa. Vamos comprar certo agora."},
+
+  {"k":"quero pra construir,construir","t":"Quero pra construir","m":"1) Ótimo. Então o foco é: topografia, vizinhança e infraestrutura.\n\n2) Me diz seu projeto (casa térrea/sobrado) e eu te indico o lote ideal.\n\n3) Quem constrói precisa escolher bem. Eu não deixo você errar. Vamos escolher já."},
+
+  {"k":"vou esperar a poeira baixar,esperar estabilizar","t":"Vou esperar estabilizar","m":"1) Estabilizar é quando já subiu.\n\n2) Se eu te mostrar que a fase boa é justamente antes, você age?\n\n3) Lobo entra antes do barulho. Vamos entrar antes."},
+
+  {"k":"não quero me expor,privacidade","t":"Não quero me expor / privacidade","m":"1) Tranquilo. Eu trabalho discreto. Só preciso do mínimo pra montar sua proposta.\n\n2) Eu te mando tudo sem dados sensíveis e você decide.\n\n3) Você controla o ritmo. Eu só garanto que você não perde a condição."},
+
+  {"k":"só estou olhando,olhando apenas","t":"Só estou olhando","m":"1) Perfeito. Quem ‘só olha’ às vezes compra o melhor. Me diz: você olha pra investir ou pra morar?\n\n2) Se eu te mostrar 2 opções certeiras, você olha com direção?\n\n3) Olhar sem direção vira perder tempo. Eu te dou direção e você ganha vantagem."},
+
+  {"k":"tenho medo de ser pressionado,pressão","t":"Não gosto de pressão","m":"1) Perfeito. Aqui não tem pressão. Tem clareza.\n\n2) Meu papel é te mostrar o melhor cenário e o pior cenário. Você decide.\n\n3) Sem pressão, mas com verdade: a condição não espera. Vamos só garantir e você decide tranquilo."},
+
+  {"k":"vou decidir semana que vem,próxima semana","t":"Decido semana que vem","m":"1) Combinado. Só uma coisa: semana que vem a condição pode mudar. Quer que eu segure hoje?\n\n2) Se eu segurar e você decidir, fechou. Se não decidir, você libera. Justo.\n\n3) Eu prefiro você com opção do que sem opção. Vamos segurar agora."},
+
+  {"k":"qual a melhor condição,melhor condição","t":"Qual a melhor condição?","m":"1) A melhor condição é a que você consegue decidir agora.\n\n2) Me diz: entrada baixa ou parcela baixa? Eu te dou o melhor caminho.\n\n3) Eu vou te dar a melhor condição possível — mas eu preciso do seu ‘sim’ pra destravar."},
+
+  {"k":"posso reservar,reserva,segurar","t":"Dá pra reservar/segurar?","m":"1) Sim. Reserva existe pra proteger sua vantagem.\n\n2) Eu reservo, te mando tudo e você valida com calma.\n\n3) Reserva é atitude de comprador sério. Vamos fazer agora."},
+
+  {"k":"qual próximo passo,proximo passo","t":"Qual o próximo passo?","m":"1) Próximo passo é simples: escolher o lote e formalizar proposta.\n\n2) Eu te envio a proposta pronta pra você só confirmar.\n\n3) A partir daqui, a gente joga no modo rápido: escolha, proposta, documentação. Vamos?"}
+],
+,
         "users": [{"u": "admin", "p": "123"}],
         "lastProd": null
     };
@@ -249,3 +382,4 @@
 </script>
 </body>
 </html>
+

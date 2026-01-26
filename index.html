@@ -1,35 +1,219 @@
 <!DOCTYPE html>
-<!-- CÓDIGO COMPLETO RESTAURADO – SISTEMA ELITE SINOP V26 -->
 <html lang="pt-BR">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 <title>SISTEMA ELITE SINOP V26</title>
+
 <style>
-/* estilos mantidos */
+:root{
+  --bg:#05070a;
+  --card:#111827;
+  --primary:#2563eb;
+  --good:#10b981;
+  --bad:#ef4444;
+  --gold:#f59e0b;
+  --border:#374151;
+}
+*{box-sizing:border-box;font-family:Segoe UI,Arial,sans-serif;margin:0;padding:0}
+body{background:var(--bg);color:#fff;height:100vh;display:flex;flex-direction:column;overflow:hidden}
+header{background:#000;padding:12px;border-bottom:3px solid var(--primary);display:flex;justify-content:space-between;align-items:center}
+.idx-tag{background:#1f2937;padding:6px 10px;border-radius:6px;font-size:11px;border:1px solid var(--gold);color:var(--gold);font-weight:bold;margin-right:5px;white-space:nowrap}
+main{flex:1;padding:15px;overflow-y:auto;padding-bottom:180px}
+.busca-master{width:100%;padding:18px;border-radius:12px;border:3px solid var(--primary);background:#000;color:#fff;font-size:18px;font-weight:bold;margin-bottom:20px;box-shadow:0 0 15px rgba(37,99,235,.3)}
+.card{background:var(--card);border-radius:12px;padding:16px;border:2px solid var(--border);margin-bottom:15px}
+.card-prod{border-left:8px solid var(--primary)}
+.card-obj{border-left:8px solid var(--gold)}
+.btn{padding:12px;border:none;border-radius:8px;font-weight:900;cursor:pointer;text-transform:uppercase;font-size:11px;text-align:center;color:#fff}
+.btn-blue{background:#2563eb}
+.btn-green{background:#059669}
+.btn-red{background:#dc2626}
+.btn-gold{background:#f59e0b;color:#000}
+.label-f{display:block;font-size:10px;color:var(--gold);font-weight:bold;margin-bottom:4px;text-transform:uppercase}
+input,textarea{width:100%;padding:12px;border-radius:8px;border:2px solid #4b5563;background:#000;color:#fff;margin-bottom:10px;font-size:14px}
+.modal{position:fixed;inset:0;background:#000;z-index:2000;display:none;padding:20px;overflow-y:auto}
+.footer{position:fixed;bottom:0;width:100%;background:#000;padding:15px;border-top:3px solid var(--primary);display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;z-index:1000}
+.calc-box{background:rgba(239,68,68,.1);border:1px solid var(--bad);padding:10px;border-radius:8px;margin-top:10px;font-size:12px;color:#fca5a5}
+.info-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:10px;background:rgba(0,0,0,.4);padding:10px;border-radius:8px}
+.admin-section{margin-bottom:30px;border-bottom:1px solid var(--border);padding-bottom:20px}
 </style>
 </head>
+
 <body>
+
 <!-- LOGIN -->
-<div id="login">LOGIN FUNCIONAL</div>
+<div id="login" style="position:fixed;inset:0;background:#000;z-index:5000;display:flex;align-items:center;justify-content:center;padding:20px">
+  <div class="card" style="width:100%;max-width:350px;text-align:center">
+    <h2 style="color:var(--primary);margin-bottom:20px">ELITE SINOP V26</h2>
+    <input id="uIn" placeholder="Usuário">
+    <input id="pIn" type="password" placeholder="Senha">
+    <button class="btn btn-blue" style="width:100%;padding:15px" onclick="login()">ACESSAR</button>
+  </div>
+</div>
+
+<header>
+  <div style="display:flex;overflow-x:auto" id="indices">
+    <div class="idx-tag">SINCRONIZANDO...</div>
+  </div>
+  <button id="btnAdm" class="btn btn-gold" style="display:none" onclick="abrir('adm')">GESTOR ⚙️</button>
+</header>
+
+<main>
+  <input id="busca" class="busca-master" placeholder="Busque: SPC, CARO, MAGGI..." oninput="pesquisar(this.value)">
+  <div id="feed"></div>
+</main>
+
+<!-- ADMIN / PRODUTOS / OBJEÇÕES / USUÁRIOS -->
+<div id="adm" class="modal">
+  <h2>⚙️ CENTRAL DE CONTROLE</h2>
+  <button class="btn btn-red" onclick="fechar('adm')">FECHAR</button>
+  <div id="adminConteudo"></div>
+</div>
+
+<div class="footer">
+  <button class="btn btn-blue" onclick="copiarDocs()">📂 DOCS</button>
+  <button class="btn btn-green" onclick="limpar()">🧹 LIMPAR</button>
+  <button class="btn btn-blue" style="grid-column:span 3" onclick="falar()">🎙️ ESCUTA ATIVA</button>
+</div>
 
 <script>
-/* BANCO DE DADOS */
+/* =========================
+   BANCO DE DADOS CENTRAL
+========================= */
 let db = {
-  users:[{u:"admin",p:"123"}],
-  prods:[],
-  objs:[]
+  users: [
+    { u: "admin", p: "123" }
+  ],
+
+  prods: [
+    {
+      nome: "Loteamento Carvalhos",
+      reg: "Próximo ao Shopping (Sinop-MT)",
+      keys: "carvalhos,shopping,300m,sem entrada,1299,alto padrão,investir",
+      preco: "",
+      area: "300",
+      ent: "Sem entrada",
+      parc: "1.299,00",
+      reaj: "A informar",
+      prazo: "Até 240x"
+    },
+    {
+      nome: "Morada Brasil",
+      reg: "Av. André Maggi (Sinop-MT)",
+      keys: "morada brasil,andré maggi,sem entrada,713,lançamento",
+      preco: "",
+      area: "240",
+      ent: "Sem entrada",
+      parc: "713,00",
+      reaj: "A informar",
+      prazo: "Até 240x"
+    },
+    {
+      nome: "Cedros Jardins",
+      reg: "Próximo ao Posto Búfalo (Sinop-MT)",
+      keys: "cedros jardins,posto búfalo,sem entrada,753,200m,lote barato",
+      preco: "",
+      area: "200",
+      ent: "Sem entrada",
+      parc: "753,00",
+      reaj: "A informar",
+      prazo: "A informar"
+    }
+  ],
+
+  objs: [
+    {
+      k: "vou pensar,pensar,depois",
+      t: "Vou pensar melhor",
+      m: "1) Perfeito, pensar é inteligente.\n2) Posso te mostrar em 30s por que essa condição é a melhor hoje?\n3) Quem pensa depois geralmente paga mais caro."
+    },
+    {
+      k: "caro,preço alto",
+      t: "Tá caro",
+      m: "1) Caro comparado a quê?\n2) Prefere pagar menos no total ou parcela menor?\n3) Caro é perder valorização."
+    },
+    {
+      k: "spc,nome sujo",
+      t: "Nome sujo / SPC",
+      m: "1) Nome sujo não impede estratégia.\n2) Tenho caminhos alternativos.\n3) Vamos garantir a condição agora."
+    },
+    {
+      k: "parcela alta",
+      t: "Parcela alta",
+      m: "1) Parcela comparada ao aluguel?\n2) Posso ajustar prazo.\n3) Parcela vira patrimônio."
+    },
+    {
+      k: "entrada",
+      t: "Entrada",
+      m: "1) Você quer reduzir ou diluir?\n2) Entrada é alavanca.\n3) Vamos montar inteligente."
+    }
+  ],
+
+  lastProd: null
 };
 
-/* LOGIN */
-function login(){
-  const u=document.getElementById('uIn')?.value||'admin';
-  const p=document.getElementById('pIn')?.value||'123';
-  if(db.users.find(x=>x.u===u&&x.p===p)){
-    document.getElementById('login').style.display='none';
-    alert("LOGIN OK");
-  } else alert("ACESSO NEGADO");
+/* =========================
+   LOGIN
+========================= */
+function login() {
+  const u = document.getElementById("uIn").value;
+  const p = document.getElementById("pIn").value;
+  const ok = db.users.find(x => x.u === u && x.p === p);
+  if (ok) {
+    document.getElementById("login").style.display = "none";
+    document.getElementById("btnAdm").style.display = "block";
+  } else {
+    alert("Acesso negado");
+  }
 }
-</script>
-</body>
+
+/* =========================
+   PESQUISA INTELIGENTE
+========================= */
+function pesquisar(v) {
+  const t = v.toLowerCase().trim();
+  const feed = document.getElementById("feed");
+  feed.innerHTML = "";
+  if (t.length < 2) return;
+
+  db.prods.forEach(p => {
+    if (p.keys.includes(t) || p.nome.toLowerCase().includes(t)) {
+      db.lastProd = p;
+      feed.innerHTML += `
+        <div class="card card-prod">
+          <h3>📍 ${p.nome}</h3>
+          <p style="font-size:12px;opacity:.8">${p.reg}</p>
+          <div class="info-grid">
+            <div><span class="label-f">Parcela</span><b>R$ ${p.parc}</b></div>
+            <div><span class="label-f">Entrada</span><b>${p.ent}</b></div>
+            <div><span class="label-f">Área</span><b>${p.area} m²</b></div>
+            <div><span class="label-f">Prazo</span><b>${p.prazo}</b></div>
+          </div>
+        </div>
+      `;
+    }
+  });
+
+  db.objs.forEach(o => {
+    if (o.k.split(",").some(k => t.includes(k.trim()))) {
+      feed.innerHTML += `
+        <div class="card card-obj">
+          <strong>${o.t}</strong>
+          <div style="margin-top:8px;white-space:pre-wrap">${o.m}</div>
+        </div>
+      `;
+    }
+  });
+}
+
+/* =========================
+   FUNÇÕES BÁSICAS
+========================= */
+function abrir(id){ document.getElementById(id).style.display="block"; }
+function fechar(id){ document.getElementById(id).style.display="none"; }
+function limpar(){ document.getElementById("busca").value=""; document.getElementById("feed").innerHTML=""; }
+function copiarDocs(){
+  navigator.clipboard.writeText("RG, CPF, Comprovante de Renda e Residência");
+  alert("Docs copiados");
+}
 </html>

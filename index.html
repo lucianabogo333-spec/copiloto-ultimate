@@ -3,132 +3,200 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>ELITE SINOP V23 - REAL DATA</title>
+    <title>SISTEMA ELITE SINOP - CONTROLE TOTAL</title>
     <style>
-        :root { --bg: #0b0f1a; --card: #161e2e; --primary: #3b82f6; --good: #10b981; --bad: #ef4444; --text: #f8fafc; --border: #2d3748; --gold: #f59e0b; }
-        * { box-sizing: border-box; font-family: 'Segoe UI', sans-serif; outline: none; }
+        :root { --bg: #05070a; --card: #111827; --primary: #2563eb; --good: #059669; --bad: #dc2626; --text: #ffffff; --border: #374151; --gold: #fbbf24; }
+        * { box-sizing: border-box; font-family: 'Segoe UI', Arial, sans-serif; }
         body { margin: 0; background: var(--bg); color: var(--text); height: 100vh; display: flex; flex-direction: column; overflow: hidden; }
-        header { background: var(--card); padding: 12px; border-bottom: 1px solid var(--border); display: flex; justify-content: space-between; align-items: center; }
-        .idx-container { display: flex; gap: 8px; overflow-x: auto; flex: 1; padding-right: 10px; scrollbar-width: none; }
-        .index-tag { background: #000; padding: 6px 12px; border-radius: 6px; font-size: 11px; border: 1px solid var(--gold); color: var(--gold); white-space: nowrap; font-weight: bold; }
-        main { flex: 1; padding: 15px; overflow-y: auto; display: flex; flex-direction: column; gap: 12px; padding-bottom: 180px; }
-        .card { background: var(--card); border-radius: 12px; padding: 16px; border: 1px solid var(--border); position: relative; animation: fadeIn 0.3s ease; }
-        .card-prod { border-left: 5px solid var(--primary); }
-        .card-obj { border-left: 5px solid var(--gold); }
-        .badge-regiao { position: absolute; top: 12px; right: 12px; font-size: 10px; background: var(--primary); color: white; padding: 3px 8px; border-radius: 4px; text-transform: uppercase; font-weight: 900; }
-        .grid-tecnico { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-top: 15px; background: rgba(0,0,0,0.4); padding: 12px; border-radius: 8px; }
-        .tecnico-label { color: #94a3b8; font-size: 10px; text-transform: uppercase; display: block; }
-        .tecnico-val { color: #fff; font-weight: bold; font-size: 14px; }
-        .calc-perda { background: rgba(239, 68, 68, 0.15); border: 1px solid var(--bad); padding: 12px; border-radius: 8px; margin-top: 12px; font-size: 13px; color: #fca5a5; }
-        .q-box { margin-top: 10px; padding: 12px; border-radius: 8px; font-size: 14px; border-left: 4px solid transparent; }
-        .q-leve { background: rgba(16, 185, 129, 0.1); color: #6ee7b7; border-color: var(--good); }
-        .q-media { background: rgba(59, 130, 246, 0.1); color: #93c5fd; border-color: var(--primary); }
-        .q-agres { background: rgba(245, 158, 11, 0.1); color: #fcd34d; border-color: var(--gold); }
-        .footer { position: fixed; bottom: 0; width: 100%; background: var(--card); padding: 12px; border-top: 1px solid var(--border); display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px; }
-        .btn { padding: 12px; border: none; border-radius: 8px; font-weight: bold; cursor: pointer; color: white; display: flex; align-items: center; justify-content: center; font-size: 12px; text-transform: uppercase; }
-        input, textarea { width: 100%; padding: 14px; border-radius: 8px; border: 1px solid var(--border); background: #000; color: #fff; margin-bottom: 12px; }
-        .modal { position: fixed; inset: 0; background: var(--bg); z-index: 2000; display: none; padding: 20px; overflow-y: auto; }
-        .overlay-login { position: fixed; inset: 0; background: var(--bg); z-index: 3000; display: flex; align-items: center; justify-content: center; padding: 20px; }
+        
+        header { background: #000; padding: 12px; border-bottom: 3px solid var(--primary); display: flex; justify-content: space-between; align-items: center; }
+        .index-tag { background: #1f2937; padding: 6px 10px; border-radius: 6px; font-size: 11px; border: 1px solid var(--gold); color: var(--gold); white-space: nowrap; font-weight: bold; margin-right: 5px; }
+
+        main { flex: 1; padding: 15px; overflow-y: auto; display: flex; flex-direction: column; gap: 15px; padding-bottom: 200px; }
+        .card { background: var(--card); border-radius: 12px; padding: 16px; border: 2px solid var(--border); position: relative; }
+        .card-prod { border-left: 8px solid var(--primary); }
+        .card-obj { border-left: 8px solid var(--gold); }
+        
+        /* BOTÕES ALTO CONTRASTE */
+        .btn { padding: 14px; border: none; border-radius: 8px; font-weight: 900; cursor: pointer; color: #ffffff !important; text-transform: uppercase; font-size: 12px; text-align: center; }
+        .btn-primary { background-color: #2563eb; } /* Azul Forte */
+        .btn-good { background-color: #059669; } /* Verde Sólido */
+        .btn-bad { background-color: #dc2626; } /* Vermelho Sólido */
+        .btn-edit { background-color: #fbbf24; color: #000 !important; } /* Amarelo Ouro */
+
+        input, textarea, select { width: 100%; padding: 15px; border-radius: 8px; border: 2px solid #4b5563; background: #000; color: #fff; margin-bottom: 12px; font-size: 16px; font-weight: bold; }
+        
+        .footer { position: fixed; bottom: 0; width: 100%; background: #000; padding: 15px; border-top: 3px solid var(--primary); display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px; z-index: 1000; }
+        .modal { position: fixed; inset: 0; background: #000; z-index: 2000; display: none; padding: 20px; overflow-y: auto; }
+        
+        .grid-tecnico { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 10px; background: #000; padding: 10px; border-radius: 8px; border: 1px solid #333; }
+        .label-t { color: #9ca3af; font-size: 10px; text-transform: uppercase; }
+        .val-t { color: #fff; font-weight: bold; font-size: 14px; display: block; }
     </style>
 </head>
 <body>
 
-<div id="loginOverlay" class="overlay-login">
-    <div class="card" style="width: 100%; max-width: 350px; text-align: center;">
-        <h1 style="color:var(--primary); margin-bottom: 20px;">ELITE SINOP V23</h1>
-        <input type="text" id="userLogin" placeholder="Consultor">
-        <input type="password" id="passLogin" placeholder="Senha">
-        <button onclick="fazerLogin()" class="btn btn-primary" style="width:100%">ACESSAR PRODUTOS REAIS</button>
+<div id="loginOverlay" style="position:fixed; inset:0; background:#000; z-index:5000; display:flex; align-items:center; justify-content:center; padding:20px;">
+    <div class="card" style="width:100%; max-width:350px; text-align:center;">
+        <h1 style="color:var(--primary)">SISTEMA ELITE</h1>
+        <input type="text" id="uIn" placeholder="Usuário">
+        <input type="password" id="pIn" placeholder="Senha">
+        <button onclick="login()" class="btn btn-primary" style="width:100%">ACESSAR</button>
     </div>
 </div>
 
 <header>
-    <div class="idx-container" id="indicesTopo">Sincronizando Índices...</div>
-    <button id="btnAdmin" onclick="abrir('adminPanel')" style="display:none; background:none; border:none; font-size:24px;">⚙️</button>
+    <div style="display:flex; overflow-x:auto;" id="indices"></div>
+    <button onclick="abrir('admin')" class="btn btn-edit" id="btnAdm" style="display:none;">GESTOR ⚙️</button>
 </header>
 
-<div id="propPanel" class="modal">
-    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:20px"><h2>📝 Gerar Proposta</h2><button onclick="fechar('propPanel')" class="btn btn-bad">X</button></div>
-    <input type="text" id="f_cliente" placeholder="NOME DO CLIENTE">
-    <input type="text" id="f_lote" placeholder="EMPREENDIMENTO / QUADRA / LOTE">
-    <input type="text" id="f_entrada" placeholder="ENTRADA">
-    <input type="text" id="f_parc" placeholder="PARCELAMENTO">
-    <button onclick="copiarProposta()" class="btn btn-good" style="width:100%">📋 COPIAR PARA WHATSAPP</button>
-</div>
-
-<div id="docPanel" class="modal">
-    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:20px"><h3>📂 Documentos</h3><button onclick="fechar('docPanel')" class="btn btn-bad">X</button></div>
-    <div class="card"><p>• RG/CPF • Renda • Residência • Certidão • 3 Ref • E-mail</p><button onclick="copiarDoc()" class="btn btn-primary" style="width:100%">📋 COPIAR LISTA</button></div>
-</div>
-
-<div id="adminPanel" class="modal">
-    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:20px"><h2>⚙️ Painel Master</h2><button onclick="fechar('adminPanel')" class="btn btn-bad">VOLTAR</button></div>
-    <button onclick="gerarCodigoFinal()" class="btn btn-primary" style="width:100%; padding: 20px;">💾 SALVAR ATUALIZAÇÕES</button>
-    <div id="listaProds" style="margin-top:20px"></div>
-</div>
-
 <main>
-    <input type="text" id="box" placeholder="Busque 'maggi', 'agro', 'spc' ou 'casa'..." oninput="analisar(this.value)" style="border: 2px solid var(--primary);">
-    <div id="respostas"></div>
+    <input type="text" id="busca" placeholder="O que o cliente disse? (ex: spc, maggi, caro...)" oninput="pesquisar(this.value)" style="border: 3px solid var(--primary);">
+    <div id="feed"></div>
 </main>
 
-<div class="footer">
-    <button class="btn btn-primary" onclick="abrir('docPanel')">📂 DOCS</button>
-    <button class="btn btn-good" onclick="abrir('propPanel')">📝 PROP</button>
-    <button class="btn btn-bad" onclick="limpar()">🧹 LIMP</button>
-    <button id="btnFalar" class="btn btn-primary" style="grid-column: span 3; background: #2563eb;" onclick="toggleFala()">🎙️ OUVIR CLIENTE</button>
+<div id="admin" class="modal">
+    <div style="display:flex; justify-content:space-between; margin-bottom:20px;">
+        <h2>⚙️ PAINEL MASTER</h2>
+        <button onclick="fechar('admin')" class="btn btn-bad">SAIR</button>
+    </div>
+
+    <div class="card" style="border-color: var(--primary); margin-bottom: 20px;">
+        <h3 id="tProd">Adicionar Produto</h3>
+        <input type="hidden" id="idxP" value="-1">
+        <input type="text" id="p1" placeholder="Nome">
+        <input type="text" id="p2" placeholder="Região">
+        <input type="text" id="pk" placeholder="Palavras-Chave (vírgula)">
+        <div style="display:grid; grid-template-columns:1fr 1fr; gap:10px;">
+            <input type="number" id="p3" placeholder="Preço R$">
+            <input type="number" id="p4" placeholder="M²">
+            <input type="text" id="p5" placeholder="Entrada">
+            <input type="text" id="p6" placeholder="Parcela">
+            <input type="text" id="p7" placeholder="Prazo">
+            <input type="text" id="p8" placeholder="Reajuste">
+        </div>
+        <button onclick="salvarP()" class="btn btn-good" style="width:100%">SALVAR PRODUTO</button>
+        <div id="listP" style="margin-top:15px"></div>
+    </div>
+
+    <div class="card" style="border-color: var(--gold); margin-bottom: 20px;">
+        <h3 id="tObj">Adicionar Objeção</h3>
+        <input type="hidden" id="idxO" value="-1">
+        <input type="text" id="o1" placeholder="Título (ex: Tá Caro)">
+        <input type="text" id="ok" placeholder="Gatilhos (ex: preço, valor)">
+        <textarea id="o2" placeholder="Resposta Leve"></textarea>
+        <textarea id="o3" placeholder="Resposta Média"></textarea>
+        <textarea id="o4" placeholder="Resposta Agressiva"></textarea>
+        <button onclick="salvarO()" class="btn btn-good" style="width:100%; background: #b45309;">SALVAR OBJEÇÃO</button>
+        <div id="listO" style="margin-top:15px"></div>
+    </div>
+
+    <div class="card" style="border-color: #fff; margin-bottom: 20px;">
+        <h3>Gestão de Usuários</h3>
+        <input type="text" id="uN" placeholder="Novo Usuário">
+        <input type="text" id="uS" placeholder="Senha">
+        <button onclick="addU()" class="btn btn-primary" style="width:100%">ADICIONAR USUÁRIO</button>
+        <div id="listU" style="margin-top:15px"></div>
+    </div>
+
+    <button onclick="exportar()" class="btn btn-primary" style="width:100%; padding:20px;">💾 BAIXAR SISTEMA COM MEUS DADOS</button>
 </div>
 
-<script id="dadosSistema">
-    let BASE_DADOS = {
-        indices: { ipca: "4.62", igpm: "0.59", selic: "11.75", val: "18" },
-        usuarios: [{u:"admin", p:"123", role:"master"}],
-        produtos: [
-            {nome: "CEDROS JARDINS", regiao: "Próx. Posto Búfalo", preco: 145000, area: 200, entrada: "SEM ENTRADA", parcela: "R$ 753,00", reajuste: "IGP-M", prazo: "Construção Imediata", keys: "cedros, bufalo, sem entrada, pronto", desc: "Próximo ao Posto Búfalo, lotes de 200m²."},
-            {nome: "GRAN CANÁRIO", regiao: "Belvedere / MT-140", preco: 98000, area: 250, entrada: "Facilitada", parcela: "R$ 595,00", reajuste: "IPCA", prazo: "Lançamento", keys: "canario, agro, fasipe, belvedere, mt140", desc: "Futura Fasipe Agro na região. Investimento de alto crescimento."},
-            {nome: "CHÁCARAS STA CARMEM", regiao: "6km Sta Carmem", preco: 135000, area: 1800, entrada: "SEM ENTRADA", parcela: "R$ 695,00", reajuste: "Fixo", prazo: "Pronto", keys: "chacara, spc, carmen, campo, lazer", desc: "Sem consulta SPC/Serasa. 1.800m² prontos para construir."},
-            {nome: "CASAS PRONTAS (MCMV)", regiao: "Bairros Planejados", preco: 230000, area: 180, entrada: "R$ 1.500 (SINAL)", parcela: "R$ 699,00", reajuste: "TR / Caixa", prazo: "Pronta Entrega", keys: "casa, pronta, sinal, caixa, mcmv", desc: "2 quartos, sala, cozinha e área de lazer. Sinal de R$ 1.500."},
-            {nome: "MORADA BRASIL", regiao: "Próx. André Maggi", preco: 170000, area: 300, entrada: "SEM ENTRADA", parcela: "R$ 713,00", reajuste: "IGP-M", prazo: "Lançamento (11/10)", keys: "morada, maggi, andre maggi, lancamento", desc: "O loteamento mais esperado. Acesso direto à André Maggi."}
-        ],
-        objecoes: [
-            {keys: "caro, preco, preço", t: "ESTÁ CARO", l: "Entendo, o valor da parcela não coube no planejamento mensal?", m: "Em Sinop, o m² valoriza 18% ao ano. Cada mês que você espera, o lote fica R$ 2.500 mais caro.", a: "Caro é continuar pagando aluguel ou ver seu dinheiro desvalorizar enquanto a terra dobra de preço."},
-            {keys: "esposa, marido, familia", t: "FALAR COM CÔNJUGE", l: "Decisão em família é essencial. Ela costuma ser sua parceira nos investimentos?", m: "Segurança é o que elas buscam. Lote escriturado em Sinop é o seguro de vida da sua família.", a: "Reserve o lote sem entrada agora. Se ela disser não, cancelamos. Mas se o lote vender agora, amanhã não tem mais."},
-            {keys: "spc, consulta, serasa, nome", t: "TENHO RESTRIÇÃO / SPC", l: "Entendo perfeitamente, muitos clientes começam assim. Qual o tamanho da sua urgência?", m: "As Chácaras Santa Carmem e o Cedros possuem planos sem burocracia de consulta.", a: "O seu nome não impede você de ter terra. O sistema facilitado é justamente para quem quer recomeçar."},
-            {keys: "longe, distancia, mt140", t: "ACHEI LONGE", l: "Distância em Sinop é sinônimo de lucro futuro, você percebeu isso?", m: "Quem comprou na André Maggi quando era 'longe', hoje está rico com a valorização.", a: "A Fasipe Agro está indo para lá. Onde tem faculdade, o preço triplica. Você quer comprar antes ou depois?"}
-        ]
-    };
-</script>
+<div class="footer">
+    <button class="btn btn-primary" onclick="alert('Docs: RG, CPF, Renda, Residência')">📂 DOCS</button>
+    <button class="btn btn-good" onclick="abrir('prop')">📝 PROP</button>
+    <button class="btn btn-bad" onclick="document.getElementById('busca').value=''; pesquisar('')">🧹 LIMP</button>
+</div>
 
 <script>
-    let db = BASE_DADOS;
-    function fazerLogin() {
-        const u = document.getElementById('userLogin').value, p = document.getElementById('passLogin').value;
-        if(u === 'admin' && p === '123') { document.getElementById('loginOverlay').style.display='none'; document.getElementById('btnAdmin').style.display='block'; buscarIndices(); } 
-        else { alert("Dados incorretos!"); }
+    let db = {
+        users: [{u:"admin", p:"123"}],
+        prods: [
+            {nome: "CEDROS JARDINS", reg: "Posto Búfalo", preco: 145000, area: 200, ent: "SEM ENTRADA", parc: "753,00", prazo: "Imediato", reaj: "IGPM", keys: "cedros, bufalo, sem entrada"},
+            {nome: "GRAN CANÁRIO", reg: "MT-140", preco: 98000, area: 250, ent: "Facil", parc: "595,00", prazo: "Lançamento", reaj: "IPCA", keys: "canario, agro, fasipe"},
+            {nome: "MORADA BRASIL", reg: "André Maggi", preco: 170000, area: 300, ent: "SEM ENTRADA", parc: "713,00", prazo: "Amanhã 07h", reaj: "IGPM", keys: "morada, maggi, andre maggi"}
+        ],
+        objs: [
+            {t: "TÁ CARO", k: "caro, preço", l: "Parece caro comparado a que?", m: "A terra valoriza 18% ao ano.", a: "Caro é não comprar e pagar o dobro depois."}
+        ]
+    };
+
+    function login() {
+        const u = document.getElementById('uIn').value, s = document.getElementById('pIn').value;
+        const val = db.users.find(x => x.u === u && x.p === s);
+        if(val) { document.getElementById('loginOverlay').style.display='none'; document.getElementById('btnAdm').style.display='block'; atualizarListas(); }
+        else alert("Acesso Negado!");
     }
-    async function buscarIndices() {
-        try { const r = await fetch('https://brasilapi.com.br/api/taxas/v1'); const d = await r.json(); const s = d.find(i => i.nome === 'Selic'); if(s) db.indices.selic = s.valor; renderIndices(); } catch(e) { renderIndices(); }
+
+    // GESTÃO DE PRODUTOS
+    function salvarP() {
+        const i = parseInt(document.getElementById('idxP').value);
+        const p = { nome: document.getElementById('p1').value, reg: document.getElementById('p2').value, preco: document.getElementById('p3').value, area: document.getElementById('p4').value, ent: document.getElementById('p5').value, parc: document.getElementById('p6').value, prazo: document.getElementById('p7').value, reaj: document.getElementById('p8').value, keys: document.getElementById('pk').value };
+        if(i === -1) db.prods.push(p); else db.prods[i] = p;
+        document.getElementById('idxP').value = "-1"; atualizarListas(); alert("Lote Salvo!");
     }
-    function renderIndices() {
-        document.getElementById('indicesTopo').innerHTML = `<div class="index-tag">SELIC: ${db.indices.selic}%</div><div class="index-tag">IPCA: ${db.indices.ipca}%</div><div class="index-tag">IGPM: ${db.indices.igpm}%</div><div class="index-tag">VALORIZAÇÃO: ${db.indices.val}% A.A.</div>`;
+
+    function editP(i) {
+        const p = db.prods[i];
+        document.getElementById('p1').value = p.nome; document.getElementById('p2').value = p.reg;
+        document.getElementById('p3').value = p.preco; document.getElementById('p4').value = p.area;
+        document.getElementById('p5').value = p.ent; document.getElementById('p6').value = p.parc;
+        document.getElementById('p7').value = p.prazo; document.getElementById('p8').value = p.reaj;
+        document.getElementById('pk').value = p.keys; document.getElementById('idxP').value = i;
+        document.getElementById('tProd').innerText = "Editando: " + p.nome;
     }
-    function analisar(val) {
-        const t = val.toLowerCase(); const res = document.getElementById('respostas'); res.innerHTML = ""; if(t.length < 2) return;
-        db.produtos.forEach(p => {
-            if(p.keys.toLowerCase().includes(t) || p.nome.toLowerCase().includes(t)) {
-                const m2 = p.preco / p.area; const perda = (p.preco * (db.indices.val / 100)) / 12;
-                res.innerHTML += `<div class="card card-prod"><span class="badge-regiao">${p.regiao}</span><h3 style="margin:0;color:var(--primary)">📍 ${p.nome}</h3><div class="grid-tecnico"><div><span class="tecnico-label">M²</span><span class="tecnico-val">R$ ${m2.toFixed(2)}</span></div><div><span class="tecnico-label">ENTRADA</span><span class="tecnico-val">${p.entrada}</span></div><div><span class="tecnico-label">PARCELA</span><span class="tecnico-val">${p.parcela}</span></div><div><span class="tecnico-label">PRAZO</span><span class="tecnico-val">${p.prazo}</span></div></div><div class="calc-perda">⚠️ Adiar este investimento te custa <b>R$ ${perda.toFixed(2)}</b> de valorização este mês.</div></div>`;
+
+    // GESTÃO DE OBJEÇÕES
+    function salvarO() {
+        const i = parseInt(document.getElementById('idxO').value);
+        const o = { t: document.getElementById('o1').value, k: document.getElementById('ok').value, l: document.getElementById('o2').value, m: document.getElementById('o3').value, a: document.getElementById('o4').value };
+        if(i === -1) db.objs.push(o); else db.objs[i] = o;
+        document.getElementById('idxO').value = "-1"; atualizarListas(); alert("Objeção Salva!");
+    }
+
+    function editO(i) {
+        const o = db.objs[i];
+        document.getElementById('o1').value = o.t; document.getElementById('ok').value = o.k;
+        document.getElementById('o2').value = o.l; document.getElementById('o3').value = o.m;
+        document.getElementById('o4').value = o.a; document.getElementById('idxO').value = i;
+        document.getElementById('tObj').innerText = "Editando: " + o.t;
+    }
+
+    // GESTÃO DE USUÁRIOS
+    function addU() {
+        db.users.push({u: document.getElementById('uN').value, p: document.getElementById('uS').value});
+        atualizarListas(); alert("Corretor Adicionado!");
+    }
+
+    function atualizarListas() {
+        document.getElementById('listP').innerHTML = db.prods.map((x,i) => `<div class="card" style="margin-bottom:5px; padding:8px; display:flex; justify-content:space-between;"><span>${x.nome}</span><div><button onclick="editP(${i})" class="btn btn-edit" style="padding:4px 8px;">EDITAR</button> <button onclick="db.prods.splice(${i},1);atualizarListas()" class="btn btn-bad" style="padding:4px 8px;">X</button></div></div>`).join('');
+        document.getElementById('listO').innerHTML = db.objs.map((x,i) => `<div class="card" style="margin-bottom:5px; padding:8px; display:flex; justify-content:space-between;"><span>${x.t}</span><div><button onclick="editO(${i})" class="btn btn-edit" style="padding:4px 8px;">EDITAR</button> <button onclick="db.objs.splice(${i},1);atualizarListas()" class="btn btn-bad" style="padding:4px 8px;">X</button></div></div>`).join('');
+        document.getElementById('listU').innerHTML = db.users.map((x,i) => `<div class="card" style="margin-bottom:5px; padding:8px; display:flex; justify-content:space-between;"><span>${x.u}</span><button onclick="db.users.splice(${i},1);atualizarListas()" class="btn btn-bad" style="padding:4px 8px;">REMOVER</button></div>`).join('');
+    }
+
+    function pesquisar(v) {
+        const t = v.toLowerCase(); const f = document.getElementById('feed'); f.innerHTML = ""; if(t.length < 2) return;
+        db.prods.forEach(p => {
+            if(p.keys.includes(t) || p.nome.toLowerCase().includes(t)) {
+                f.innerHTML += `<div class="card card-prod"><h3>📍 ${p.nome}</h3><div class="grid-tecnico"><div><span class="label-t">ENTRADA</span><span class="val-t">${p.ent}</span></div><div><span class="label-t">PARCELA</span><span class="val-t">${p.parc}</span></div></div></div>`;
             }
         });
-        db.objecoes.forEach(o => { if(o.keys.toLowerCase().includes(t)) { res.innerHTML += `<div class="card card-obj"><strong>💥 ${o.t}</strong><div class="q-box q-leve">🟢 ${o.l}</div><div class="q-box q-media">🔵 ${o.m}</div><div class="q-box q-agres">🔴 ${o.a}</div></div>`; }});
+        db.objs.forEach(o => {
+            if(o.k.includes(t)) {
+                f.innerHTML += `<div class="card card-obj"><strong>💥 ${o.t}</strong><div style="color:#6ee7b7; margin-top:5px;">L: ${o.l}</div><div style="color:#93c5fd; margin-top:5px;">M: ${o.m}</div><div style="color:#fcd34d; margin-top:5px;">A: ${o.a}</div></div>`;
+            }
+        });
     }
+
+    function exportar() {
+        let h = document.documentElement.outerHTML;
+        h = h.replace(/let db = \{[\s\S]*?\};/, `let db = ${JSON.stringify(db, null, 4)};`);
+        const b = new Blob(["<!DOCTYPE html>\n"+h], {type:"text/html"});
+        const a = document.createElement("a"); a.href = URL.createObjectURL(b); a.download = "sinop_master.html"; a.click();
+    }
+    
     function abrir(id) { document.getElementById(id).style.display='block'; }
     function fechar(id) { document.getElementById(id).style.display='none'; }
-    function limpar() { document.getElementById('box').value = ""; document.getElementById('respostas').innerHTML = ""; }
-    function copiarDoc() { navigator.clipboard.writeText("📂 DOCS: RG/CPF, Renda, Residência, Certidão Civil, 3 Ref, E-mail."); alert("Checklist Copiado!"); }
-    function copiarProposta() { const txt = `📝 *PROPOSTA FORMAL*\nCLIENTE: ${document.getElementById('f_cliente').value}\nPRODUTO: ${document.getElementById('f_lote').value}\nENTRADA: ${document.getElementById('f_entrada').value}\nPARCELAMENTO: ${document.getElementById('f_parc').value}`; navigator.clipboard.writeText(txt); alert("Proposta Copiada!"); }
-    function gerarCodigoFinal() { let h = document.documentElement.outerHTML; h = h.replace(/let BASE_DADOS = \{[\s\S]*?\};/, `let BASE_DADOS = ${JSON.stringify(db, null, 4)};`); const b = new Blob(["<!DOCTYPE html>\n" + h], {type:"text/html"}); const a = document.createElement("a"); a.href = URL.createObjectURL(b); a.download = "elite_v23_real.html"; a.click(); }
-    let rec; function toggleFala() { const S = window.SpeechRecognition || window.webkitSpeechRecognition; if(!rec) { rec = new S(); rec.lang = 'pt-BR'; rec.continuous = true; rec.onresult = (e) => { const r = Array.from(e.results).map(res => res[0].transcript).join(''); document.getElementById('box').value = r; analisar(r); }; } if(document.getElementById('btnFalar').innerText.includes("OUVIR")) { rec.start(); document.getElementById('btnFalar').innerText = "🛑 OUVINDO..."; } else { rec.stop(); document.getElementById('btnFalar').innerText = "🎙️ OUVIR CLIENTE"; } }
 </script>
 </body>
 </html>

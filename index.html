@@ -57,6 +57,7 @@
         <h2>⚙️ CENTRAL DE CONTROLE</h2>
         <button onclick="fechar('adm')" class="btn btn-red">SAIR</button>
     </div>
+    
     <div class="admin-section">
         <h3 style="color:var(--primary)">📦 PRODUTOS</h3>
         <input type="hidden" id="idxP" value="-1">
@@ -74,6 +75,27 @@
         <button onclick="salvarP()" class="btn btn-green" style="width:100%">SALVAR PRODUTO</button>
         <div id="listP" style="max-height:150px; overflow-y:auto; margin-top:10px;"></div>
     </div>
+
+    <div class="admin-section">
+        <h3 style="color:var(--gold)">🛡️ OBJEÇÕES</h3>
+        <input type="hidden" id="idxO" value="-1">
+        <input type="text" id="okey" placeholder="Gatilho (ex: spc, caro)">
+        <input type="text" id="otit" placeholder="Título da Objeção">
+        <textarea id="omsg" placeholder="Script de Contorno" rows="4"></textarea>
+        <button onclick="salvarO()" class="btn btn-green" style="width:100%">SALVAR OBJEÇÃO</button>
+        <div id="listO" style="max-height:150px; overflow-y:auto; margin-top:10px;"></div>
+    </div>
+
+    <div class="admin-section">
+        <h3 style="color:var(--good)">👥 USUÁRIOS</h3>
+        <div style="display:grid; grid-template-columns:1fr 1fr; gap:10px;">
+            <input type="text" id="unome" placeholder="Login">
+            <input type="text" id="usenha" placeholder="Senha">
+        </div>
+        <button onclick="salvarU()" class="btn btn-green" style="width:100%">ADICIONAR USUÁRIO</button>
+        <div id="listU" style="max-height:100px; overflow-y:auto; margin-top:10px;"></div>
+    </div>
+
     <button onclick="exportar()" class="btn btn-blue" style="width:100%; padding:20px; margin-top:10px;">💾 AUTO-BUILD (GERAR NOVO HTML)</button>
 </div>
 
@@ -98,35 +120,27 @@
 
 <script>
     let db = {
-    "prods": [],
-    "objs": [],
-    "users": [{"u": "admin", "p": "123"}],
-    "lastProd": null
-};
+        "prods": [],
+        "objs": [],
+        "users": [{"u": "admin", "p": "123"}],
+        "lastProd": null
+    };
 
-    // FUNÇÃO ATUALIZADA: BUSCA ACUMULADO 12 MESES
     async function renderIndices() {
         const container = document.getElementById('indices');
         try {
-            // SELIC Meta (Anualizada)
             const resSelic = await fetch('https://api.bcb.gov.br/dados/serie/bcdata.sgs.432/dados/ultimos/1?formato=json');
             const dataSelic = await resSelic.json();
-            const selic = dataSelic[0].valor;
-
-            // IPCA Acumulado 12 meses (IBGE)
             const resIpca = await fetch('https://servicodados.ibge.gov.br/api/v3/agregados/1737/periodos/-1/variaveis/63?localidades=N1[all]');
             const dataIpca = await resIpca.json();
             const ipca = dataIpca[0].resultados[0].series[0].serie[Object.keys(dataIpca[0].resultados[0].series[0].serie)[0]];
-            
-            // IGP-M Acumulado 12 meses (Estimativa via API BCB série 189)
             const resIgpm = await fetch('https://api.bcb.gov.br/dados/serie/bcdata.sgs.189/dados/ultimos/1?formato=json');
             const dataIgpm = await resIgpm.json();
-            const igpm = dataIgpm[0].valor;
 
             container.innerHTML = `
-                <div class="idx-tag">SELIC: ${selic}% (AA)</div>
+                <div class="idx-tag">SELIC: ${dataSelic[0].valor}%</div>
                 <div class="idx-tag">IPCA 12M: ${ipca}%</div>
-                <div class="idx-tag">IGP-M 12M: ${igpm}%</div>
+                <div class="idx-tag">IGP-M 12M: ${dataIgpm[0].valor}%</div>
                 <div class="idx-tag">VALORIZAÇÃO: 18% A.A.</div>
             `;
         } catch (e) {
@@ -134,29 +148,31 @@
         }
     }
 
-    // --- TODAS AS FUNÇÕES ORIGINAIS PRESERVADAS ABAIXO ---
     function login() {
         const u = document.getElementById('uIn').value;
         const p = document.getElementById('pIn').value;
-        if(db.users.find(user => user.u === u && user.p === p)) {
+        const valid = db.users.find(user => user.u === u && user.p === p);
+        if(valid) {
             document.getElementById('login').style.display='none';
             document.getElementById('btnAdm').style.display='block';
             renderIndices(); atualizarListas();
-        } else alert("Erro!");
+        } else alert("Acesso Negado!");
     }
 
     function pesquisar(v) {
         const t = v.toLowerCase().trim(); 
         const f = document.getElementById('feed'); f.innerHTML = ""; 
         if(t.length < 2) return;
+
         db.prods.forEach(p => {
             if(p.keys.includes(t) || p.nome.toLowerCase().includes(t)) {
                 db.lastProd = p;
                 const m2 = p.preco / p.area;
                 const perda = (p.preco * 0.18) / 12;
-                f.innerHTML += `<div class="card card-prod"><div style="display:flex; justify-content:space-between;"><h3>📍 ${p.nome}</h3><span style="background:var(--primary); font-size:9px; padding:3px 6px; border-radius:4px;">${p.prazo}</span></div><p style="font-size:11px; opacity:0.8; margin-bottom:10px;">${p.reg}</p><div class="info-grid"><div><span class="label-f">Total</span><b>R$ ${Number(p.preco).toLocaleString('pt-BR')}</b></div><div><span class="label-f">Parcela</span><b>R$ ${p.parc}</b></div><div><span class="label-f">Entrada</span><b>${p.ent}</b></div><div><span class="label-f">M²</span><b>R$ ${m2.toFixed(2)}</b></div><div><span class="label-f">Reajuste</span><b>${p.reaj}</b></div><div><span class="label-f">Área</span><b>${p.area}m²</b></div></div><div class="calc-box">📉 Adiar custa <b>R$ ${perda.toLocaleString('pt-BR', {minimumFractionDigits: 2})}</b>/mês em valorização.</div></div>`;
+                f.innerHTML += `<div class="card card-prod"><div style="display:flex; justify-content:space-between;"><h3>📍 ${p.nome}</h3><span style="background:var(--primary); font-size:9px; padding:3px 6px; border-radius:4px;">${p.prazo}</span></div><p style="font-size:11px; opacity:0.8; margin-bottom:10px;">${p.reg}</p><div class="info-grid"><div><span class="label-f">Total</span><b>R$ ${Number(p.preco).toLocaleString('pt-BR')}</b></div><div><span class="label-f">Parcela</span><b>R$ ${p.parc}</b></div><div><span class="label-f">Entrada</span><b>${p.ent}</b></div><div><span class="label-f">M²</span><b>R$ ${m2.toFixed(2)}</b></div><div><span class="label-f">Reajuste</span><b>${p.reaj}</b></div><div><span class="label-f">Área</span><b>${p.area}m²</b></div></div><div class="calc-box">📉 Procrastinar custa <b>R$ ${perda.toLocaleString('pt-BR', {minimumFractionDigits: 2})}</b>/mês em valorização.</div></div>`;
             }
         });
+
         db.objs.forEach(o => {
             if(o.k.split(',').some(g => t.includes(g.trim()))) { 
                 f.innerHTML += `<div class="card card-obj"><strong>${o.t}</strong><div style="color:#93c5fd; margin-top:5px; font-size:14px; line-height:1.4; white-space: pre-wrap;">${o.m}</div></div>`; 
@@ -168,28 +184,63 @@
         const i = parseInt(document.getElementById('idxP').value);
         const p = { nome: document.getElementById('p1').value, reg: document.getElementById('p2').value, keys: document.getElementById('pk').value, preco: document.getElementById('p3').value, area: document.getElementById('p4').value, ent: document.getElementById('p5').value, parc: document.getElementById('p6').value, reaj: document.getElementById('p7').value, prazo: document.getElementById('p8').value };
         if(i === -1) db.prods.push(p); else db.prods[i] = p;
-        limparCamposP(); atualizarListas(); alert("Sincronizado!");
+        limparCamposP(); atualizarListas(); alert("Produto Salvo!");
     }
+
     function editP(i) {
         const p = db.prods[i];
         document.getElementById('p1').value=p.nome; document.getElementById('p2').value=p.reg; document.getElementById('p3').value=p.preco; document.getElementById('p4').value=p.area; document.getElementById('p5').value=p.ent; document.getElementById('p6').value=p.parc; document.getElementById('p7').value=p.reaj; document.getElementById('p8').value=p.prazo; document.getElementById('pk').value=p.keys; document.getElementById('idxP').value=i;
     }
-    function atualizarListas() {
-        document.getElementById('listP').innerHTML = db.prods.map((x,i) => `<div style="display:flex; justify-content:space-between; padding:8px; background:#000; margin-top:5px; font-size:11px;"><span>${x.nome}</span><button onclick="editP(${i})">📝</button></div>`).join('');
+
+    function salvarO() {
+        const i = parseInt(document.getElementById('idxO').value);
+        const o = { k: document.getElementById('okey').value, t: document.getElementById('otit').value, m: document.getElementById('omsg').value };
+        if(i === -1) db.objs.push(o); else db.objs[i] = o;
+        document.getElementById('idxO').value="-1"; document.getElementById('okey').value=""; document.getElementById('otit').value=""; document.getElementById('omsg').value="";
+        atualizarListas(); alert("Objeção Salva!");
     }
+
+    function editO(i) {
+        const o = db.objs[i];
+        document.getElementById('okey').value=o.k; document.getElementById('otit').value=o.t; document.getElementById('omsg').value=o.m; document.getElementById('idxO').value=i;
+    }
+
+    function salvarU() {
+        db.users.push({u: document.getElementById('unome').value, p: document.getElementById('usenha').value});
+        document.getElementById('unome').value=""; document.getElementById('usenha').value="";
+        atualizarListas();
+    }
+
+    function atualizarListas() {
+        document.getElementById('listP').innerHTML = db.prods.map((x,i) => `<div style="display:flex; justify-content:space-between; padding:8px; background:#000; margin-top:5px; font-size:11px;"><span>${x.nome}</span><div><button onclick="editP(${i})">📝</button><button onclick="db.prods.splice(${i},1);atualizarListas()">❌</button></div></div>`).join('');
+        document.getElementById('listO').innerHTML = db.objs.map((x,i) => `<div style="display:flex; justify-content:space-between; padding:8px; background:#000; margin-top:5px; font-size:11px;"><span>${x.t}</span><div><button onclick="editO(${i})">📝</button><button onclick="db.objs.splice(${i},1);atualizarListas()">❌</button></div></div>`).join('');
+        document.getElementById('listU').innerHTML = db.users.map((x,i) => `<div style="display:flex; justify-content:space-between; padding:8px; background:#000; margin-top:5px; font-size:11px;"><span>👤 ${x.u}</span><button onclick="db.users.splice(${i},1);atualizarListas()">❌</button></div>`).join('');
+    }
+
     function exportar() { 
         let h = document.documentElement.outerHTML; 
         h = h.replace(/let db = \{[\s\S]*?\};/, `let db = ${JSON.stringify(db, null, 4)};`); 
         const b = new Blob(["<!DOCTYPE html>\n"+h], {type:"text/html"}); 
         const a = document.createElement("a"); a.href = URL.createObjectURL(b); a.download = "sistema_elite_sinop.html"; a.click(); 
     }
+
     function abrir(id) { document.getElementById(id).style.display='block'; }
     function fechar(id) { document.getElementById(id).style.display='none'; }
     function limpar() { document.getElementById('busca').value=''; pesquisar(''); }
     function copiarDocs() { navigator.clipboard.writeText("📂 *DOCS:* RG/CPF, Comprovante de Residência, Renda."); alert("Copiado!"); }
     function limparCamposP() { document.getElementById('idxP').value="-1"; ["p1","p2","p3","p4","p5","p6","p7","p8","pk"].forEach(id => document.getElementById(id).value=""); }
-    function abrirProposta() { if(!db.lastProd) return; abrir('propModal'); document.getElementById('propPreview').innerText = `PROPOSTA: ${db.lastProd.nome}\nVALOR: R$ ${db.lastProd.preco}`; }
-    function copiarProp() { navigator.clipboard.writeText(`📝 *PROPOSTA*\nLOCAL: ${db.lastProd.nome}`); alert("Copiado!"); }
+    
+    function abrirProposta() {
+        if(!db.lastProd) return;
+        abrir('propModal');
+        document.getElementById('propPreview').innerText = `PROPOSTA: ${db.lastProd.nome}\nVALOR: R$ ${Number(db.lastProd.preco).toLocaleString('pt-BR')}\nENTRADA: ${db.lastProd.ent}\nPARCELA: ${db.lastProd.parc}`;
+    }
+
+    function copiarProp() {
+        const t = `📝 *PROPOSTA SINOP*\nLOCAL: ${db.lastProd.nome}\nVALOR: ${db.lastProd.preco}\nENTRADA: ${db.lastProd.ent}\nPARCELA: ${db.lastProd.parc}`;
+        navigator.clipboard.writeText(t); alert("Copiado!");
+    }
+
     function falar() {
         const r = new (window.SpeechRecognition || window.webkitSpeechRecognition)();
         r.lang = 'pt-BR'; r.onresult = (e) => { document.getElementById('busca').value = e.results[0][0].transcript; pesquisar(document.getElementById('busca').value); };

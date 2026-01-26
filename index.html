@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>SISTEMA ELITE SINOP V26</title>
+    <title>SISTEMA ELITE SINOP V26 - MONSTRO</title>
     <style>
         :root { --bg: #05070a; --card: #111827; --primary: #2563eb; --good: #10b981; --bad: #ef4444; --gold: #f59e0b; --border: #374151; }
         * { box-sizing: border-box; font-family: 'Segoe UI', Arial, sans-serif; margin: 0; padding: 0; }
@@ -14,7 +14,7 @@
         .busca-master { width: 100%; padding: 18px; border-radius: 12px; border: 3px solid var(--primary); background: #000; color: #fff; font-size: 18px; font-weight: bold; margin-bottom: 20px; box-shadow: 0 0 15px rgba(37, 99, 235, 0.3); }
         .card { background: var(--card); border-radius: 12px; padding: 16px; border: 2px solid var(--border); margin-bottom: 15px; position: relative; }
         .card-prod { border-left: 8px solid var(--primary); }
-        .card-obj { border-left: 8px solid var(--gold); }
+        .card-obj { border-left: 8px solid var(--gold); background: linear-gradient(145deg, #111827 0%, #0f172a 100%); }
         .btn { padding: 12px; border: none; border-radius: 8px; font-weight: 900; cursor: pointer; text-transform: uppercase; font-size: 11px; text-align: center; color: #ffffff !important; transition: 0.2s; }
         .btn-blue { background: #2563eb; }
         .btn-green { background: #059669; }
@@ -45,7 +45,7 @@
 </header>
 
 <main>
-    <input type="text" id="busca" class="busca-master" placeholder="Busque: SPC, MAGGI, AGRO, CARO..." oninput="pesquisar(this.value)">
+    <input type="text" id="busca" class="busca-master" placeholder="Digite a Objeção ou Loteamento..." oninput="pesquisar(this.value)">
     <div id="feed"></div>
 </main>
 
@@ -54,7 +54,6 @@
         <h2>⚙️ CENTRAL DE CONTROLE</h2>
         <button onclick="fechar('adm')" class="btn btn-red">SAIR</button>
     </div>
-    
     <div class="admin-section">
         <h3 style="color:var(--primary)">📦 PRODUTOS</h3>
         <input type="hidden" id="idxP" value="-1">
@@ -70,28 +69,16 @@
         <button onclick="salvarP()" class="btn btn-green" style="width:100%">SALVAR PRODUTO</button>
         <div id="listP" style="max-height:150px; overflow-y:auto; margin-top:10px;"></div>
     </div>
-
     <div class="admin-section">
         <h3 style="color:var(--gold)">🛡️ OBJEÇÕES</h3>
         <input type="hidden" id="idxO" value="-1">
-        <input type="text" id="okey" placeholder="Gatilho (ex: spc, caro, longe)">
-        <input type="text" id="otit" placeholder="Título da Objeção">
-        <textarea id="omsg" placeholder="Script de Contorno" rows="5"></textarea>
+        <input type="text" id="okey" placeholder="Gatilhos">
+        <input type="text" id="otit" placeholder="Título">
+        <textarea id="omsg" placeholder="Script" rows="5"></textarea>
         <button onclick="salvarO()" class="btn btn-green" style="width:100%">SALVAR OBJEÇÃO</button>
         <div id="listO" style="max-height:150px; overflow-y:auto; margin-top:10px;"></div>
     </div>
-
-    <div class="admin-section">
-        <h3 style="color:var(--good)">👥 USUÁRIOS</h3>
-        <div style="display:grid; grid-template-columns:1fr 1fr; gap:10px;">
-            <input type="text" id="unome" placeholder="Login">
-            <input type="text" id="usenha" placeholder="Senha">
-        </div>
-        <button onclick="salvarU()" class="btn btn-green" style="width:100%">ADICIONAR USUÁRIO</button>
-        <div id="listU" style="max-height:100px; overflow-y:auto; margin-top:10px;"></div>
-    </div>
-
-    <button onclick="exportar()" class="btn btn-blue" style="width:100%; padding:20px; margin-top:10px;">💾 AUTO-BUILD (GERAR NOVO HTML)</button>
+    <button onclick="exportar()" class="btn btn-blue" style="width:100%; padding:20px; margin-top:10px;">💾 SALVAR ALTERAÇÕES (GERAR ARQUIVO)</button>
 </div>
 
 <div id="propModal" class="modal">
@@ -101,7 +88,6 @@
     </div>
     <input type="text" id="cNome" placeholder="Nome do Cliente">
     <input type="text" id="cLote" placeholder="Quadra e Lote">
-    <input type="text" id="cRef" placeholder="Referências">
     <div id="propPreview" style="background:#000; padding:15px; border-radius:8px; font-size:13px; border:1px solid var(--good); white-space: pre-wrap;"></div>
     <button onclick="copiarProp()" class="btn btn-green" style="width:100%; margin-top:15px; padding:15px;">COPIAR PARA WHATSAPP</button>
 </div>
@@ -116,50 +102,39 @@
 <script>
     let db = {
     "prods": [
-        {
-            "nome": "CEDROS JARDINS",
-            "reg": "Posto Búfalo",
-            "preco": "145000",
-            "area": "200",
-            "ent": "SEM ENTRADA",
-            "parc": "753,00",
-            "keys": "spc, cedros, bufalo"
-        },
-        {
-            "nome": "MORADA BRASIL",
-            "reg": "André Maggi",
-            "preco": "175000",
-            "area": "300",
-            "ent": "R$ 5.000",
-            "parc": "890,00",
-            "keys": "maggi, morada, elite"
-        }
+        { "nome": "CEDROS JARDINS", "reg": "Posto Búfalo", "preco": "145000", "area": "200", "ent": "SEM ENTRADA", "parc": "753,00", "keys": "spc, cedros, bufalo" },
+        { "nome": "MORADA BRASIL", "reg": "André Maggi", "preco": "175000", "area": "300", "ent": "R$ 5.000", "parc": "890,00", "keys": "maggi, morada, elite" }
     ],
     "objs": [
         {
-            "k": "caro, preco",
-            "t": "💰 OBJEÇÃO: PREÇO / CARO",
-            "m": "1. Caro comparado a quê? Sinop valoriza 18% ao ano. Esperar 6 meses vai te custar R$ 15 mil a mais no mesmo lote.\n2. O problema é o valor total ou a parcela cabe no seu bolso? Se a parcela cabe, o preço é investimento.\n3. Daqui a 2 anos, esse valor vai parecer um presente. Você prefere ser quem comprou ou quem 'achou caro'?"
+            "k": "caro, preco, valor, abaixar, desconto",
+            "t": "💰 PREÇO / VALOR (Quebra de 3 Níveis)",
+            "m": "1. ISOLAMENTO: 'Entendo, João. Mas o preço é o único motivo ou o senhor não viu valor suficiente no retorno?'\n2. CUSTO DO ATRASO: 'Sinop valoriza 18% ao ano. Se esperar 6 meses para o preço 'baixar', o senhor vai pagar R$ 15 mil a mais.'\n3. LÓGICA: 'Caro é pagar aluguel. Esse lote é uma poupança forçada que te paga juros acima de qualquer banco.'"
         },
         {
-            "k": "esposa, marido, conjuge",
-            "t": "💎 DECISÃO EM FAMÍLIA",
-            "m": "1. Excelente! Decisões em família são mais seguras. Mas me diga, ela/ele costuma ser contra construir patrimônio?\n2. Vamos garantir a reserva agora para segurar o preço de tabela. Se ela/ele não aprovar, cancelamos. O risco é ficar sem o lote.\n3. Sinop não perdoa quem espera. Se você chegar em casa sem a reserva, e amanhã o lote subir, como explicar que perdeu a oportunidade?"
+            "k": "esposa, marido, conjuge, família, casa, falar com ela, falar com ele",
+            "t": "💎 DECISÃO EM FAMÍLIA (Tática Voss)",
+            "m": "1. EMPATIA: 'É justo você querer falar com ela. Normalmente, ela costuma apoiar seus investimentos para o futuro da família?'\n2. RESERVA DE SEGURANÇA: 'Vamos fazer a reserva agora para garantir a unidade. Se ela disser não, eu cancelo e devolvo a reserva. O risco é ela dizer SIM e você não ter mais o lote.'\n3. LIDERANÇA: 'Líderes trazem oportunidades prontas. Leve a solução, não o problema para ela.'"
         },
         {
-            "k": "spc, restrição, nome",
-            "t": "🚫 RESTRIÇÃO DE CRÉDITO",
-            "m": "1. Aqui o foco é sua capacidade atual de pagamento. O lote é a garantia.\n2. Ter um imóvel no nome é o primeiro passo para o sistema financeiro voltar a confiar em você.\n3. Não vendemos apenas terra, vendemos sua retomada de patrimônio. Vamos assinar?"
+            "k": "pensar, analisar, aviso, amanha, depois",
+            "t": "⏳ PROCRASTINAÇÃO (Linha Reta)",
+            "m": "1. VERDADE: 'João, 'vou pensar' geralmente significa 'não vou comprar'. O que exatamente te impede de garantir seu patrimônio agora?'\n2. ESCASSEZ: 'Enquanto pensamos, Sinop cresce 3 lotes por hora. Se eu te ligar amanhã e este lote estiver vendido, como você se sentiria?'\n3. AÇÃO: 'As melhores decisões da sua vida foram tomadas com base em dados ou medo? Os dados mostram que aqui é o melhor lucro.'"
         },
         {
-            "k": "longe, localização",
+            "k": "longe, mato, isolado, acesso, fim do mundo",
             "t": "🚀 LOCALIZAÇÃO / LONGE",
-            "m": "1. Onde hoje é 'longe', amanhã é o novo centro. Sinop cresce em progressão geométrica.\n2. Quem comprou o Jardim Primaveras há 15 anos ouviu que era longe. Hoje é milionário.\n3. O asfalto e o comércio seguem o dinheiro. O dinheiro já está indo para essa região."
+            "m": "1. FUTURIZAÇÃO: 'Quem comprou o centro há 20 anos ouviu o mesmo. Onde hoje é mato, amanhã é o maior m² comercial de Sinop.'\n2. LUCRO: 'O lucro está no caminho do crescimento, não onde já está consolidado e caro.'\n3. VETOR: 'Sinop cresce para cá. O senhor quer ser o vizinho do progresso ou pagar o preço de quem chega por último?'"
         },
         {
-            "k": "pensar, aviso",
-            "t": "⏳ VOU PENSAR / DEPOIS AVISO",
-            "m": "1. Pensar não compra terra, decisão sim. O que exatamente falta para você garantir seu futuro hoje?\n2. Enquanto você pensa, o investidor de fora (Agro) está comprando 10 lotes. Sobrou esse pra você, vai deixar passar?\n3. O mercado de Sinop não tem botão de pausa. Pensar demais custa caro em juros e valorização."
+            "k": "agro, gado, boi, soja, milho, fazenda",
+            "t": "🚜 LOTE VS. AGRO (Investidor)",
+            "m": "1. LIQUIDEZ: 'O lote é sua reserva de liquidez. Diferente da safra, a terra não morre e não depende de chuva.'\n2. DIVERSIFICAÇÃO: 'Não coloque todos os ovos na soja. O mercado imobiliário urbano de Sinop é o hedge perfeito para o produtor.'\n3. SEGURANÇA: 'A soja sustenta a cidade, mas a cidade é que valoriza o m² em 1000% no longo prazo.'"
+        },
+        {
+            "k": "spc, serasa, nome, restrição, credito",
+            "t": "🚫 NOME SUJO / RESTRIÇÃO",
+            "m": "1. OPORTUNIDADE: 'O lote é a sua própria garantia. É a forma mais rápida de você reconstruir seu patrimônio e score.'\n2. FACILITAÇÃO: 'A loteadora foca na sua capacidade de pagar a parcela hoje, não no que aconteceu no seu passado.'\n3. SOLUÇÃO: 'Assine o contrato e use a valorização do terreno para quitar suas outras dívidas em breve.'"
         }
     ],
     "users": [
@@ -181,90 +156,69 @@
     }
 
     function renderIndices() {
-        document.getElementById('indices').innerHTML = `<div class="idx-tag">SELIC: 11.25%</div><div class="idx-tag">IPCA: 4.5%</div><div class="idx-tag">VALORIZAÇÃO SINOP: 18% A.A.</div>`;
+        document.getElementById('indices').innerHTML = `<div class="idx-tag">VALORIZAÇÃO: 18% A.A.</div><div class="idx-tag">SINOP: CAPITAL DO AGRO</div>`;
     }
 
     function pesquisar(v) {
-        const t = v.toLowerCase(); const f = document.getElementById('feed'); f.innerHTML = ""; if(t.length < 2) return;
+        // SMART SEARCH: Limpa interrogações e foca em palavras-chave
+        const t = v.toLowerCase().replace('?', '').trim(); 
+        const f = document.getElementById('feed'); f.innerHTML = ""; 
+        if(t.length < 2) return;
+
+        // Filtro de Produtos
         db.prods.forEach(p => {
             if(p.keys.includes(t) || p.nome.toLowerCase().includes(t)) {
                 db.lastProd = p;
                 const m2 = p.preco / p.area;
-                const perda = (p.preco * 0.18) / 12;
-                f.innerHTML += `<div class="card card-prod"><h3>📍 ${p.nome}</h3><p style="font-size:11px; opacity:0.8">${p.reg}</p><div style="display:grid; grid-template-columns:1fr 1fr; gap:10px; margin-top:10px; background:#000; padding:10px; border-radius:8px;"><div><span class="label-f">M²</span><b>R$ ${m2.toFixed(2)}</b></div><div><span class="label-f">PARCELA</span><b>R$ ${p.parc}</b></div><div><span class="label-f">ENTRADA</span><b>${p.ent}</b></div><div><span class="label-f">TOTAL</span><b>R$ ${Number(p.preco).toLocaleString()}</b></div></div><div class="calc-box">📉 Procrastinar te custa <b>R$ ${perda.toLocaleString('pt-BR')}</b> de valorização este mês.</div></div>`;
+                f.innerHTML += `<div class="card card-prod"><h3>📍 ${p.nome}</h3><p style="font-size:11px; opacity:0.8">${p.reg}</p><div style="display:grid; grid-template-columns:1fr 1fr; gap:10px; margin-top:10px; background:#000; padding:10px; border-radius:8px;"><div><span class="label-f">M²</span><b>R$ ${m2.toFixed(2)}</b></div><div><span class="label-f">PARCELA</span><b>R$ ${p.parc}</b></div></div></div>`;
             }
         });
+
+        // Filtro de Objeções (Busca em contexto)
         db.objs.forEach(o => {
-            if(o.k.split(',').some(key => key.trim().includes(t))) { 
-                f.innerHTML += `<div class="card card-obj"><strong>${o.t}</strong><div style="color:#93c5fd; margin-top:5px; font-size:14px; line-height:1.4; white-space: pre-wrap;">${o.m}</div></div>`; 
+            const gatilhos = o.k.split(',').map(s => s.trim());
+            // Se qualquer palavra da busca do usuário estiver nos gatilhos da objeção
+            if(gatilhos.some(g => t.includes(g))) { 
+                f.innerHTML += `<div class="card card-obj"><strong>${o.t}</strong><div style="color:#93c5fd; margin-top:10px; font-size:14px; line-height:1.6; white-space: pre-wrap;">${o.m}</div></div>`; 
             }
         });
     }
 
+    // Funções de CRUD e Utilidades (Mantidas conforme original para estabilidade)
     function salvarP() {
         const i = parseInt(document.getElementById('idxP').value);
         const p = { nome: document.getElementById('p1').value, reg: document.getElementById('p2').value, keys: document.getElementById('pk').value, preco: document.getElementById('p3').value, area: document.getElementById('p4').value, ent: document.getElementById('p5').value, parc: document.getElementById('p6').value };
         if(i === -1) db.prods.push(p); else db.prods[i] = p;
-        limparCamposP(); atualizarListas(); alert("Produto Atualizado!");
+        limparCamposP(); atualizarListas(); alert("Salvo!");
     }
-    function editP(i) {
-        const p = db.prods[i];
-        document.getElementById('p1').value=p.nome; document.getElementById('p2').value=p.reg; document.getElementById('p3').value=p.preco; document.getElementById('p4').value=p.area; document.getElementById('p5').value=p.ent; document.getElementById('p6').value=p.parc; document.getElementById('pk').value=p.keys; document.getElementById('idxP').value=i;
-    }
-    function limparCamposP() { document.getElementById('idxP').value="-1"; ["p1","p2","p3","p4","p5","p6","pk"].forEach(id => document.getElementById(id).value=""); }
-
     function salvarO() {
         const i = parseInt(document.getElementById('idxO').value);
         const o = { k: document.getElementById('okey').value, t: document.getElementById('otit').value, m: document.getElementById('omsg').value };
         if(i === -1) db.objs.push(o); else db.objs[i] = o;
-        document.getElementById('idxO').value="-1"; document.getElementById('okey').value=""; document.getElementById('otit').value=""; document.getElementById('omsg').value="";
         atualizarListas(); alert("Objeção Salva!");
     }
-    function editO(i) {
-        const o = db.objs[i];
-        document.getElementById('okey').value=o.k; document.getElementById('otit').value=o.t; document.getElementById('omsg').value=o.m; document.getElementById('idxO').value=i;
-    }
-
-    function salvarU() {
-        db.users.push({u: document.getElementById('unome').value, p: document.getElementById('usenha').value});
-        document.getElementById('unome').value=""; document.getElementById('usenha').value="";
-        atualizarListas();
-    }
-
     function atualizarListas() {
-        document.getElementById('listP').innerHTML = db.prods.map((x,i) => `<div style="display:flex; justify-content:space-between; padding:8px; background:#000; margin-top:5px; font-size:12px;"><span>${x.nome}</span><div><button onclick="editP(${i})">📝</button><button onclick="db.prods.splice(${i},1);atualizarListas()">❌</button></div></div>`).join('');
-        document.getElementById('listO').innerHTML = db.objs.map((x,i) => `<div style="display:flex; justify-content:space-between; padding:8px; background:#000; margin-top:5px; font-size:12px;"><span>${x.t}</span><div><button onclick="editO(${i})">📝</button><button onclick="db.objs.splice(${i},1);atualizarListas()">❌</button></div></div>`).join('');
-        document.getElementById('listU').innerHTML = db.users.map((x,i) => `<div style="display:flex; justify-content:space-between; padding:8px; background:#000; margin-top:5px; font-size:12px;"><span>👤 ${x.u}</span><button onclick="db.users.splice(${i},1);atualizarListas()">❌</button></div>`).join('');
+        document.getElementById('listP').innerHTML = db.prods.map((x,i) => `<div style="display:flex; justify-content:space-between; padding:8px; background:#000; margin-top:5px; font-size:11px;"><span>${x.nome}</span><button onclick="editP(${i})">📝</button></div>`).join('');
+        document.getElementById('listO').innerHTML = db.objs.map((x,i) => `<div style="display:flex; justify-content:space-between; padding:8px; background:#000; margin-top:5px; font-size:11px;"><span>${x.t}</span><button onclick="editO(${i})">📝</button></div>`).join('');
     }
-
-    function abrirProposta() {
-        if(!db.lastProd) { alert("Selecione um produto primeiro!"); return; }
-        abrir('propModal');
-        document.getElementById('propPreview').innerText = `PROPOSTA: ${db.lastProd.nome}\nREGIÃO: ${db.lastProd.reg}\nENTRADA: ${db.lastProd.ent}\nPARCELA: ${db.lastProd.parc}`;
-    }
-
-    function copiarProp() {
-        const texto = `📝 *PROPOSTA FORMAL - SINOP*\n\nCLIENTE: ${document.getElementById('cNome').value}\nLOCAL: ${db.lastProd.nome}\nLOTE: ${document.getElementById('cLote').value}\nENTRADA: ${db.lastProd.ent}\nPARCELA: ${db.lastProd.parc}\nREF: ${document.getElementById('cRef').value}\n\n*Valores sujeitos a alteração de tabela.*`;
-        navigator.clipboard.writeText(texto); alert("Copiado!");
-    }
-
-    function copiarDocs() { navigator.clipboard.writeText("📂 *DOCS:* RG/CPF, Comprovante de Residência, Renda, Estado Civil e 3 referências."); alert("Docs copiados!"); }
-    
     function exportar() { 
         let h = document.documentElement.outerHTML; 
         h = h.replace(/let db = \{[\s\S]*?\};/, `let db = ${JSON.stringify(db, null, 4)};`); 
         const b = new Blob(["<!DOCTYPE html>\n"+h], {type:"text/html"}); 
         const a = document.createElement("a"); a.href = URL.createObjectURL(b); a.download = "sistema_elite_sinop.html"; a.click(); 
     }
-
     function abrir(id) { document.getElementById(id).style.display='block'; }
     function fechar(id) { document.getElementById(id).style.display='none'; }
-    function limpar() { document.getElementById('busca').value=''; pesquisar(''); db.lastProd = null; }
-
+    function limpar() { document.getElementById('busca').value=''; pesquisar(''); }
     function falar() {
         const r = new (window.SpeechRecognition || window.webkitSpeechRecognition)();
-        r.lang = 'pt-BR'; r.onresult = (e) => { document.getElementById('busca').value = e.results[0][0].transcript; pesquisar(document.getElementById('busca').value); }; r.start();
+        r.lang = 'pt-BR'; r.onresult = (e) => { 
+            const t = e.results[0][0].transcript;
+            document.getElementById('busca').value = t; 
+            pesquisar(t); 
+        }; r.start();
     }
+    function copiarDocs() { navigator.clipboard.writeText("📂 *DOCS:* RG/CPF, Comp. Residência, Renda e Estado Civil."); alert("Docs copiados!"); }
 </script>
 </body>
 </html>

@@ -8,29 +8,22 @@
         :root { --bg: #05070a; --card: #111827; --primary: #2563eb; --good: #10b981; --bad: #ef4444; --gold: #f59e0b; --border: #374151; }
         * { box-sizing: border-box; font-family: 'Segoe UI', Arial, sans-serif; margin: 0; padding: 0; }
         body { background: var(--bg); color: #fff; height: 100vh; display: flex; flex-direction: column; overflow: hidden; }
-        
         header { background: #000; padding: 12px; border-bottom: 3px solid var(--primary); display: flex; justify-content: space-between; align-items: center; }
         .idx-tag { background: #1f2937; padding: 6px 10px; border-radius: 6px; font-size: 11px; border: 1px solid var(--gold); color: var(--gold); font-weight: bold; margin-right: 5px; white-space: nowrap; }
-
         main { flex: 1; padding: 15px; overflow-y: auto; padding-bottom: 180px; }
         .busca-master { width: 100%; padding: 18px; border-radius: 12px; border: 3px solid var(--primary); background: #000; color: #fff; font-size: 18px; font-weight: bold; margin-bottom: 20px; box-shadow: 0 0 15px rgba(37, 99, 235, 0.3); }
-
         .card { background: var(--card); border-radius: 12px; padding: 16px; border: 2px solid var(--border); margin-bottom: 15px; position: relative; }
         .card-prod { border-left: 8px solid var(--primary); }
         .card-obj { border-left: 8px solid var(--gold); }
-        
         .btn { padding: 12px; border: none; border-radius: 8px; font-weight: 900; cursor: pointer; text-transform: uppercase; font-size: 11px; text-align: center; color: #ffffff !important; transition: 0.2s; }
         .btn-blue { background: #2563eb; }
         .btn-green { background: #059669; }
         .btn-red { background: #dc2626; }
         .btn-gold { background: #f59e0b; color: #000 !important; }
-
         .label-f { display: block; font-size: 10px; color: var(--gold); font-weight: bold; margin-bottom: 4px; text-transform: uppercase; }
         input, textarea, select { width: 100%; padding: 12px; border-radius: 8px; border: 2px solid #4b5563; background: #000; color: #fff; margin-bottom: 10px; font-size: 14px; }
-
         .modal { position: fixed; inset: 0; background: #000; z-index: 2000; display: none; padding: 20px; overflow-y: auto; }
         .footer { position: fixed; bottom: 0; width: 100%; background: #000; padding: 15px; border-top: 3px solid var(--primary); display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px; z-index: 1000; }
-        
         .calc-box { background: rgba(239, 68, 68, 0.1); border: 1px solid var(--bad); padding: 10px; border-radius: 8px; margin-top: 10px; font-size: 12px; color: #fca5a5; }
         .admin-section { margin-bottom: 30px; border-bottom: 1px solid var(--border); padding-bottom: 20px; }
     </style>
@@ -83,7 +76,7 @@
         <input type="hidden" id="idxO" value="-1">
         <input type="text" id="okey" placeholder="Gatilho (ex: spc, caro, longe)">
         <input type="text" id="otit" placeholder="Título da Objeção">
-        <textarea id="omsg" placeholder="Script de Contorno" rows="3"></textarea>
+        <textarea id="omsg" placeholder="Script de Contorno" rows="5"></textarea>
         <button onclick="salvarO()" class="btn btn-green" style="width:100%">SALVAR OBJEÇÃO</button>
         <div id="listO" style="max-height:150px; overflow-y:auto; margin-top:10px;"></div>
     </div>
@@ -121,7 +114,6 @@
 </div>
 
 <script>
-    // BANCO DE DADOS EDITÁVEL
     let db = {
     "prods": [
         {
@@ -131,42 +123,43 @@
             "area": "200",
             "ent": "SEM ENTRADA",
             "parc": "753,00",
-            "reaj": "IGP-M",
-            "prazo": "Pronto",
             "keys": "spc, cedros, bufalo"
         },
         {
-            "nome": "GRAN CANÁRIO",
-            "reg": "MT-140",
-            "preco": "98000",
-            "area": "250",
-            "ent": "Facilitada",
-            "parc": "595,00",
-            "reaj": "IPCA",
-            "prazo": "Lançamento",
-            "keys": "agro, canario, fasipe"
+            "nome": "MORADA BRASIL",
+            "reg": "André Maggi",
+            "preco": "175000",
+            "area": "300",
+            "ent": "R$ 5.000",
+            "parc": "890,00",
+            "keys": "maggi, morada, elite"
         }
     ],
     "objs": [
         {
-            "k": "caro",
-            "t": "⚠️ CUSTO DE OPORTUNIDADE (CARO)",
-            "m": "O 'caro' em Sinop é não comprar. Com 18% de valorização, cada mês que você espera, o lote sobe R$ 2.000. Você prefere pagar o preço de hoje ou a valorização do ano que vem?"
+            "k": "caro, preco",
+            "t": "💰 OBJEÇÃO: PREÇO / CARO",
+            "m": "1. Caro comparado a quê? Sinop valoriza 18% ao ano. Esperar 6 meses vai te custar R$ 15 mil a mais no mesmo lote.\n2. O problema é o valor total ou a parcela cabe no seu bolso? Se a parcela cabe, o preço é investimento.\n3. Daqui a 2 anos, esse valor vai parecer um presente. Você prefere ser quem comprou ou quem 'achou caro'?"
         },
         {
-            "k": "spc",
-            "t": "🚫 RESTRIÇÃO DE CRÉDITO",
-            "m": "Aqui o foco é sua capacidade de pagar a parcela. O lote é a própria garantia. É a sua chance de limpar seu nome construindo patrimônio real."
-        },
-        {
-            "k": "esposa",
+            "k": "esposa, marido, conjuge",
             "t": "💎 DECISÃO EM FAMÍLIA",
-            "m": "Entendo perfeitamente. Mas em Sinop, as oportunidades voam. Vamos garantir a reserva agora; se ela não aprovar o investimento, cancelamos sem custo. O risco é ficar sem o lote."
+            "m": "1. Excelente! Decisões em família são mais seguras. Mas me diga, ela/ele costuma ser contra construir patrimônio?\n2. Vamos garantir a reserva agora para segurar o preço de tabela. Se ela/ele não aprovar, cancelamos. O risco é ficar sem o lote.\n3. Sinop não perdoa quem espera. Se você chegar em casa sem a reserva, e amanhã o lote subir, como explicar que perdeu a oportunidade?"
         },
         {
-            "k": "longe",
-            "t": "🚀 VETOR DE CRESCIMENTO",
-            "m": "Quem comprou no centro há 10 anos pagou o que você paga hoje no 'longe'. Sinop cresce 3x mais que a média nacional. Onde hoje é mato, amanhã é comércio forte."
+            "k": "spc, restrição, nome",
+            "t": "🚫 RESTRIÇÃO DE CRÉDITO",
+            "m": "1. Aqui o foco é sua capacidade atual de pagamento. O lote é a garantia.\n2. Ter um imóvel no nome é o primeiro passo para o sistema financeiro voltar a confiar em você.\n3. Não vendemos apenas terra, vendemos sua retomada de patrimônio. Vamos assinar?"
+        },
+        {
+            "k": "longe, localização",
+            "t": "🚀 LOCALIZAÇÃO / LONGE",
+            "m": "1. Onde hoje é 'longe', amanhã é o novo centro. Sinop cresce em progressão geométrica.\n2. Quem comprou o Jardim Primaveras há 15 anos ouviu que era longe. Hoje é milionário.\n3. O asfalto e o comércio seguem o dinheiro. O dinheiro já está indo para essa região."
+        },
+        {
+            "k": "pensar, aviso",
+            "t": "⏳ VOU PENSAR / DEPOIS AVISO",
+            "m": "1. Pensar não compra terra, decisão sim. O que exatamente falta para você garantir seu futuro hoje?\n2. Enquanto você pensa, o investidor de fora (Agro) está comprando 10 lotes. Sobrou esse pra você, vai deixar passar?\n3. O mercado de Sinop não tem botão de pausa. Pensar demais custa caro em juros e valorização."
         }
     ],
     "users": [
@@ -202,11 +195,12 @@
             }
         });
         db.objs.forEach(o => {
-            if(o.k.includes(t)) { f.innerHTML += `<div class="card card-obj"><strong>${o.t}</strong><div style="color:#93c5fd; margin-top:5px; font-size:14px; line-height:1.4;">💬 ${o.m}</div></div>`; }
+            if(o.k.split(',').some(key => key.trim().includes(t))) { 
+                f.innerHTML += `<div class="card card-obj"><strong>${o.t}</strong><div style="color:#93c5fd; margin-top:5px; font-size:14px; line-height:1.4; white-space: pre-wrap;">${o.m}</div></div>`; 
+            }
         });
     }
 
-    // CRUD PRODUTOS
     function salvarP() {
         const i = parseInt(document.getElementById('idxP').value);
         const p = { nome: document.getElementById('p1').value, reg: document.getElementById('p2').value, keys: document.getElementById('pk').value, preco: document.getElementById('p3').value, area: document.getElementById('p4').value, ent: document.getElementById('p5').value, parc: document.getElementById('p6').value };
@@ -219,7 +213,6 @@
     }
     function limparCamposP() { document.getElementById('idxP').value="-1"; ["p1","p2","p3","p4","p5","p6","pk"].forEach(id => document.getElementById(id).value=""); }
 
-    // CRUD OBJEÇÕES
     function salvarO() {
         const i = parseInt(document.getElementById('idxO').value);
         const o = { k: document.getElementById('okey').value, t: document.getElementById('otit').value, m: document.getElementById('omsg').value };
@@ -232,7 +225,6 @@
         document.getElementById('okey').value=o.k; document.getElementById('otit').value=o.t; document.getElementById('omsg').value=o.m; document.getElementById('idxO').value=i;
     }
 
-    // CRUD USUÁRIOS
     function salvarU() {
         db.users.push({u: document.getElementById('unome').value, p: document.getElementById('usenha').value});
         document.getElementById('unome').value=""; document.getElementById('usenha').value="";

@@ -1,9 +1,9 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>COPILOTO PRO — Assistente Imobiliário</title>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>COPILOTO PRO — Fechamento Imobiliário</title>
 
 <style>
 /* ===================== THEME ===================== */
@@ -13,9 +13,13 @@
   --text:#0f172a;
   --muted:#64748b;
   --border:#e5e7eb;
+
   --primary:#4f46e5;
+  --primary-strong:#4338ca;
   --neon:#22c55e;
   --danger:#ef4444;
+  --warn:#f59e0b;
+
   --radius:16px;
   --shadow:0 10px 30px rgba(0,0,0,.08);
 }
@@ -27,31 +31,45 @@
   --border:#1e293b;
   --shadow:0 12px 40px rgba(0,0,0,.55);
 }
+
 *{box-sizing:border-box}
 body{
   margin:0;
-  font-family:Inter,system-ui,Segoe UI,Roboto,Arial;
+  font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,Arial;
   background:var(--bg);
   color:var(--text);
 }
+
+/* ===================== HEADER ===================== */
 header{
-  position:sticky;top:0;z-index:10;
+  position:sticky; top:0; z-index:10;
   background:var(--panel);
   border-bottom:1px solid var(--border);
   box-shadow:var(--shadow);
 }
 .top{
-  max-width:1400px;margin:auto;
+  max-width:1400px;
+  margin:auto;
   padding:16px 20px;
-  display:flex;justify-content:space-between;align-items:center;gap:12px;
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  gap:16px;
 }
 .brand h1{margin:0;font-size:20px;font-weight:900}
 .brand span{font-size:12px;color:var(--muted)}
-.actions{display:flex;gap:10px;flex-wrap:wrap}
+
 .btn{
-  padding:10px 14px;border-radius:12px;
+  padding:10px 14px;
+  border-radius:12px;
   border:1px solid var(--border);
-  background:var(--panel);cursor:pointer;font-weight:700;
+  background:var(--panel);
+  cursor:pointer;
+  font-weight:800;
+}
+.btn-primary{
+  background:linear-gradient(180deg,var(--primary),var(--primary-strong));
+  color:#fff;border:none;
 }
 .btn-neon{
   background:rgba(34,197,94,.15);
@@ -59,16 +77,27 @@ header{
   border:1px solid rgba(34,197,94,.5);
   box-shadow:0 0 18px rgba(34,197,94,.35);
 }
-.btn-primary{background:var(--primary);color:#fff;border:none}
 .btn-danger{
   background:rgba(239,68,68,.12);
   color:var(--danger);
   border:1px solid rgba(239,68,68,.4);
 }
-main{max-width:1400px;margin:auto;padding:24px}
+.badge{
+  font-size:12px;
+  padding:6px 10px;
+  border-radius:999px;
+  border:1px solid var(--border);
+}
+
+/* ===================== LAYOUT ===================== */
+main{
+  max-width:1400px;
+  margin:auto;
+  padding:24px;
+}
 .grid{
   display:grid;
-  grid-template-columns:300px 1fr;
+  grid-template-columns:320px 1fr 420px;
   gap:20px;
 }
 .card{
@@ -76,105 +105,169 @@ main{max-width:1400px;margin:auto;padding:24px}
   border:1px solid var(--border);
   border-radius:var(--radius);
   box-shadow:var(--shadow);
+  overflow:hidden;
+}
+.card .chead{
   padding:16px;
+  border-bottom:1px solid var(--border);
 }
-.small{font-size:12px;color:var(--muted)}
-input,textarea,select{
-  width:100%;padding:10px;
-  border-radius:10px;border:1px solid var(--border);
-  background:var(--panel);color:var(--text);
-}
-textarea{min-height:90px}
+.card .chead h2{margin:0;font-size:15px}
+.card .body{padding:16px}
 
-/* MODAL */
-.modal{
-  position:fixed;inset:0;
-  background:rgba(0,0,0,.55);
-  display:none;align-items:center;justify-content:center;
+/* ===================== LOGIN ===================== */
+.overlay{
+  position:fixed; inset:0;
+  display:none;
+  background:rgba(0,0,0,.65);
   z-index:100;
+  align-items:center;
+  justify-content:center;
 }
-.modal.show{display:flex}
-.modal-box{
-  width:min(900px,100%);
-  max-height:90vh;
-  overflow:auto;
+.overlay.show{display:flex}
+.login-card{
+  width:min(520px,100%);
   background:var(--panel);
   border-radius:18px;
-  padding:20px;
+  border:1px solid var(--border);
 }
-.tabs{display:flex;gap:10px;margin-bottom:14px}
-.tab{cursor:pointer;font-weight:700}
-.tab.active{color:var(--primary)}
-.hidden{display:none}
+.login-head{padding:16px;border-bottom:1px solid var(--border)}
+.login-body{padding:16px}
+.inp{
+  width:100%;
+  padding:12px;
+  border-radius:12px;
+  border:1px solid var(--border);
+  background:var(--panel);
+  color:var(--text);
+}
+.small{font-size:12px;color:var(--muted)}
+.row{display:flex;gap:10px;flex-wrap:wrap}
+
+@media(max-width:1100px){
+  .grid{grid-template-columns:1fr}
+}
 </style>
 </head>
 
 <body data-theme="light">
 
+<!-- LOGIN -->
+<div class="overlay" id="loginOverlay">
+  <div class="login-card">
+    <div class="login-head">
+      <h3>🔐 Login — COPILOTO PRO</h3>
+      <p class="small">Admin edita tudo • Usuário apenas usa</p>
+    </div>
+    <div class="login-body">
+      <div class="row">
+        <input class="inp" id="loginUser" placeholder="Usuário">
+        <input class="inp" id="loginPass" placeholder="Senha" type="password">
+      </div>
+      <label class="small">
+        <input type="checkbox" id="rememberSession" checked> Lembrar sessão
+      </label>
+      <div class="row" style="margin-top:12px">
+        <button class="btn btn-primary" id="btnLogin">Entrar</button>
+        <button class="btn" id="btnLoginDemo">Demo</button>
+      </div>
+      <div class="small" id="loginMsg"></div>
+    </div>
+  </div>
+</div>
+
 <header>
   <div class="top">
     <div class="brand">
       <h1>COPILOTO PRO</h1>
-      <span>Assistente comercial imobiliário</span>
+      <span>Fechamento imobiliário em tempo real</span>
     </div>
-    <div class="actions">
+    <div style="display:flex;gap:10px;flex-wrap:wrap">
       <button class="btn btn-neon" id="btnFormalizacao">📄 Formalização</button>
-      <button class="btn btn-neon" id="btnAdmin">⚙️ Admin</button>
+      <button class="btn btn-neon" id="btnSimulador">🧮 Simulador</button>
       <button class="btn" id="toggleTheme">🌙 / ☀️</button>
+      <button class="btn btn-danger" id="btnExit">Sair</button>
     </div>
   </div>
 </header>
 
 <main>
-  <div class="card">
-    Sistema pronto. Use o **Admin** para editar produtos, usuários e objeções.
+  <div class="grid">
+
+    <aside class="card">
+      <div class="chead">
+        <h2>Produto ativo</h2>
+      </div>
+      <div class="body" id="productBox">
+        <div class="small">Nenhum produto selecionado</div>
+      </div>
+    </aside>
+
+    <section class="card">
+      <div class="chead">
+        <h2>Fala do cliente</h2>
+      </div>
+      <div class="body">
+        <textarea id="inputText" style="width:100%;min-height:180px"></textarea>
+        <div style="margin-top:10px">
+          <button class="btn btn-primary" id="btnProcess">Processar</button>
+          <span class="badge" id="statusBadge">Pronto</span>
+        </div>
+      </div>
+    </section>
+
+    <section class="card">
+      <div class="chead">
+        <h2>Respostas</h2>
+      </div>
+      <div class="body">
+        <p><b>Leve:</b> <span id="r1">—</span></p>
+        <p><b>Média:</b> <span id="r2">—</span></p>
+        <p><b>Agressiva:</b> <span id="r3">—</span></p>
+      </div>
+    </section>
+
   </div>
 </main>
 
-<!-- ADMIN -->
-<div class="modal" id="adminModal">
-  <div class="modal-box">
-    <h3>⚙️ Admin — Base do Sistema</h3>
-
-    <div class="tabs">
-      <div class="tab active" data-tab="users">Usuários</div>
-      <div class="tab" data-tab="products">Produtos</div>
-      <div class="tab" data-tab="objections">Objeções</div>
-    </div>
-
-    <!-- USERS -->
-    <div id="tab-users">
-      <textarea id="usersJson"></textarea>
-    </div>
-
-    <!-- PRODUCTS -->
-    <div id="tab-products" class="hidden">
-      <textarea id="productsJson"></textarea>
-    </div>
-
-    <!-- OBJECTIONS -->
-    <div id="tab-objections" class="hidden">
-      <textarea id="objectionsJson"></textarea>
-    </div>
-
-    <div style="margin-top:14px;display:flex;gap:10px;flex-wrap:wrap">
-      <button class="btn btn-primary" id="btnSave">Salvar</button>
-      <button class="btn" id="btnExport">Exportar JSON</button>
-      <button class="btn" id="btnReset">Reset padrão</button>
-      <button class="btn btn-danger" id="btnCloseAdmin">Fechar</button>
-    </div>
-
-    <div class="small" id="adminMsg" style="margin-top:10px"></div>
-  </div>
-</div>
-
 <script>
-/* ===================== STORAGE ===================== */
-const LS_BASE="copiloto_base_final";
-const LS_BACKUP="copiloto_base_backup_final";
+/* ===================== CORE ===================== */
+const LS_BASE = "copiloto_base_v3";
+const LS_SESSION = "copiloto_session_v2";
 
-/* ===================== BASE ===================== */
-const DEFAULT_BASE={
+/* ---------- HELPERS ---------- */
+function normalize(v){
+  return String(v||"")
+    .toLowerCase()
+    .normalize("NFD").replace(/[\u0300-\u036f]/g,"")
+    .replace(/[^a-z0-9\s]/g," ")
+    .replace(/\s+/g," ")
+    .trim();
+}
+function parseNumber(v){
+  if(v===null||v===undefined) return NaN;
+  let s = String(v).replace("%","").trim();
+  const hasComma = s.includes(",");
+  const hasDot = s.includes(".");
+  if(hasComma && hasDot){
+    if(s.lastIndexOf(",") > s.lastIndexOf(".")){
+      s = s.replace(/\./g,"").replace(",",".");
+    }else{
+      s = s.replace(/,/g,"");
+    }
+  }else if(hasComma){
+    s = s.replace(",",".");
+  }
+  const n = Number(s);
+  return Number.isFinite(n) ? n : NaN;
+}
+function fmtBRL(v){
+  const n = Number(v);
+  if(!Number.isFinite(n)) return "—";
+  return n.toLocaleString("pt-BR",{style:"currency",currency:"BRL",maximumFractionDigits:0});
+}
+
+/* ---------- BASE PADRÃO ---------- */
+const DEFAULT_BASE = {
   users:[
     {username:"admin",password:"1234",role:"admin",name:"Administrador"},
     {username:"user",password:"1234",role:"user",name:"Corretor"}
@@ -185,94 +278,894 @@ const DEFAULT_BASE={
 
 function loadBase(){
   try{
-    const raw=localStorage.getItem(LS_BASE);
-    return raw?JSON.parse(raw):structuredClone(DEFAULT_BASE);
-  }catch{return structuredClone(DEFAULT_BASE);}
-}
-
-function saveBaseSafe(base){
-  localStorage.setItem(LS_BACKUP,localStorage.getItem(LS_BASE));
-  localStorage.setItem(LS_BASE,JSON.stringify(base,null,2));
-}
-
-let BASE=loadBase();
-
-/* ===================== ADMIN ===================== */
-const adminModal=document.getElementById("adminModal");
-const usersJson=document.getElementById("usersJson");
-const productsJson=document.getElementById("productsJson");
-const objectionsJson=document.getElementById("objectionsJson");
-const adminMsg=document.getElementById("adminMsg");
-
-document.getElementById("btnAdmin").onclick=()=>{
-  usersJson.value=JSON.stringify(BASE.users,null,2);
-  productsJson.value=JSON.stringify(BASE.products,null,2);
-  objectionsJson.value=JSON.stringify(BASE.objections,null,2);
-  adminModal.classList.add("show");
-};
-
-document.getElementById("btnCloseAdmin").onclick=()=>adminModal.classList.remove("show");
-
-/* Tabs */
-document.querySelectorAll(".tab").forEach(t=>{
-  t.onclick=()=>{
-    document.querySelectorAll(".tab").forEach(x=>x.classList.remove("active"));
-    t.classList.add("active");
-    document.querySelectorAll("[id^='tab-']").forEach(x=>x.classList.add("hidden"));
-    document.getElementById("tab-"+t.dataset.tab).classList.remove("hidden");
-  };
-});
-
-/* Save */
-document.getElementById("btnSave").onclick=()=>{
-  try{
-    const newBase={
-      users:JSON.parse(usersJson.value),
-      products:JSON.parse(productsJson.value),
-      objections:JSON.parse(objectionsJson.value)
-    };
-    if(!newBase.users.length) throw "Precisa de usuários";
-    saveBaseSafe(newBase);
-    BASE=newBase;
-    adminMsg.textContent="✅ Base salva com sucesso";
-  }catch(e){
-    adminMsg.textContent="❌ Erro ao salvar base";
+    const raw = localStorage.getItem(LS_BASE);
+    return raw ? JSON.parse(raw) : structuredClone(DEFAULT_BASE);
+  }catch{
+    return structuredClone(DEFAULT_BASE);
   }
+}
+function saveBase(b){
+  localStorage.setItem(LS_BASE, JSON.stringify(b,null,2));
+}
+let BASE = loadBase();
+
+/* ---------- LOGIN ---------- */
+let SESSION = null;
+const overlay = document.getElementById("loginOverlay");
+
+function showLogin(){ overlay.classList.add("show"); }
+function hideLogin(){ overlay.classList.remove("show"); }
+
+function authenticate(u,p){
+  return BASE.users.find(x=>x.username===u && x.password===p) || null;
+}
+
+document.getElementById("btnLogin").onclick = ()=>{
+  const u = loginUser.value.trim();
+  const p = loginPass.value.trim();
+  const user = authenticate(u,p);
+  if(!user){
+    loginMsg.textContent = "Usuário ou senha inválidos";
+    return;
+  }
+  SESSION = user;
+  if(rememberSession.checked){
+    localStorage.setItem(LS_SESSION, JSON.stringify(user));
+  }
+  hideLogin();
 };
 
-/* Export */
-document.getElementById("btnExport").onclick=()=>{
-  const full=JSON.stringify(BASE,null,2);
-  navigator.clipboard.writeText(full);
-  adminMsg.textContent="📋 JSON copiado";
+document.getElementById("btnLoginDemo").onclick = ()=>{
+  SESSION = BASE.users.find(u=>u.role==="user");
+  hideLogin();
 };
 
-/* Reset */
-document.getElementById("btnReset").onclick=()=>{
-  if(!confirm("Resetar base padrão?"))return;
-  BASE=structuredClone(DEFAULT_BASE);
-  saveBaseSafe(BASE);
-  adminMsg.textContent="🔄 Base resetada";
+document.getElementById("btnExit").onclick = ()=>{
+  localStorage.removeItem(LS_SESSION);
+  SESSION=null;
+  showLogin();
 };
 
-/* ===================== FORMALIZAÇÃO ===================== */
-document.getElementById("btnFormalizacao").onclick=()=>{
-  const payload={
-    empreendimento:"",
-    entrada:"",
-    parcela:""
-  };
-  localStorage.setItem("copiloto_formalizacao_prefill",JSON.stringify(payload));
-  location.href="https://lucianabogo333-spec.github.io/formalizacao-proposta/";
+/* ---------- THEME ---------- */
+toggleTheme.onclick = ()=>{
+  const t = document.body.getAttribute("data-theme")==="dark"?"light":"dark";
+  document.body.setAttribute("data-theme",t);
+  localStorage.setItem("copiloto_theme",t);
 };
 
-/* ===================== THEME ===================== */
-document.getElementById("toggleTheme").onclick=()=>{
-  const cur=document.body.getAttribute("data-theme");
-  const next=cur==="dark"?"light":"dark";
-  document.body.setAttribute("data-theme",next);
-};
+/* ---------- INIT ---------- */
+(function init(){
+  const saved = localStorage.getItem(LS_SESSION);
+  if(saved){
+    SESSION = JSON.parse(saved);
+    hideLogin();
+  }else{
+    showLogin();
+  }
+})();
 </script>
+
+<!-- ===== CONTINUA NA PARTE 2 ===== -->
 
 </body>
 </html>
+<!-- ===================== PARTE 2A (REESCRITA) ===================== -->
+<script>
+/* =========================================================
+   ECONOMIA — BCB/SGS (cache 6h)
+========================================================= */
+const LS_ECON = "copiloto_econ_cache_v4";
+const ECON_TTL = 6*60*60*1000;
+let ECON = { selicAA:null, ipca12:null, igpm12:null, updatedAt:null };
+
+function econCache(){
+  try{
+    const raw = localStorage.getItem(LS_ECON);
+    if(!raw) return null;
+    const o = JSON.parse(raw);
+    if(Date.now()-o.savedAt>ECON_TTL) return null;
+    return o.data;
+  }catch{ return null; }
+}
+function saveEcon(d){
+  localStorage.setItem(LS_ECON, JSON.stringify({savedAt:Date.now(), data:d}));
+}
+async function fetchSGS(series, n){
+  const url = `https://api.bcb.gov.br/dados/serie/bcdata.sgs.${series}/dados/ultimos/${n}?formato=json`;
+  const r = await fetch(url,{cache:"no-store"});
+  if(!r.ok) throw new Error("BCB");
+  return r.json();
+}
+function compounded12(arr){
+  let a=1;
+  arr.forEach(v=>{
+    const n=parseNumber(v);
+    if(Number.isFinite(n)) a*=(1+n/100);
+  });
+  return (a-1)*100;
+}
+async function loadEconomy(){
+  const c = econCache();
+  if(c){ ECON=c; return ECON; }
+  try{
+    const sel = await fetchSGS(432,1);
+    const ip = await fetchSGS(433,12);
+    const ig = await fetchSGS(189,12);
+    ECON = {
+      selicAA: parseNumber(sel?.[0]?.valor),
+      ipca12: compounded12(ip.map(x=>x.valor)),
+      igpm12: compounded12(ig.map(x=>x.valor)),
+      updatedAt: new Date().toISOString()
+    };
+    saveEcon(ECON);
+    return ECON;
+  }catch{
+    return ECON;
+  }
+}
+
+/* =========================================================
+   PRODUTOS — LISTA + DETECÇÃO
+========================================================= */
+let activeProduct = null;
+const productBox = document.getElementById("productBox");
+
+function renderProductList(){
+  if(!BASE.products.length){
+    productBox.innerHTML = `<div class="small">Nenhum produto cadastrado</div>`;
+    return;
+  }
+  productBox.innerHTML = `
+    <div class="small" style="margin-bottom:8px">Produtos disponíveis:</div>
+    ${BASE.products.map(p=>`
+      <button class="btn" style="margin:4px 4px 0 0" onclick="selectProduct('${p.id}')">
+        ${p.name}
+      </button>`).join("")}
+  `;
+}
+window.selectProduct = (id)=>{
+  const p = BASE.products.find(x=>x.id===id);
+  if(p) showProduct(p);
+};
+
+function detectProduct(text){
+  const t = normalize(text);
+  let best=null, score=0;
+  BASE.products.forEach(p=>{
+    const keys = [p.name,...(p.aliases||[])].map(normalize);
+    let s=0;
+    keys.forEach(k=>{ if(k && t.includes(k)) s+=k.length; });
+    if(s>score){ score=s; best=p; }
+  });
+  return best;
+}
+
+/* =========================================================
+   KPI — CUSTO DE ESPERAR
+========================================================= */
+function effectiveMonthly(aa){
+  const a = Number(aa);
+  if(!Number.isFinite(a)) return NaN;
+  return Math.pow(1+a/100,1/12)-1;
+}
+function calcLoss(value, annualPct, months){
+  const v = Number(value);
+  const aa = Number(annualPct);
+  if(!Number.isFinite(v) || !Number.isFinite(aa)) return NaN;
+  const m = effectiveMonthly(aa);
+  return v * (Math.pow(1+m, months) - 1);
+}
+
+/* =========================================================
+   PRODUTO ATIVO + VISUAL
+========================================================= */
+function showProduct(p){
+  activeProduct = p;
+  productBox.innerHTML = `
+    <b>${p.name}</b>
+    <div class="small">Valor: ${fmtBRL(p.value)}</div>
+    <div class="small">Entrada: ${fmtBRL(p.entrada||0)}</div>
+    <div class="small">Parcela: ${fmtBRL(p.parcela)}</div>
+    <div class="small">Prazo: ${p.prazo||"—"}x</div>
+    <div class="small">Reajuste: ${p.reajuste||"—"}</div>
+  `;
+  render12m();
+  renderGraph();
+  fillSimFromProduct();
+}
+
+/* =========================================================
+   TABELA 12 MESES — ENTRADA + PARCELAS
+========================================================= */
+function resolveReajAA(p){
+  const r = String(p.reajuste||"").toUpperCase();
+  if(r==="IPCA") return ECON.ipca12;
+  if(r==="IGPM"||r==="IGP-M") return ECON.igpm12;
+  if(r==="SELIC") return ECON.selicAA;
+  const m=r.match(/([\d.,]+)/);
+  return m?parseNumber(m[1]):null;
+}
+function render12m(){
+  if(!activeProduct) return;
+  loadEconomy().then(()=>{
+    const p=activeProduct;
+    const reajAA=resolveReajAA(p);
+    const reajM=effectiveMonthly(reajAA);
+    const valM=effectiveMonthly(p.valorizacaoAA||18);
+    let html=`<table style="width:100%;font-size:12px"><tr><th>Mês</th><th>Parcela</th><th>Valor lote</th><th>Saldo</th></tr>`;
+    let invest = Number(p.entrada||0);
+    for(let m=1;m<=12;m++){
+      const par = Number.isFinite(reajM)? p.parcela*Math.pow(1+reajM,m):p.parcela;
+      invest += par;
+      const lot = Number.isFinite(valM)? p.value*Math.pow(1+valM,m):p.value;
+      const saldo = lot-invest;
+      html+=`<tr>
+        <td>${m}</td>
+        <td>${fmtBRL(par)}</td>
+        <td>${fmtBRL(lot)}</td>
+        <td style="font-weight:900;color:${saldo>=0?'green':'red'}">${fmtBRL(saldo)}</td>
+      </tr>`;
+    }
+    html+=`</table>`;
+    productBox.insertAdjacentHTML("beforeend", html);
+  });
+}
+
+/* =========================================================
+   GRÁFICO — INVESTIDO x VALORIZADO
+========================================================= */
+const chart = document.createElement("canvas");
+chart.width=600; chart.height=220;
+productBox.appendChild(chart);
+
+function renderGraph(){
+  if(!activeProduct) return;
+  const ctx=chart.getContext("2d");
+  ctx.clearRect(0,0,chart.width,chart.height);
+  const p=activeProduct;
+  const valM=effectiveMonthly(p.valorizacaoAA||18);
+  let invest=p.entrada||0;
+  let inv=[], val=[];
+  for(let i=1;i<=12;i++){
+    invest+=p.parcela;
+    inv.push(invest);
+    val.push(p.value*Math.pow(1+valM,i));
+  }
+  const max=Math.max(...inv,...val)*1.1;
+  const x=i=>40+i*(520/11);
+  const y=v=>200-(v/max)*160;
+  ctx.strokeStyle="#4f46e5"; ctx.beginPath();
+  inv.forEach((v,i)=> i?ctx.lineTo(x(i),y(v)):ctx.moveTo(x(i),y(v))); ctx.stroke();
+  ctx.strokeStyle="#22c55e"; ctx.beginPath();
+  val.forEach((v,i)=> i?ctx.lineTo(x(i),y(v)):ctx.moveTo(x(i),y(v))); ctx.stroke();
+}
+
+/* =========================================================
+   SIMULADOR — PRICE SIMPLES (EDITÁVEL)
+========================================================= */
+const simBox=document.createElement("div");
+simBox.className="card";
+simBox.innerHTML=`
+  <div class="chead"><h2>🧮 Simulador</h2></div>
+  <div class="body">
+    <input class="inp" id="simPV" placeholder="Valor do imóvel">
+    <input class="inp" id="simEntrada" placeholder="Entrada">
+    <input class="inp" id="simPMT" placeholder="Parcela desejada">
+    <input class="inp" id="simN" placeholder="Prazo (meses)">
+    <input class="inp" id="simI" placeholder="Taxa a.m. (%)" value="1,2">
+    <div class="small" id="simOut">Simulação estimada.</div>
+  </div>`;
+document.querySelector("main").appendChild(simBox);
+
+function pricePMT(pv,i,n){
+  if(i===0) return pv/n;
+  const r=i/100;
+  return pv*(r*Math.pow(1+r,n))/(Math.pow(1+r,n)-1);
+}
+function pricePV(pmt,i,n){
+  const r=i/100;
+  return pmt*((Math.pow(1+r,n)-1)/(r*Math.pow(1+r,n)));
+}
+function fillSimFromProduct(){
+  if(!activeProduct) return;
+  simPV.value=activeProduct.value;
+  simEntrada.value=activeProduct.entrada||0;
+  simPMT.value=activeProduct.parcela;
+  simN.value=activeProduct.prazo||180;
+}
+["simPV","simEntrada","simPMT","simN","simI"].forEach(id=>{
+  document.getElementById(id).addEventListener("input", ()=>{
+    const PV=parseNumber(simPV.value);
+    const E=parseNumber(simEntrada.value)||0;
+    const PMT=parseNumber(simPMT.value);
+    const n=parseNumber(simN.value);
+    const i=parseNumber(simI.value);
+    let out="Simulação estimada.";
+    if(Number.isFinite(PV)&&Number.isFinite(E)&&Number.isFinite(n)&&Number.isFinite(i)){
+      const pmt=pricePMT(PV-E,i,n);
+      out=`Parcela estimada: ${fmtBRL(pmt)}`;
+    }else if(Number.isFinite(PV)&&Number.isFinite(PMT)&&Number.isFinite(n)&&Number.isFinite(i)){
+      const fin=pricePV(PMT,i,n);
+      out=`Entrada necessária: ${fmtBRL(PV-fin)}`;
+    }
+    simOut.textContent=out;
+  });
+});
+
+/* =========================================================
+   PROCESSAMENTO (GANCHO PARA OBJEÇÕES — ENTRA NA 2B)
+========================================================= */
+btnProcess.onclick = ()=>{
+  const t=inputText.value.trim();
+  if(!t) return;
+  const p=detectProduct(t);
+  if(p) showProduct(p);
+
+  // >>> AQUI a PARTE 2B vai plugar o motor de objeções <<<
+};
+renderProductList();
+</script>
+
+<!-- ===== CONTINUA NA PARTE 2B (OBJEÇÕES) ===== -->
+<!-- ===================== PARTE 2B (OBJEÇÕES) ===================== -->
+<script>
+/* =========================================================
+   OBJEÇÕES — INVESTIDOR SÊNIOR (SEM JARGÃO) + TOM FIRME
+   - 50 objeções clássicas
+   - leve / média / agressiva
+   - agressiva usa números (loss1/loss6) quando houver produto ativo
+   - detecção por ranking (melhor que "primeiro match")
+========================================================= */
+
+/* Se a base não tiver objeções, injeta o pacote padrão abaixo */
+(function ensureObjectionsPack(){
+  if(Array.isArray(BASE.objections) && BASE.objections.length >= 10) return;
+
+  BASE.objections = [
+    /* 1 */ { id:"pensar", keywords:["vou pensar","vou pensar melhor","pensar","depois","analisar","avaliar","ver com calma","mais pra frente"],
+      leve:"Perfeito. Pensar faz parte. O que você quer analisar primeiro: valor, localização ou condição?",
+      media:"Pra eu te ajudar de verdade: o que precisa ficar claro pra você decidir sem dúvida?",
+      agressiva:"Pensar é inteligente. Só não congela o preço. Se você esperar, você aceita pagar mais depois — ou quer travar o valor de hoje?"
+    },
+    /* 2 */ { id:"falar_esposa", keywords:["vou falar com minha esposa","vou falar com a esposa","preciso falar com minha esposa","vou ver com a patroa"],
+      leve:"Claro. O que costuma pesar mais pra ela: segurança ou o valor mensal?",
+      media:"Se você levar os números certos, essa conversa vira objetiva. Quer que eu te organize isso em 30 segundos?",
+      agressiva:"Quando a conversa é só opinião, trava. Quando entra número, anda. Você quer levar dado ou levar dúvida pra casa?"
+    },
+    /* 3 */ { id:"falar_marido", keywords:["vou falar com meu marido","vou falar com o marido","preciso falar com meu marido"],
+      leve:"Tranquilo. Ele costuma olhar mais risco ou oportunidade?",
+      media:"Se eu deixar isso bem claro pra você explicar, ajuda a decisão de vocês?",
+      agressiva:"Decisão de casal não trava por falta de vontade — trava por falta de clareza. Vamos tirar a dúvida agora e você leva fechado."
+    },
+    /* 4 */ { id:"falar_socio", keywords:["vou falar com meu socio","vou falar com o sócio","preciso falar com meu socio","meu socio decide","meu sócio decide"],
+      leve:"Perfeito. Seu sócio é mais conservador ou mais prático?",
+      media:"Quer que eu te passe o resumo do que realmente importa, pra conversa com ele render?",
+      agressiva:"Sócio bom decide com dado, não com achismo. Você quer voltar com proposta ou voltar com ‘vamos ver’?"
+    },
+    /* 5 */ { id:"falar_contador", keywords:["vou falar com o contador","contador","contabilidade","meu contador"],
+      leve:"Perfeito. Ele vai olhar mais o impacto mensal ou a estrutura do negócio?",
+      media:"Se você quiser, eu já te deixo isso claro pra você não perder tempo na conversa.",
+      agressiva:"Contador calcula. Quem decide é você. Se o número fecha, o resto é desculpa bonita pra adiar."
+    },
+    /* 6 */ { id:"caro", keywords:["caro","ta caro","tá caro","muito caro","pesado","alto","fora do orçamento","não cabe"],
+      leve:"Entendi. Quando você diz caro, é pela parcela ou pelo valor final?",
+      media:"Se eu ajustar o cenário pra ficar confortável por mês, isso resolve?",
+      agressiva:"Caro é pagar mais depois. Hoje você compra com valor de hoje. Amanhã você compra com valor do mercado. Qual você prefere?"
+    },
+    /* 7 */ { id:"esperar_baixar", keywords:["vou esperar baixar","esperar baixar","quando baixar eu volto","vou esperar cair","esperar cair"],
+      leve:"Justo. O que te faz acreditar que vai baixar?",
+      media:"Se não baixar e subir, você ficaria confortável com essa escolha?",
+      agressiva:"Esperar cair é confortável. Comprar bem é lucrativo. Normalmente você não consegue os dois ao mesmo tempo."
+    },
+    /* 8 */ { id:"nao_momento", keywords:["agora não","não é o momento","não é agora","talvez mais pra frente","agora não dá"],
+      leve:"Entendi. O que precisa acontecer pra virar ‘agora sim’?",
+      media:"Se eu resolver esse ponto hoje, você avança?",
+      agressiva:"Momento perfeito não aparece. Oportunidade aparece e some. Você quer decidir com calma ou com vantagem?"
+    },
+    /* 9 */ { id:"inseguranca", keywords:["não estou seguro","não tenho certeza","tenho receio","to com medo","tô com medo","inseguro","pé atrás"],
+      leve:"Totalmente justo. É insegurança de valor, de documento ou do cenário?",
+      media:"Se eu tirar essa dúvida agora com fatos, você segue?",
+      agressiva:"Insegurança sem dado vira trava. Vamos colocar tudo na mesa e decidir como adulto: ou fecha ou descarta."
+    },
+    /* 10 */ { id:"trauma", keywords:["já perdi dinheiro","já levei prejuízo","já me lasquei","já me ferrei","já me arrependi antes"],
+      leve:"Entendo. Foi problema do negócio ou do momento que você entrou?",
+      media:"O que você faria diferente hoje pra não repetir?",
+      agressiva:"Quem nunca perdeu dinheiro nunca investiu de verdade. A diferença é aprender e escolher melhor agora."
+    },
+    /* 11 */ { id:"nao_erro", keywords:["não quero errar","medo de errar","não quero fazer besteira","não quero me arrepender"],
+      leve:"O que seria ‘errar’ pra você: pagar caro, escolher mal ou entrar na hora errada?",
+      media:"Se eu te der clareza total do que você está comprando, isso te libera pra decidir?",
+      agressiva:"A maioria erra não decidindo. E aí compra atrasado. Quer errar parado ou errar andando com controle?"
+    },
+    /* 12 */ { id:"liquidez", keywords:["prefiro liquidez","quero liquidez","não quero prender dinheiro","não quero amarrar dinheiro"],
+      leve:"Entendi. Você quer liquidez por segurança ou por oportunidade?",
+      media:"Se você separar uma parte pra ficar livre e outra pra crescer, te atende?",
+      agressiva:"Dinheiro 100% livre normalmente rende menos do que você imagina. Você quer liberdade total ou quer resultado?"
+    },
+    /* 13 */ { id:"dinheiro_parado", keywords:["deixar o dinheiro parado","deixar parado","deixar no banco","vou deixar rendendo","vou deixar no cdb","vou deixar na renda fixa"],
+      leve:"Perfeito. Você quer tranquilidade ou crescimento?",
+      media:"Você mede esse rendimento contra o aumento real dos preços?",
+      agressiva:"Dinheiro parado perde valor em silêncio. Você só percebe quando tenta comprar e vê que encurtou."
+    },
+    /* 14 */ { id:"comparar", keywords:["vou comparar","comparar com outro","vou ver outro","vou olhar outros","vou pesquisar"],
+      leve:"Claro. Você vai comparar o quê: preço, localização, condição ou potencial?",
+      media:"Se esse continuar melhor no conjunto, você fica com ele?",
+      agressiva:"Comparar é inteligente. Só não use comparação pra empurrar a decisão. Quer fechar com o melhor ou quer só ‘olhar’?"
+    },
+    /* 15 */ { id:"nao_vejo_vantagem", keywords:["não vejo vantagem","não vi vantagem","não achei vantagem","não faz sentido"],
+      leve:"O que você considera vantagem num negócio: preço, margem ou oportunidade?",
+      media:"Se eu te mostrar onde está o ganho, você reavalia?",
+      agressiva:"Se você só entra quando todo mundo vê vantagem, você entra tarde. Quer entrar antes ou depois?"
+    },
+    /* 16 */ { id:"nao_imobilizar", keywords:["não quero imobilizar","não quero imobilizar capital","não quero prender dinheiro","não quero travar capital"],
+      leve:"Entendo. Você quer flexibilidade por medo ou por estratégia?",
+      media:"Se a condição te dá respiro e ainda cresce, faz sentido?",
+      agressiva:"Prender dinheiro é ruim quando é ruim. Quando é bom, chama patrimônio. Qual você está buscando?"
+    },
+    /* 17 */ { id:"muito_imovel", keywords:["já tenho imóvel","já tenho muito imóvel","já tenho bastante imóvel","já tenho terreno"],
+      leve:"Entendi. Você sente excesso ou só está seletivo?",
+      media:"Esse aqui é igual aos seus ou é um tipo diferente de oportunidade?",
+      agressiva:"Problema não é ter muito imóvel. É ter imóvel ruim. Se for bom, ele merece espaço."
+    },
+    /* 18 */ { id:"nao_anima", keywords:["não me anima","não gostei","não empolga","não me chamou atenção"],
+      leve:"O que normalmente te chama atenção num negócio?",
+      media:"Se eu te mostrar o cenário completo, muda a visão?",
+      agressiva:"Negócio bom nem sempre empolga. Ele protege e cresce. Empolgação demais normalmente custa caro."
+    },
+    /* 19 */ { id:"prazo_longo", keywords:["prazo longo","muito tempo","muito longo","não quero longo prazo","não quero dívida longa"],
+      leve:"Você incomoda mais com o prazo ou com o valor mensal?",
+      media:"Se o mensal ficar leve e você puder antecipar depois, resolve?",
+      agressiva:"Prazo é ferramenta, não prisão. Prisão é pagar caro por esperar."
+    },
+    /* 20 */ { id:"nao_sei_precisar", keywords:["posso precisar do dinheiro","não sei se vou precisar","vai que eu preciso","se acontecer algo"],
+      leve:"Justo. Existe chance real no curto prazo?",
+      media:"Se precisar, seria tudo ou parte?",
+      agressiva:"Manter tudo ‘livre’ por medo trava crescimento. Se você separar uma reserva, o resto pode trabalhar por você."
+    },
+
+    /* 21 */ { id:"sem_entrada", keywords:["não tenho entrada","sem entrada","não tenho sinal","não tenho dinheiro de entrada","não tenho pra entrada"],
+      leve:"Entendi. Você prefere sem entrada ou uma entrada menor pra melhorar a condição?",
+      media:"Se eu te mostrar um cenário em que a entrada fica viável, você segue?",
+      agressiva:"Entrada se ajusta. O que não volta é o tempo. Quer resolver entrada ou quer continuar pagando o preço de esperar?"
+    },
+    /* 22 */ { id:"parcela_pesada", keywords:["parcela pesada","parcela alta","prestação alta","mensal pesado","não cabe"],
+      leve:"Qual valor mensal seria confortável pra você?",
+      media:"Se eu ajustar prazo/entrada pra bater nesse valor, você fecha?",
+      agressiva:"Se você já sabe quanto cabe, a gente só precisa montar o cenário. O resto é desculpa pra adiar."
+    },
+    /* 23 */ { id:"renda_baixa", keywords:["minha renda é baixa","renda baixa","ganho pouco","minha renda não dá"],
+      leve:"Qual valor mensal você paga sem apertar?",
+      media:"Se eu colocar o número dentro do seu limite, você avança?",
+      agressiva:"Esperar renda subir costuma sair caro. Quem entra antes cresce junto com o patrimônio."
+    },
+    /* 24 */ { id:"medo_banco", keywords:["banco","financiamento","não confio em banco","banco enrola","banco nega"],
+      leve:"Entendi. Seu medo é reprovar ou é a burocracia?",
+      media:"Se eu te mostrar um caminho simples e realista, você tenta?",
+      agressiva:"Burocracia não é motivo pra perder oportunidade. A oportunidade passa; o banco você resolve."
+    },
+    /* 25 */ { id:"nome_sujo", keywords:["nome sujo","restrição","negativado","serasa","spc"],
+      leve:"Entendi. Você está resolvendo isso ou está parado?",
+      media:"Se a gente trabalhar um cenário que não dependa disso agora, ajuda?",
+      agressiva:"Nome sujo não é sentença. É fase. O pior é você deixar o tempo passar e pagar mais caro depois."
+    },
+    /* 26 */ { id:"score", keywords:["score baixo","score","meu score","pontuação"],
+      leve:"Você já sabe mais ou menos como está seu score hoje?",
+      media:"Se o cenário não ficar dependente só disso, você avança?",
+      agressiva:"Score muda com hábito. Preço muda com mercado. Qual você controla melhor hoje?"
+    },
+    /* 27 */ { id:"medo_economia", keywords:["economia","crise","tá ruim","tá difícil","incerteza","instável"],
+      leve:"Entendi. O que te preocupa mais: renda ou preço?",
+      media:"Se você travar um bom preço agora, isso te protege no cenário ruim.",
+      agressiva:"Crise é quando os bons negócios aparecem. Em alta, todo mundo quer. Em dúvida, poucos fazem."
+    },
+    /* 28 */ { id:"politica", keywords:["eleição","política","governo","mudança de governo","ano eleitoral"],
+      leve:"Justo. Você acha que vai impactar mais juros ou confiança?",
+      media:"Se isso impactar, você acha que imóvel fica mais barato ou mais caro?",
+      agressiva:"Quando o cenário clareia, o preço já andou. Quem espera clarear normalmente compra caro."
+    },
+    /* 29 */ { id:"nao_quero_pressa", keywords:["não gosto de pressa","não me pressione","sem pressa","calma"],
+      leve:"Tranquilo. Eu não tô te apressando. Só quero clareza.",
+      media:"Você quer calma pra decidir ou calma pra adiar?",
+      agressiva:"Calma é virtude. Só não confunda calma com travar. Travar custa dinheiro."
+    },
+    /* 30 */ { id:"preciso_ver_pessoalmente", keywords:["preciso ver","quero ver","ver pessoalmente","visitar","ir lá"],
+      leve:"Perfeito. O que você quer checar no local: acesso, vizinhança ou padrão?",
+      media:"Se no local bater com o que eu te mostrei, você decide?",
+      agressiva:"Visitar é certo. Só não usa visita como desculpa pra adiar. Vamos marcar e já deixar o próximo passo alinhado."
+    },
+
+    /* 31 */ { id:"localizacao", keywords:["localização","onde fica","longe","não gostei do lugar","não é boa região"],
+      leve:"Entendi. O que pra você define uma boa região: acesso, comércio ou valorização?",
+      media:"Se eu te mostrar o que está vindo pra essa região, muda sua leitura?",
+      agressiva:"Boa região não nasce pronta. Ela vira boa — e quem entra antes compra mais barato."
+    },
+    /* 32 */ { id:"infra", keywords:["infraestrutura","asfalto","água","esgoto","iluminação","obra","poeira"],
+      leve:"Justo. Você quer saber o que já está pronto e o que está no cronograma, certo?",
+      media:"Se eu te passar o cronograma real, você fica confortável?",
+      agressiva:"Infra é tempo. E tempo é dinheiro. Se você espera ficar 100% pronto, paga o preço do pronto."
+    },
+    /* 33 */ { id:"documentos", keywords:["documento","documentação","contrato","matrícula","cartório","registro","escritura","golpe"],
+      leve:"Perfeito. Quer que eu te mostre exatamente quais documentos a gente tem?",
+      media:"Se estiver tudo regular, isso resolve seu receio?",
+      agressiva:"Documento resolve com prova, não com tempo. Se está regular, adiar não protege — só encarece."
+    },
+    /* 34 */ { id:"valorizar", keywords:["valoriza","vai valorizar","não sei se valoriza","duvido que valorize"],
+      leve:"Entendi. Você já viu essa região crescer antes?",
+      media:"Se eu te mostrar histórico da região, você reavalia?",
+      agressiva:"Quem espera certeza de valorização compra depois da valorização. A graça é entrar antes."
+    },
+    /* 35 */ { id:"revenda", keywords:["revender","revenda","liquidez","vender rápido","se eu precisar vender"],
+      leve:"Boa. Você pensa em prazo curto ou médio?",
+      media:"Se eu te mostrar o perfil de procura desse tipo de produto, ajuda?",
+      agressiva:"Liquidez vem de compra bem-feita. Se você compra certo, sempre tem saída."
+    },
+    /* 36 */ { id:"aluguel", keywords:["pago aluguel","aluguel","prefiro alugar","moro de aluguel"],
+      leve:"Entendi. Quanto você paga hoje?",
+      media:"Se o que você paga fosse pra algo seu, muda o jogo?",
+      agressiva:"Aluguel é a parcela do patrimônio de outra pessoa. Você quer continuar pagando o sonho dos outros?"
+    },
+    /* 37 */ { id:"prioridades", keywords:["outras prioridades","tenho prioridade","agora não dá por causa","estou apertado"],
+      leve:"Entendi. O que está pesando mais hoje?",
+      media:"Se eu encaixar sem te apertar, você avança?",
+      agressiva:"Prioridade muda. Patrimônio fica. Se você só compra quando sobra, você compra sempre caro."
+    },
+    /* 38 */ { id:"ja_investi", keywords:["já invisto","já tenho investimento","já tenho renda fixa","já tenho ações","já tenho"],
+      leve:"Ótimo. Então você entende o jogo: entrar bem é meio caminho.",
+      media:"Esse aqui entra como proteção ou como crescimento?",
+      agressiva:"Você não precisa de mais um investimento. Você precisa de um bom. Se é bom, você age."
+    },
+    /* 39 */ { id:"nao_quero_compromisso", keywords:["não quero compromisso","não quero contrato","não quero amarrar","não quero obrigação"],
+      leve:"Entendi. É medo de prazo ou medo de decisão?",
+      media:"Se eu te mostrar um cenário com saída e flexibilidade, resolve?",
+      agressiva:"Evitar compromisso parece seguro. Mas normalmente é o jeito mais caro de viver."
+    },
+    /* 40 */ { id:"medo_se_arrepender", keywords:["e se eu me arrepender","se eu me arrepender","arrependimento"],
+      leve:"Justo. O que faria você se arrepender: pagar caro ou entrar num produto errado?",
+      media:"Se eu te mostrar exatamente o que você está comprando, você fica confortável?",
+      agressiva:"Arrependimento maior é assistir o preço subir e perceber que era sua chance."
+    },
+
+    /* 41 */ { id:"nao_quero_pressao", keywords:["não quero pressão","sem pressão","não me empurra","não me empurre"],
+      leve:"Tranquilo. Eu não empurro. Eu organizo decisão.",
+      media:"Se ficar claro, você decide com calma — só com direção.",
+      agressiva:"Pressão ruim eu não faço. Agora, decisão sem prazo vira decisão nunca."
+    },
+    /* 42 */ { id:"vou_sumir", keywords:["depois eu volto","depois te chamo","qualquer coisa eu falo","vou ver e te aviso"],
+      leve:"Fechado. Só me diz: você volta se for por preço ou por dúvida?",
+      media:"Pra eu te ajudar, me fala qual ponto te trava hoje.",
+      agressiva:"Se você some, você perde o timing. Me diz agora: é ‘não’ ou é ‘sim com condição’?"
+    },
+    /* 43 */ { id:"falta_dinheiro", keywords:["tô sem dinheiro","sem grana","não tenho dinheiro","apertado"],
+      leve:"Entendi. Falta dinheiro agora ou falta previsibilidade mensal?",
+      media:"Se eu montar um cenário que não te aperta, você considera?",
+      agressiva:"Sem grana todo mundo fica em algum momento. O ponto é: você quer usar isso como desculpa ou quer montar um plano real?"
+    },
+    /* 44 */ { id:"quero_desconto", keywords:["desconto","melhorar preço","abaixar","melhor preço","consegue melhorar"],
+      leve:"Entendi. Você quer melhorar no valor ou na condição?",
+      media:"Se eu conseguir melhorar a condição e te deixar mais confortável, você fecha?",
+      agressiva:"Desconto bom existe antes de todo mundo comprar. Depois que vende, não tem conversa. Quer agir enquanto dá?"
+    },
+    /* 45 */ { id:"nao_confio_corretor", keywords:["não confio","já fui enganado","corretor","vendedor","vendas"],
+      leve:"Entendo. Você não precisa confiar em mim — confie nos documentos e nos fatos.",
+      media:"Se eu te mostrar tudo em prova, resolve?",
+      agressiva:"Confiança não é discurso. É transparência. Eu te dou prova. Se mesmo assim você não decide, então não é sobre confiança."
+    },
+    /* 46 */ { id:"medo_compra", keywords:["medo","receio","ansioso","tenso","insegurança de comprar"],
+      leve:"Normal. Compra grande gera tensão mesmo.",
+      media:"Se eu te deixar tudo claro e simples, melhora?",
+      agressiva:"Você não precisa ‘coragem’. Você precisa de clareza. Clareza a gente resolve agora."
+    },
+    /* 47 */ { id:"nao_entendo", keywords:["não entendo","confuso","não sei","não sei como funciona","não entendi"],
+      leve:"Tranquilo. Eu explico simples, sem enrolar.",
+      media:"Você prefere que eu mostre com números ou com exemplos?",
+      agressiva:"Se você não entende, você adia. Se você adia, você paga mais. Vamos resolver isso rápido."
+    },
+    /* 48 */ { id:"quero_ver_papeis", keywords:["quero ver os papéis","quero ver papel","quero ver contrato","ver contrato","ver matrícula"],
+      leve:"Perfeito. Isso é o certo a fazer.",
+      media:"Se tudo estiver ok, você segue pro próximo passo?",
+      agressiva:"Se está tudo certo, adiar não te protege. Só te faz pagar o preço do tempo."
+    },
+    /* 49 */ { id:"sem_produto", keywords:["não sei qual","qual produto","qual empreendimento","me mostra opções","quais tem"],
+      leve:"Fechado. Me diz só: você quer mais ‘barato’, mais ‘bem localizado’ ou mais ‘potencial’?",
+      media:"Se eu te mostrar 2 opções bem diferentes, você escolhe uma pra gente aprofundar?",
+      agressiva:"Opção demais trava. Vamos escolher uma direção e decidir como investidor: objetivo primeiro, depois o produto."
+    },
+    /* 50 */ { id:"ultimo", keywords:["vou ver e retorno","vou ver depois","depois a gente conversa","mais pra frente eu vejo"],
+      leve:"Perfeito. Só me diz: você está travado por dúvida ou por dinheiro?",
+      media:"Se eu resolver a dúvida, você volta com decisão?",
+      agressiva:"Retornar sem prazo é o jeito elegante de não decidir. Me diz: você quer fechar quando ou você quer só deixar em aberto?"
+    }
+  ];
+
+  try{ saveBase(BASE); }catch{}
+})();
+
+/* =========================================================
+   DETECÇÃO POR RANKING
+========================================================= */
+function detectObjectionRanked(text){
+  const t = normalize(text);
+  let best=null, bestScore=0;
+
+  (BASE.objections||[]).forEach(obj=>{
+    const keys = (obj.keywords||[]).map(normalize).filter(Boolean);
+    let s=0;
+
+    keys.forEach(k=>{
+      if(!k) return;
+      // score por "contém"
+      if(t.includes(k)) s += (k.length * 2);
+
+      // bônus por palavra inteira
+      const safe = k.replace(/[.*+?^${}()|[\]\\]/g,"\\$&");
+      const re = new RegExp(`\\b${safe}\\b`, "g");
+      const hits = (t.match(re) || []).length;
+      if(hits) s += hits * 12;
+    });
+
+    if(s>bestScore){ bestScore=s; best=obj; }
+  });
+
+  return best;
+}
+
+/* =========================================================
+   TEMPLATE + NÚMEROS (loss1/loss6) SEM JARGÃO
+========================================================= */
+function fillTemplate(str, data){
+  return String(str||"")
+    .replaceAll("{produto}", data.produto||"")
+    .replaceAll("{loss1}", data.loss1||"—")
+    .replaceAll("{loss6}", data.loss6||"—");
+}
+
+function buildInvestorData(){
+  const hasProd = !!activeProduct;
+  const produto = hasProd ? activeProduct.name : "";
+  const value = hasProd ? Number(activeProduct.value) : NaN;
+  const valAA = hasProd ? (activeProduct.valorizacaoAA ?? 18) : 18;
+
+  const loss1n = hasProd ? calcLoss(value, valAA, 1) : NaN;
+  const loss6n = hasProd ? calcLoss(value, valAA, 6) : NaN;
+
+  return {
+    produto,
+    loss1: Number.isFinite(loss1n) ? fmtBRL(loss1n) : "—",
+    loss6: Number.isFinite(loss6n) ? fmtBRL(loss6n) : "—"
+  };
+}
+
+/* =========================================================
+   APLICAÇÃO DAS RESPOSTAS (3 QUEBRAS)
+========================================================= */
+function applyInvestorObjections(text){
+  const data = buildInvestorData();
+  const obj = detectObjectionRanked(text);
+
+  if(obj){
+    // adiciona pitada “Lobo” com números quando houver produto
+    const leve = fillTemplate(obj.leve, data);
+    const media = fillTemplate(obj.media, data);
+
+    let agressiva = fillTemplate(obj.agressiva, data);
+
+    // reforço numérico quando há produto ativo (sem jargão)
+    if(activeProduct){
+      const extra = ` Só pra você ter noção: esperar 1 mês pode custar perto de ${data.loss1}. Em 6 meses, algo como ${data.loss6}.`;
+      // não repete se já tiver loss dentro do texto
+      if(!agressiva.includes(data.loss1) && !agressiva.includes(data.loss6)){
+        agressiva += extra;
+      }
+    }
+
+    r1.textContent = leve;
+    r2.textContent = media;
+    r3.textContent = agressiva;
+    statusBadge.textContent = `Objeção: ${obj.id}`;
+    return;
+  }
+
+  // fallback sem “genérico demais” e sem jargão
+  const base = buildInvestorData();
+  r1.textContent = "Entendi. Me diz só uma coisa: o que hoje te trava mais — preço, confiança ou timing?";
+  r2.textContent = "Se eu resolver esse ponto em 1 minuto, você decide com clareza?";
+  r3.textContent = activeProduct
+    ? `Direto: enquanto você adia, o preço anda. Pra ter referência, 1 mês pode dar perto de ${base.loss1}. Quer travar o valor de hoje ou pagar o valor do tempo?`
+    : "Direto: sem decidir, você só adia. Quer que eu te ajude a escolher uma direção e fechar isso com clareza?";
+  statusBadge.textContent = "Objeção: não mapeada";
+}
+
+/* =========================================================
+   PLUGA NO PROCESSAMENTO
+========================================================= */
+const _prevProcess = btnProcess.onclick;
+btnProcess.onclick = ()=>{
+  const t = inputText.value.trim();
+  if(!t) return;
+
+  const p = detectProduct(t);
+  if(p) showProduct(p);
+
+  applyInvestorObjections(t);
+};
+
+/* Botões extras do header (placeholders por enquanto — Parte 3 fecha) */
+document.getElementById("btnSimulador").onclick = ()=>{
+  // painel já está embaixo do main; aqui só faz scroll rápido
+  simBox.scrollIntoView({behavior:"smooth", block:"start"});
+};
+document.getElementById("btnFormalizacao").onclick = ()=>{
+  // Parte 3 implementa o envio real via localStorage + querystring
+  alert("Formalização será conectada na Parte 3.");
+};
+</script>
+
+<!-- ===== CONTINUA NA PARTE 3 ===== -->
+<!-- ===================== PARTE 3 (FINAL) ===================== -->
+<script>
+/* =========================================================
+   ADMIN — ROBUSTEZ SEM FRAMEWORK
+========================================================= */
+
+const LS_BACKUP = "copiloto_base_backup_v1";
+
+/* valida campos mínimos */
+function validateBaseStructure(b){
+  if(!b || typeof b!=="object") return "Base inválida";
+  if(!Array.isArray(b.users)) return "users[] ausente";
+  if(!Array.isArray(b.products)) return "products[] ausente";
+  if(!Array.isArray(b.objections)) return "objections[] ausente";
+  return null;
+}
+
+/* backup automático */
+function backupBase(){
+  try{
+    localStorage.setItem(LS_BACKUP, JSON.stringify(BASE));
+  }catch{}
+}
+
+/* restaura backup */
+function restoreBackup(){
+  try{
+    const raw = localStorage.getItem(LS_BACKUP);
+    if(!raw) return false;
+    BASE = JSON.parse(raw);
+    saveBase(BASE);
+    return true;
+  }catch{ return false; }
+}
+
+/* sobrescreve save do admin */
+btnAdminSave.onclick = ()=>{
+  try{
+    const parsed = JSON.parse(adminJson.value);
+    const err = validateBaseStructure(parsed);
+    if(err){
+      alert("Erro: "+err);
+      return;
+    }
+    backupBase();
+    BASE = parsed;
+    saveBase(BASE);
+    adminMsg.textContent = "✅ Base salva com sucesso.";
+    renderProductList();
+    if(activeProduct){
+      const p = BASE.products.find(x=>x.id===activeProduct.id);
+      if(p) showProduct(p);
+    }
+  }catch{
+    alert("JSON inválido. Verifique a estrutura.");
+  }
+};
+
+/* exportação */
+btnAdminExport.onclick = ()=>{
+  adminJson.value = JSON.stringify(BASE, null, 2);
+  adminMsg.textContent = "✅ JSON pronto para copiar.";
+};
+btnAdminCopy.onclick = async ()=>{
+  try{
+    await navigator.clipboard.writeText(adminJson.value);
+    adminMsg.textContent = "✅ Copiado.";
+  }catch{
+    adminJson.select();
+    document.execCommand("copy");
+    adminMsg.textContent = "✅ Copiado (fallback).";
+  }
+};
+
+/* reset */
+btnAdminReset.onclick = ()=>{
+  if(!confirm("Resetar base padrão?")) return;
+  BASE = structuredClone(DEFAULT_BASE);
+  saveBase(BASE);
+  adminJson.value = JSON.stringify(BASE, null, 2);
+  adminMsg.textContent = "Base padrão restaurada.";
+  renderProductList();
+};
+
+/* =========================================================
+   FORMALIZAÇÃO DE PROPOSTA — INTEGRAÇÃO
+========================================================= */
+
+function buildFormalizationPayload(){
+  if(!activeProduct) return {};
+  return {
+    empreendimento: activeProduct.name || "",
+    valor: activeProduct.value || "",
+    entrada: activeProduct.entrada || "",
+    parcela: activeProduct.parcela || "",
+    prazo: activeProduct.prazo || "",
+    reajuste: activeProduct.reajuste || "",
+    timestamp: Date.now()
+  };
+}
+
+function openFormalizacao(){
+  const data = buildFormalizationPayload();
+  localStorage.setItem("copiloto_formalizacao", JSON.stringify(data));
+
+  const qs = new URLSearchParams({
+    emp: data.empreendimento || "",
+    valor: data.valor || "",
+    entrada: data.entrada || "",
+    parcela: data.parcela || "",
+    prazo: data.prazo || ""
+  }).toString();
+
+  window.location.href =
+    "https://lucianabogo333-spec.github.io/formalizacao-proposta/?" + qs;
+}
+
+/* botão no header (se não existir, cria) */
+(function injectFormalButton(){
+  if(document.getElementById("btnFormalizacao")) return;
+  const btn = document.createElement("button");
+  btn.id = "btnFormalizacao";
+  btn.className = "btn btn-neon";
+  btn.textContent = "📄 Formalização de Proposta";
+  btn.onclick = openFormalizacao;
+  document.querySelector("header .top > div:last-child").prepend(btn);
+})();
+
+/* =========================================================
+   LOGIN — CONTROLE DE ACESSO
+========================================================= */
+
+function applyRoleUI(){
+  if(!SESSION || SESSION.role!=="admin"){
+    btnAdmin.disabled = true;
+    btnAdmin.style.opacity = .5;
+  }else{
+    btnAdmin.disabled = false;
+    btnAdmin.style.opacity = 1;
+  }
+}
+
+/* =========================================================
+   LISTA DE PRODUTOS SEMPRE VISÍVEL
+========================================================= */
+
+(function ensureProductList(){
+  if(!productBox) return;
+  renderProductList();
+})();
+
+/* =========================================================
+   INICIALIZAÇÃO FINAL
+========================================================= */
+
+(function finalize(){
+  // tenta restaurar backup se base corrompida
+  try{
+    validateBaseStructure(BASE);
+  }catch{
+    if(restoreBackup()){
+      console.warn("Base restaurada do backup.");
+    }
+  }
+})();
+</script>
+
+<!-- ===================== FIM DO ARQUIVO ===================== -->

@@ -1,28 +1,24 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-<meta charset="UTF-8"/>
-<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-<title>COPILOTO PRO — Fechamento Imobiliário</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>COPILOTO PRO — Assistente Imobiliário</title>
+
 <style>
+/* ===================== THEME ===================== */
 :root{
   --bg:#f5f7fb;
   --panel:#ffffff;
   --text:#0f172a;
   --muted:#64748b;
   --border:#e5e7eb;
-
   --primary:#4f46e5;
-  --primary-strong:#4338ca;
-
   --neon:#22c55e;
   --danger:#ef4444;
-  --warn:#f59e0b;
-
   --radius:16px;
   --shadow:0 10px 30px rgba(0,0,0,.08);
 }
-
 [data-theme="dark"]{
   --bg:#020617;
   --panel:#0b1220;
@@ -31,59 +27,31 @@
   --border:#1e293b;
   --shadow:0 12px 40px rgba(0,0,0,.55);
 }
-
 *{box-sizing:border-box}
 body{
   margin:0;
-  font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,Arial;
+  font-family:Inter,system-ui,Segoe UI,Roboto,Arial;
   background:var(--bg);
   color:var(--text);
 }
-
 header{
-  position:sticky;
-  top:0;
-  z-index:10;
+  position:sticky;top:0;z-index:10;
   background:var(--panel);
   border-bottom:1px solid var(--border);
   box-shadow:var(--shadow);
 }
-
 .top{
-  max-width:1400px;
-  margin:auto;
+  max-width:1400px;margin:auto;
   padding:16px 20px;
-  display:flex;
-  justify-content:space-between;
-  align-items:center;
-  gap:16px;
+  display:flex;justify-content:space-between;align-items:center;gap:12px;
 }
-
-.brand h1{
-  margin:0;
-  font-size:20px;
-  font-weight:900;
-}
-.brand span{
-  font-size:12px;
-  color:var(--muted);
-}
-
+.brand h1{margin:0;font-size:20px;font-weight:900}
+.brand span{font-size:12px;color:var(--muted)}
+.actions{display:flex;gap:10px;flex-wrap:wrap}
 .btn{
-  padding:10px 14px;
-  border-radius:12px;
+  padding:10px 14px;border-radius:12px;
   border:1px solid var(--border);
-  background:var(--panel);
-  cursor:pointer;
-  font-weight:800;
-  transition:transform .06s ease, filter .15s ease;
-}
-.btn:active{transform:translateY(1px)}
-.btn:hover{filter:brightness(0.98)}
-.btn-primary{
-  background:linear-gradient(180deg,var(--primary),var(--primary-strong));
-  color:#fff;
-  border:none;
+  background:var(--panel);cursor:pointer;font-weight:700;
 }
 .btn-neon{
   background:rgba(34,197,94,.15);
@@ -91,1342 +59,219 @@ header{
   border:1px solid rgba(34,197,94,.5);
   box-shadow:0 0 18px rgba(34,197,94,.35);
 }
+.btn-primary{background:var(--primary);color:#fff;border:none}
 .btn-danger{
   background:rgba(239,68,68,.12);
   color:var(--danger);
   border:1px solid rgba(239,68,68,.4);
 }
-.btn-warn{
-  background:rgba(245,158,11,.12);
-  color:var(--warn);
-  border:1px solid rgba(245,158,11,.4);
-}
-.badge{
-  display:inline-flex;
-  align-items:center;
-  gap:8px;
-  font-size:12px;
-  padding:7px 10px;
-  border-radius:999px;
-  border:1px solid var(--border);
-  background:rgba(255,255,255,.55);
-}
-[data-theme="dark"] .badge{ background:rgba(255,255,255,.04); }
-
-main{
-  max-width:1400px;
-  margin:auto;
-  padding:24px;
-}
+main{max-width:1400px;margin:auto;padding:24px}
 .grid{
   display:grid;
-  grid-template-columns:320px 1fr 420px;
+  grid-template-columns:300px 1fr;
   gap:20px;
 }
-
 .card{
   background:var(--panel);
   border:1px solid var(--border);
   border-radius:var(--radius);
   box-shadow:var(--shadow);
-  overflow:hidden;
-}
-.card .chead{
-  padding:16px;
-  border-bottom:1px solid var(--border);
-}
-.card .chead h2{
-  margin:0;
-  font-size:15px;
-}
-.card .chead p{
-  margin:6px 0 0;
-  font-size:12px;
-  color:var(--muted);
-}
-.card .body{
   padding:16px;
 }
-
-.product-name{
-  font-size:18px;
-  font-weight:900;
-}
-.product-meta{
-  margin-top:10px;
-  display:flex;
-  flex-wrap:wrap;
-  gap:8px;
-}
-.product-list{
-  margin:14px 0 0;
-  padding-left:18px;
-}
-.product-list li{
-  font-size:13px;
-  margin:6px 0;
-  line-height:1.35;
-}
-
-.kpi{
-  margin-top:14px;
-  padding:12px;
-  border:1px dashed var(--border);
-  border-radius:14px;
-  background:rgba(34,197,94,.06);
-}
-.kpi strong{display:block;font-size:12px}
-.kpi span{display:block;margin-top:6px;font-size:14px;font-weight:900;color:var(--neon)}
 .small{font-size:12px;color:var(--muted)}
+input,textarea,select{
+  width:100%;padding:10px;
+  border-radius:10px;border:1px solid var(--border);
+  background:var(--panel);color:var(--text);
+}
+textarea{min-height:90px}
 
-textarea{
-  width:100%;
-  min-height:220px;
-  padding:14px;
-  font-size:14px;
-  border-radius:14px;
-  border:1px solid var(--border);
-  background:var(--panel);
-  color:var(--text);
-  resize:vertical;
-}
-textarea:focus{
-  outline:none;
-  border-color:var(--primary);
-}
-
-.response{ margin-bottom:14px; }
-.response strong{ font-size:13px; }
-.response p{ font-size:14px; line-height:1.55; margin:6px 0 0; }
-
-.rates{
-  display:none;
-  margin-top:12px;
-  padding:12px;
-  border-radius:14px;
-  border:1px solid rgba(34,197,94,.35);
-  background:rgba(34,197,94,.08);
-}
-.rates.show{display:block}
-.rates-grid{
-  display:grid;
-  grid-template-columns:1fr 1fr;
-  gap:10px;
-}
-.rate-item{
-  padding:10px 12px;
-  border-radius:12px;
-  border:1px solid var(--border);
-  background:rgba(255,255,255,.55);
-}
-[data-theme="dark"] .rate-item{ background:rgba(255,255,255,.04); }
-.rate-item .k{font-size:12px;color:var(--muted)}
-.rate-item .v{margin-top:4px;font-size:16px;font-weight:1000;color:var(--text)}
-
-.table-wrap{
-  margin-top:14px;
-  border-radius:14px;
-  border:1px solid var(--border);
-  overflow:auto;
-}
-table{
-  width:100%;
-  border-collapse:collapse;
-  font-size:12px;
-}
-th,td{
-  padding:10px 10px;
-  border-bottom:1px solid var(--border);
-  text-align:right;
-  white-space:nowrap;
-}
-th:first-child, td:first-child{text-align:left}
-thead th{
-  position:sticky;
-  top:0;
-  background:var(--panel);
-  z-index:1;
-  font-size:12px;
-}
-tbody tr:hover{background:rgba(79,70,229,.05)}
-
-.graph-box{
-  border-radius:14px;
-  border:1px dashed var(--border);
-  padding:10px;
-  color:var(--muted);
-}
-.canvas-wrap{display:none}
-.canvas-wrap.show{display:block}
-canvas{
-  width:100%;
-  height:240px;
-  border-radius:12px;
-  background:rgba(255,255,255,.45);
-}
-[data-theme="dark"] canvas{ background:rgba(255,255,255,.05); }
-.graph-actions{
-  display:flex;
-  gap:10px;
-  flex-wrap:wrap;
-  margin-bottom:10px;
-}
-
-/* LOGIN OVERLAY */
-.overlay{
-  position:fixed; inset:0;
-  display:none;
-  background:linear-gradient(180deg, rgba(0,0,0,.55), rgba(0,0,0,.75));
-  z-index:100;
-  align-items:center;
-  justify-content:center;
-  padding:18px;
-}
-.overlay.show{display:flex}
-.login-card{
-  width:min(520px, 100%);
-  background:var(--panel);
-  border:1px solid var(--border);
-  border-radius:18px;
-  box-shadow:var(--shadow);
-  overflow:hidden;
-}
-.login-head{
-  padding:16px;
-  border-bottom:1px solid var(--border);
-}
-.login-head h3{margin:0;font-size:16px}
-.login-head p{margin:6px 0 0;color:var(--muted);font-size:12px}
-.login-body{padding:16px}
-.inp{
-  width:100%;
-  padding:12px 12px;
-  border-radius:14px;
-  border:1px solid var(--border);
-  background:var(--panel);
-  color:var(--text);
-  font-size:14px;
-  outline:none;
-}
-.inp:focus{border-color:var(--primary)}
-.row{display:flex;gap:10px;flex-wrap:wrap}
-.chk{display:flex;gap:10px;align-items:center;margin-top:10px;font-size:13px;color:var(--muted)}
-.chk input{transform:scale(1.1)}
-
-/* ADMIN MODAL */
+/* MODAL */
 .modal{
-  position:fixed; inset:0;
-  display:none;
+  position:fixed;inset:0;
   background:rgba(0,0,0,.55);
-  z-index:90;
-  padding:18px;
+  display:none;align-items:center;justify-content:center;
+  z-index:100;
 }
-.modal.show{display:flex;align-items:center;justify-content:center}
-.modal-card{
-  width:min(980px, 100%);
+.modal.show{display:flex}
+.modal-box{
+  width:min(900px,100%);
   max-height:90vh;
-  overflow:hidden;
-  border-radius:18px;
-  background:var(--panel);
-  border:1px solid var(--border);
-  box-shadow:var(--shadow);
-}
-.modal-head{
-  padding:14px 16px;
-  border-bottom:1px solid var(--border);
-  display:flex;
-  justify-content:space-between;
-  align-items:center;
-  gap:12px;
-}
-.modal-head h3{margin:0;font-size:14px}
-.modal-body{
-  padding:14px 16px;
   overflow:auto;
-  max-height:calc(90vh - 60px);
-}
-.textbox{
-  width:100%;
-  min-height:280px;
-  padding:12px;
-  border-radius:14px;
-  border:1px solid var(--border);
   background:var(--panel);
-  color:var(--text);
-  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
-  font-size:12px;
-  resize:vertical;
+  border-radius:18px;
+  padding:20px;
 }
-
-@media(max-width:1100px){
-  .grid{grid-template-columns:1fr}
-}
+.tabs{display:flex;gap:10px;margin-bottom:14px}
+.tab{cursor:pointer;font-weight:700}
+.tab.active{color:var(--primary)}
+.hidden{display:none}
 </style>
 </head>
 
 <body data-theme="light">
 
-<!-- LOGIN -->
-<div class="overlay" id="loginOverlay" aria-hidden="true">
-  <div class="login-card">
-    <div class="login-head">
-      <h3>🔐 Login — COPILOTO PRO</h3>
-      <p>Admin edita tudo. Usuário comum apenas usa.</p>
-    </div>
-    <div class="login-body">
-      <div class="row">
-        <div style="flex:1;min-width:200px">
-          <div class="small">Usuário</div>
-          <input class="inp" id="loginUser" placeholder="ex: admin" autocomplete="username"/>
-        </div>
-        <div style="flex:1;min-width:200px">
-          <div class="small">Senha</div>
-          <input class="inp" id="loginPass" placeholder="••••••" type="password" autocomplete="current-password"/>
-        </div>
-      </div>
-      <label class="chk">
-        <input type="checkbox" id="rememberSession"/>
-        Lembrar sessão neste dispositivo
-      </label>
-      <div class="row" style="margin-top:12px">
-        <button class="btn btn-primary" id="btnLogin">Entrar</button>
-        <button class="btn" id="btnLoginDemo">Entrar como usuário (demo)</button>
-      </div>
-      <div class="small" id="loginMsg" style="margin-top:10px"></div>
-    </div>
-  </div>
-</div>
-
 <header>
   <div class="top">
     <div class="brand">
       <h1>COPILOTO PRO</h1>
-      <span>Fechamento imobiliário em tempo real</span>
+      <span>Assistente comercial imobiliário</span>
     </div>
-
-    <div style="display:flex;gap:10px;flex-wrap:wrap;justify-content:flex-end">
-      <button class="btn btn-neon" id="btnRates">📊 Ver Taxas</button>
-      <button class="btn" id="btnAdmin">⚙️ Admin</button>
+    <div class="actions">
+      <button class="btn btn-neon" id="btnFormalizacao">📄 Formalização</button>
+      <button class="btn btn-neon" id="btnAdmin">⚙️ Admin</button>
       <button class="btn" id="toggleTheme">🌙 / ☀️</button>
-      <button class="btn btn-danger" id="btnExit">Sair</button>
     </div>
   </div>
 </header>
 
 <main>
-  <div class="grid">
-
-    <!-- PRODUTO -->
-    <aside class="card">
-      <div class="chead">
-        <h2>Produto ativo</h2>
-        <p>Todas as informações do loteamento</p>
-      </div>
-      <div class="body">
-        <div class="product-name" id="productName">Produto não identificado</div>
-        <div class="product-meta" id="productMeta"></div>
-        <ul class="product-list" id="productInfo"></ul>
-
-        <div class="kpi" id="kpiWait" style="display:none">
-          <strong>⏳ Custo de esperar (estimativa)</strong>
-          <span id="kpiWaitValue">—</span>
-          <div class="small" id="kpiWaitHint"></div>
-        </div>
-
-        <div class="rates" id="ratesPanel">
-          <div class="rates-grid">
-            <div class="rate-item">
-              <div class="k">SELIC (a.a.)</div>
-              <div class="v" id="rateSelic">—</div>
-            </div>
-            <div class="rate-item">
-              <div class="k">IPCA (12 meses)</div>
-              <div class="v" id="rateIpca">—</div>
-            </div>
-            <div class="rate-item">
-              <div class="k">IGP-M (12 meses)</div>
-              <div class="v" id="rateIgpm">—</div>
-            </div>
-            <div class="rate-item">
-              <div class="k">Cache</div>
-              <div class="v" id="rateCache">—</div>
-            </div>
-          </div>
-          <div class="small" id="ratesFoot" style="margin-top:10px">—</div>
-        </div>
-
-        <div id="tableBlock" style="display:none">
-          <div class="small" style="margin-top:14px;font-weight:900;color:var(--text)">
-            📈 Reajuste x Valorização (12 meses)
-          </div>
-          <div class="table-wrap">
-            <table>
-              <thead>
-                <tr>
-                  <th>Mês</th>
-                  <th>Parcela reajustada</th>
-                  <th>Valor estimado do lote</th>
-                  <th>Saldo</th>
-                </tr>
-              </thead>
-              <tbody id="tbl12"></tbody>
-            </table>
-          </div>
-          <div class="small" id="tblHint" style="margin-top:8px"></div>
-        </div>
-      </div>
-    </aside>
-    <!-- INPUT -->
-    <section class="card">
-      <div class="chead">
-        <h2>Fala do cliente</h2>
-        <p>Digite e pressione <b>Enter</b> (Shift+Enter quebra linha) ou use o microfone</p>
-      </div>
-      <div class="body">
-        <textarea id="inputText" placeholder="Digite ou dite o que o cliente falou..."></textarea>
-        <div style="display:flex;gap:10px;margin-top:12px;flex-wrap:wrap">
-          <button class="btn btn-primary" id="btnMic">🎙️ Microfone</button>
-          <button class="btn btn-warn" id="btnProcess">⚡ Processar</button>
-          <button class="btn btn-danger" id="btnClear">Limpar</button>
-          <span class="badge" id="statusBadge">Pronto</span>
-        </div>
-        <div class="small" style="margin-top:10px">
-          Dica: “caro”, “vou pensar”, “entrada”, “parcela”, “documentação”, “medo”, “golpe”…
-        </div>
-      </div>
-    </section>
-
-    <!-- RESPOSTAS + GRÁFICO -->
-    <section>
-      <div class="card">
-        <div class="chead">
-          <h2>Respostas sugeridas</h2>
-          <p>Baseadas na objeção detectada</p>
-        </div>
-        <div class="body">
-          <div class="response">
-            <strong>Leve</strong>
-            <p id="r1">—</p>
-          </div>
-          <div class="response">
-            <strong>Média</strong>
-            <p id="r2">—</p>
-          </div>
-          <div class="response">
-            <strong>Agressiva</strong>
-            <p id="r3">—</p>
-          </div>
-        </div>
-      </div>
-
-      <div class="card" style="margin-top:20px">
-        <div class="chead">
-          <h2>Valorização do investimento</h2>
-          <p>Visual para apresentação ao cliente</p>
-        </div>
-        <div class="body">
-          <div class="graph-actions">
-            <button class="btn btn-neon" id="btnGraphToggle">📈 Mostrar gráfico</button>
-            <span class="badge" id="graphHint">Aparece quando houver produto ativo</span>
-          </div>
-          <div class="graph-box">
-            <div class="canvas-wrap" id="canvasWrap">
-              <canvas id="chart" width="900" height="300"></canvas>
-              <div class="small" id="chartLegend" style="margin-top:8px"></div>
-            </div>
-            <div id="graphPlaceholder">Selecione um produto (pelo nome ou ponto de referência) para gerar o gráfico.</div>
-          </div>
-        </div>
-      </div>
-    </section>
-
+  <div class="card">
+    Sistema pronto. Use o **Admin** para editar produtos, usuários e objeções.
   </div>
 </main>
 
-<!-- ADMIN MODAL -->
-<div class="modal" id="adminModal" aria-hidden="true">
-  <div class="modal-card">
-    <div class="modal-head">
-      <h3>⚙️ Admin — Base (Produtos + Objeções + Usuários)</h3>
-      <button class="btn btn-danger" id="btnAdminClose">Fechar</button>
+<!-- ADMIN -->
+<div class="modal" id="adminModal">
+  <div class="modal-box">
+    <h3>⚙️ Admin — Base do Sistema</h3>
+
+    <div class="tabs">
+      <div class="tab active" data-tab="users">Usuários</div>
+      <div class="tab" data-tab="products">Produtos</div>
+      <div class="tab" data-tab="objections">Objeções</div>
     </div>
-    <div class="modal-body">
-      <div style="display:flex;gap:10px;flex-wrap:wrap;margin-bottom:10px">
-        <button class="btn btn-primary" id="btnAdminSave">Salvar</button>
-        <button class="btn" id="btnAdminExport">Exportar JSON</button>
-        <button class="btn" id="btnAdminCopy">Copiar</button>
-        <button class="btn btn-danger" id="btnAdminReset">Reset padrão</button>
-      </div>
-      <div class="small" style="margin-bottom:10px">
-        Cole/edite o JSON abaixo. Exportação gera JSON copiável para colar no GitHub.
-      </div>
-      <textarea class="textbox" id="adminJson" spellcheck="false"></textarea>
-      <div class="small" id="adminMsg" style="margin-top:10px"></div>
+
+    <!-- USERS -->
+    <div id="tab-users">
+      <textarea id="usersJson"></textarea>
     </div>
+
+    <!-- PRODUCTS -->
+    <div id="tab-products" class="hidden">
+      <textarea id="productsJson"></textarea>
+    </div>
+
+    <!-- OBJECTIONS -->
+    <div id="tab-objections" class="hidden">
+      <textarea id="objectionsJson"></textarea>
+    </div>
+
+    <div style="margin-top:14px;display:flex;gap:10px;flex-wrap:wrap">
+      <button class="btn btn-primary" id="btnSave">Salvar</button>
+      <button class="btn" id="btnExport">Exportar JSON</button>
+      <button class="btn" id="btnReset">Reset padrão</button>
+      <button class="btn btn-danger" id="btnCloseAdmin">Fechar</button>
+    </div>
+
+    <div class="small" id="adminMsg" style="margin-top:10px"></div>
   </div>
 </div>
 
 <script>
-document.addEventListener("DOMContentLoaded", () => {
+/* ===================== STORAGE ===================== */
+const LS_BASE="copiloto_base_final";
+const LS_BACKUP="copiloto_base_backup_final";
 
-  /* ===================== ELEMENTOS ===================== */
-  const bodyEl = document.body;
+/* ===================== BASE ===================== */
+const DEFAULT_BASE={
+  users:[
+    {username:"admin",password:"1234",role:"admin",name:"Administrador"},
+    {username:"user",password:"1234",role:"user",name:"Corretor"}
+  ],
+  products:[],
+  objections:[]
+};
 
-  const themeBtn = document.getElementById("toggleTheme");
-  const btnRates = document.getElementById("btnRates");
-  const btnAdmin = document.getElementById("btnAdmin");
-  const btnExit  = document.getElementById("btnExit");
+function loadBase(){
+  try{
+    const raw=localStorage.getItem(LS_BASE);
+    return raw?JSON.parse(raw):structuredClone(DEFAULT_BASE);
+  }catch{return structuredClone(DEFAULT_BASE);}
+}
 
-  const ratesPanel = document.getElementById("ratesPanel");
-  const rateSelic = document.getElementById("rateSelic");
-  const rateIpca  = document.getElementById("rateIpca");
-  const rateIgpm  = document.getElementById("rateIgpm");
-  const rateCache = document.getElementById("rateCache");
-  const ratesFoot = document.getElementById("ratesFoot");
+function saveBaseSafe(base){
+  localStorage.setItem(LS_BACKUP,localStorage.getItem(LS_BASE));
+  localStorage.setItem(LS_BASE,JSON.stringify(base,null,2));
+}
 
-  const productName = document.getElementById("productName");
-  const productInfo = document.getElementById("productInfo");
-  const productMeta = document.getElementById("productMeta");
+let BASE=loadBase();
 
-  const kpiWait = document.getElementById("kpiWait");
-  const kpiWaitValue = document.getElementById("kpiWaitValue");
-  const kpiWaitHint = document.getElementById("kpiWaitHint");
+/* ===================== ADMIN ===================== */
+const adminModal=document.getElementById("adminModal");
+const usersJson=document.getElementById("usersJson");
+const productsJson=document.getElementById("productsJson");
+const objectionsJson=document.getElementById("objectionsJson");
+const adminMsg=document.getElementById("adminMsg");
 
-  const tableBlock = document.getElementById("tableBlock");
-  const tbl12 = document.getElementById("tbl12");
-  const tblHint = document.getElementById("tblHint");
+document.getElementById("btnAdmin").onclick=()=>{
+  usersJson.value=JSON.stringify(BASE.users,null,2);
+  productsJson.value=JSON.stringify(BASE.products,null,2);
+  objectionsJson.value=JSON.stringify(BASE.objections,null,2);
+  adminModal.classList.add("show");
+};
 
-  const inputText = document.getElementById("inputText");
-  const btnMic = document.getElementById("btnMic");
-  const btnClear = document.getElementById("btnClear");
-  const btnProcess = document.getElementById("btnProcess");
-  const statusBadge = document.getElementById("statusBadge");
+document.getElementById("btnCloseAdmin").onclick=()=>adminModal.classList.remove("show");
 
-  const r1 = document.getElementById("r1");
-  const r2 = document.getElementById("r2");
-  const r3 = document.getElementById("r3");
-
-  const btnGraphToggle = document.getElementById("btnGraphToggle");
-  const canvasWrap = document.getElementById("canvasWrap");
-  const graphPlaceholder = document.getElementById("graphPlaceholder");
-  const graphHint = document.getElementById("graphHint");
-  const chart = document.getElementById("chart");
-  const chartLegend = document.getElementById("chartLegend");
-
-  const loginOverlay = document.getElementById("loginOverlay");
-  const loginUser = document.getElementById("loginUser");
-  const loginPass = document.getElementById("loginPass");
-  const rememberSession = document.getElementById("rememberSession");
-  const btnLogin = document.getElementById("btnLogin");
-  const btnLoginDemo = document.getElementById("btnLoginDemo");
-  const loginMsg = document.getElementById("loginMsg");
-
-  const adminModal = document.getElementById("adminModal");
-  const btnAdminClose = document.getElementById("btnAdminClose");
-  const adminJson = document.getElementById("adminJson");
-  const adminMsg = document.getElementById("adminMsg");
-  const btnAdminSave = document.getElementById("btnAdminSave");
-  const btnAdminExport = document.getElementById("btnAdminExport");
-  const btnAdminCopy = document.getElementById("btnAdminCopy");
-  const btnAdminReset = document.getElementById("btnAdminReset");
-
-  /* ===================== HELPERS ===================== */
-  function setStatus(text, kind=""){
-    statusBadge.textContent = text;
-    statusBadge.style.borderColor =
-      kind==="good" ? "rgba(34,197,94,.55)" :
-      kind==="warn" ? "rgba(245,158,11,.55)" :
-      kind==="bad"  ? "rgba(239,68,68,.55)" : "";
-  }
-  function normalize(s){
-    return String(s||"")
-      .toLowerCase()
-      .normalize("NFD").replace(/[\u0300-\u036f]/g, "")
-      .replace(/[^a-z0-9\s]/g," ")
-      .replace(/\s+/g," ")
-      .trim();
-  }
-  function brToNumber(v){
-    if(v === null || v === undefined) return NaN;
-    const s = String(v).trim().replace(/\./g, "").replace(",", ".");
-    const n = Number(s);
-    return Number.isFinite(n) ? n : NaN;
-  }
-  function fmtBRL(n){
-    const x = Number(n);
-    if(!Number.isFinite(x)) return "—";
-    return x.toLocaleString("pt-BR", {style:"currency", currency:"BRL", maximumFractionDigits:0});
-  }
-  function fmtPct(n){
-    const x = Number(n);
-    if(!Number.isFinite(x)) return "—";
-    return `${x.toFixed(2).replace(".", ",")}%`;
-  }
-  function effectiveMonthlyFromAnnual(annualPct){
-    const a = Number(annualPct);
-    if(!Number.isFinite(a)) return NaN;
-    return Math.pow(1 + a/100, 1/12) - 1;
-  }
-  function calcLoss(value, rateAA, months){
-    const monthly = effectiveMonthlyFromAnnual(rateAA);
-    if(!Number.isFinite(monthly)) return NaN;
-    const v0 = Number(value);
-    return v0 * (Math.pow(1+monthly, months) - 1);
-  }
-  function compounded12m(monthlyArray){
-    let acc = 1;
-    for(const v of monthlyArray){
-      const n = Number(v);
-      if(!Number.isFinite(n)) continue;
-      acc *= (1 + n/100);
-    }
-    return (acc - 1) * 100;
-  }
-  function nowISO(){ return new Date().toISOString(); }
-
-  /* ===================== THEME ===================== */
-  const savedTheme = localStorage.getItem("copiloto_theme");
-  if(savedTheme) bodyEl.setAttribute("data-theme", savedTheme);
-
-  themeBtn.addEventListener("click", () => {
-    const current = bodyEl.getAttribute("data-theme") || "light";
-    const next = current === "light" ? "dark" : "light";
-    bodyEl.setAttribute("data-theme", next);
-    localStorage.setItem("copiloto_theme", next);
-  });
-
-  /* ===================== BASE + SESSÃO ===================== */
-  const LS_KEY_BASE = "copiloto_base_v2";
-  const LS_KEY_SESSION = "copiloto_session_v1";
-
-  const DEFAULT_BASE = {
-    users: [
-      { id:"admin", name:"Administrador", role:"admin", username:"admin", password:"1234" },
-      { id:"user",  name:"Corretor",      role:"user",  username:"user",  password:"1234" }
-    ],
-    products: [
-      {
-        id:"cedros",
-        name:"CEDROS JARDINS",
-        aliases:["cedros","cedros jardins","posto bufalo","posto búfalo","santa catarina","pontinho vermelho","super center","fastech"],
-        value:150000,
-        entrada:0,
-        parcela:753,
-        prazo:180,
-        reajuste:"IPCA",
-        valorizacaoAA:18,
-        info:[
-          "Lotes a partir de 200 m²",
-          "Parcelas a partir de R$ 753",
-          "Sem entrada",
-          "Atrás do Posto Búfalo",
-          "Próximo ao Residencial Santa Catarina"
-        ]
-      },
-      {
-        id:"morada",
-        name:"MORADA BRASIL",
-        aliases:["morada","morada brasil","andre maggi","andré maggi","região andre maggi"],
-        value:170000,
-        entrada:0,
-        parcela:713,
-        prazo:240,
-        reajuste:"IGPM",
-        valorizacaoAA:18,
-        info:[
-          "Parcelas a partir de R$ 713",
-          "Até 240x",
-          "Região da Av. André Maggi",
-          "Fase de obras (lançamento)"
-        ]
-      }
-    ],
-    objections: [
-      {
-        id:"pensar",
-        keywords:["pensar","depois","analisar","ver com calma","mais pra frente","avaliar"],
-        leve:"Tranquilo. O que você quer analisar primeiro: localização, condição ou prazo?",
-        media:"Pra eu te ajudar certo: o que precisa acontecer pra virar um ‘sim’ hoje?",
-        agressiva:"Vou ser direto: esperar costuma custar caro. Em 6 meses você pode perder cerca de {loss6}. Quer travar o preço de agora ou pagar mais depois?"
-      },
-      {
-        id:"caro",
-        keywords:["caro","muito","pesado","alto","fora do orçamento"],
-        leve:"Entendi. Quando você diz ‘caro’, é pela parcela ou pelo valor final?",
-        media:"Se eu encaixar uma condição que te deixe confortável por mês, você avança hoje?",
-        agressiva:"Caro é esperar. Se você adia, a valorização corre todo mês. Isso dá cerca de {loss1}/mês. Quer garantir agora ou comprar mais caro depois?"
-      },
-      {
-        id:"entrada",
-        keywords:["entrada","sem entrada","não tenho entrada","dinheiro de entrada","sinal"],
-        leve:"Beleza. Você prefere sem entrada ou consegue um sinal simbólico pra melhorar condição?",
-        media:"Se eu montar um cenário com entrada baixa e parcela menor, encaixa pra você?",
-        agressiva:"Entrada não é o problema — o problema é perder tempo e comprar mais caro. Vamos travar a melhor condição agora e você decide o formato de entrada."
-      },
-      {
-        id:"parcela",
-        keywords:["parcela","mensal","cabe no bolso","valor da parcela","prestação"],
-        leve:"Perfeito. Qual faixa de parcela seria confortável pra você hoje?",
-        media:"Se eu ajustar prazo/entrada pra bater nessa faixa, você fecha agora?",
-        agressiva:"O cliente que fecha pensa no mês e no patrimônio: você paga parcela e o lote valoriza. Se eu te provar isso no gráfico, você avança?"
-      },
-      {
-        id:"documentacao",
-        keywords:["documento","documentação","contrato","matrícula","registro","cartório","golpe","confio","seguro"],
-        leve:"Totalmente justo. Você quer ver matrícula/contrato e o histórico do empreendimento?",
-        media:"Se eu te mandar a documentação e cronograma, resolve essa insegurança?",
-        agressiva:"Se estiver 100% documentado, adiar não te protege — só te faz pagar mais caro depois. Vamos validar tudo agora e travar a condição."
-      }
-    ]
+/* Tabs */
+document.querySelectorAll(".tab").forEach(t=>{
+  t.onclick=()=>{
+    document.querySelectorAll(".tab").forEach(x=>x.classList.remove("active"));
+    t.classList.add("active");
+    document.querySelectorAll("[id^='tab-']").forEach(x=>x.classList.add("hidden"));
+    document.getElementById("tab-"+t.dataset.tab).classList.remove("hidden");
   };
-
-  function loadBase(){
-    try{
-      const raw = localStorage.getItem(LS_KEY_BASE);
-      if(!raw) return structuredClone(DEFAULT_BASE);
-      const parsed = JSON.parse(raw);
-      if(!parsed.users) parsed.users = structuredClone(DEFAULT_BASE.users);
-      if(!parsed.products) parsed.products = structuredClone(DEFAULT_BASE.products);
-      if(!parsed.objections) parsed.objections = structuredClone(DEFAULT_BASE.objections);
-      return parsed;
-    }catch{
-      return structuredClone(DEFAULT_BASE);
-    }
-  }
-  function saveBase(base){ localStorage.setItem(LS_KEY_BASE, JSON.stringify(base, null, 2)); }
-  let BASE = loadBase();
-
-  let SESSION = null; // {username, role, name}
-  /* ===================== LOGIN / SESSÃO ===================== */
-  function showLogin(){
-    loginOverlay.classList.add("show");
-    loginOverlay.setAttribute("aria-hidden","false");
-    loginMsg.textContent = "";
-    loginUser.value = "";
-    loginPass.value = "";
-    rememberSession.checked = true;
-    setStatus("Login necessário", "warn");
-  }
-  function hideLogin(){
-    loginOverlay.classList.remove("show");
-    loginOverlay.setAttribute("aria-hidden","true");
-    setStatus("Pronto", "good");
-  }
-  function saveSession(sess, remember){
-    SESSION = sess;
-    if(remember){
-      localStorage.setItem(LS_KEY_SESSION, JSON.stringify({
-        ...sess,
-        savedAt: Date.now(),
-        ttl: 7*24*60*60*1000 // 7 dias
-      }));
-    }else{
-      localStorage.removeItem(LS_KEY_SESSION);
-    }
-  }
-  function loadSession(){
-    try{
-      const raw = localStorage.getItem(LS_KEY_SESSION);
-      if(!raw) return null;
-      const obj = JSON.parse(raw);
-      if(!obj || !obj.savedAt || !obj.ttl) return null;
-      if(Date.now() - obj.savedAt > obj.ttl) return null;
-      return { username: obj.username, role: obj.role, name: obj.name };
-    }catch{
-      return null;
-    }
-  }
-
-  function authenticate(username, password){
-    const u = String(username||"").trim();
-    const p = String(password||"").trim();
-    const user = BASE.users.find(x => x.username === u && x.password === p);
-    if(!user) return null;
-    return { username: user.username, role: user.role, name: user.name };
-  }
-
-  function applyRoleUI(){
-    // usuário comum não abre admin
-    if(!SESSION || SESSION.role !== "admin"){
-      btnAdmin.disabled = true;
-      btnAdmin.style.opacity = "0.6";
-      btnAdmin.title = "Apenas admin";
-    }else{
-      btnAdmin.disabled = false;
-      btnAdmin.style.opacity = "1";
-      btnAdmin.title = "Admin";
-    }
-  }
-
-  btnLogin.addEventListener("click", () => {
-    const sess = authenticate(loginUser.value, loginPass.value);
-    if(!sess){
-      loginMsg.textContent = "❌ Usuário ou senha inválidos.";
-      setStatus("Login inválido", "bad");
-      return;
-    }
-    saveSession(sess, rememberSession.checked);
-    hideLogin();
-    applyRoleUI();
-  });
-
-  btnLoginDemo.addEventListener("click", () => {
-    const user = BASE.users.find(x => x.role === "user") || BASE.users[0];
-    saveSession({username:user.username, role:user.role, name:user.name}, true);
-    hideLogin();
-    applyRoleUI();
-  });
-
-  btnExit.addEventListener("click", () => {
-    localStorage.removeItem(LS_KEY_SESSION);
-    SESSION = null;
-    resetUI();
-    showLogin();
-  });
-
-  /* ===================== ECONOMIA (BCB/SGS) + CACHE 6H ===================== */
-  const LS_KEY_ECON = "copiloto_econ_cache_v2";
-  const ECON_TTL_MS = 6 * 60 * 60 * 1000;
-
-  let ECON = { selicAA:null, ipca12:null, igpm12:null, updatedAt:null, source:"BCB/SGS" };
-
-  function econFromCache(){
-    try{
-      const raw = localStorage.getItem(LS_KEY_ECON);
-      if(!raw) return null;
-      const obj = JSON.parse(raw);
-      if(!obj || !obj.savedAt || !obj.data) return null;
-      if(Date.now() - obj.savedAt > ECON_TTL_MS) return null;
-      return obj;
-    }catch{ return null; }
-  }
-  function saveEconCache(data){
-    localStorage.setItem(LS_KEY_ECON, JSON.stringify({ savedAt: Date.now(), data }));
-  }
-  async function fetchSGS(series, lastN){
-    const url = `https://api.bcb.gov.br/dados/serie/bcdata.sgs.${series}/dados/ultimos/${lastN}?formato=json`;
-    const res = await fetch(url, {cache:"no-store"});
-    if(!res.ok) throw new Error("Falha BCB/SGS");
-    const data = await res.json();
-    return Array.isArray(data) ? data : [];
-  }
-  function updateRatesUI(mode){
-    rateSelic.textContent = ECON.selicAA!=null ? fmtPct(ECON.selicAA) : "—";
-    rateIpca.textContent  = ECON.ipca12!=null  ? fmtPct(ECON.ipca12)  : "—";
-    rateIgpm.textContent  = ECON.igpm12!=null  ? fmtPct(ECON.igpm12)  : "—";
-
-    const cache = econFromCache();
-    if(cache){
-      const ageMin = Math.round((Date.now() - cache.savedAt)/60000);
-      rateCache.textContent = `${ageMin} min`;
-    }else{
-      rateCache.textContent = "—";
-    }
-
-    const when = ECON.updatedAt ? new Date(ECON.updatedAt).toLocaleString("pt-BR") : "—";
-    ratesFoot.textContent = `Fonte: ${ECON.source} • Atualizado: ${when} • Modo: ${mode}`;
-  }
-  async function loadEconomy(force=false){
-    const cached = !force ? econFromCache() : null;
-    if(cached){
-      ECON = cached.data;
-      updateRatesUI("cache");
-      return ECON;
-    }
-    try{
-      setStatus("Carregando taxas…", "warn");
-
-      // SELIC a.a. correta: Meta Selic (432) último valor
-      const selicArr = await fetchSGS(432, 1);
-      const selicAA = selicArr.length ? brToNumber(selicArr[0].valor) : NaN;
-
-      // IPCA mensal (433) e IGP-M mensal (189): últimos 12 e compor
-      const ipcaArr = await fetchSGS(433, 12);
-      const igpmArr = await fetchSGS(189, 12);
-
-      const ipcaMonthly = ipcaArr.map(x => brToNumber(x.valor)).filter(Number.isFinite);
-      const igpmMonthly = igpmArr.map(x => brToNumber(x.valor)).filter(Number.isFinite);
-
-      const ipca12 = compounded12m(ipcaMonthly);
-      const igpm12 = compounded12m(igpmMonthly);
-
-      ECON = {
-        selicAA,
-        ipca12,
-        igpm12,
-        updatedAt: nowISO(),
-        source: "BCB/SGS (432/433/189)"
-      };
-      saveEconCache(ECON);
-      updateRatesUI("live");
-      setStatus("Pronto", "good");
-      return ECON;
-    }catch{
-      updateRatesUI("erro");
-      setStatus("Sem taxas (offline)", "bad");
-      return ECON;
-    }
-  }
-
-  btnRates.addEventListener("click", async () => {
-    const willShow = !ratesPanel.classList.contains("show");
-    if(willShow){
-      ratesPanel.classList.add("show");
-      await loadEconomy(false);
-    }else{
-      ratesPanel.classList.remove("show");
-    }
-  });
-
-  /* ===================== DETECÇÃO PRODUTO (NOME + PONTO DE REFERÊNCIA) ===================== */
-  let activeProduct = null;
-
-  function detectProduct(text){
-    const t = normalize(text);
-    let best = null;
-    let bestScore = 0;
-
-    for(const p of BASE.products){
-      const aliasList = [p.name, ...(p.aliases||[])].map(normalize);
-
-      // também permite detectar por frases do info (ponto de referência fica lá muitas vezes)
-      const infoList = (p.info||[]).map(normalize);
-
-      for(const key of [...aliasList, ...infoList]){
-        if(!key) continue;
-        if(t.includes(key)){
-          const score = key.length;
-          if(score > bestScore){ bestScore = score; best = p; }
-        }
-      }
-
-      // bônus: detectar por palavras avulsas fortes (ex: "búfalo", "andré maggi")
-      const words = aliasList.flatMap(a => a.split(" ")).filter(w => w.length >= 5);
-      let hits = 0;
-      for(const w of words){
-        if(t.includes(w)) hits++;
-      }
-      if(hits >= 2){
-        const score = 20 + hits;
-        if(score > bestScore){ bestScore = score; best = p; }
-      }
-    }
-    return best;
-  }
-
-  function resolveReajusteAnnualPct(prod){
-    const r = String(prod.reajuste||"").trim().toUpperCase();
-    if(r === "IPCA") return ECON.ipca12;
-    if(r === "IGPM" || r === "IGP-M") return ECON.igpm12;
-    if(r === "SELIC") return ECON.selicAA;
-
-    const m = r.match(/([\d.,]+)\s*%?/);
-    if(m){
-      const n = brToNumber(m[1]);
-      return Number.isFinite(n) ? n : null;
-    }
-    return null;
-  }
-
-  function showProduct(p){
-    activeProduct = p;
-    productName.textContent = p.name;
-
-    productMeta.innerHTML = `
-      <span class="badge">💰 Valor: <b>${fmtBRL(p.value)}</b></span>
-      <span class="badge">🧾 Parcela: <b>${fmtBRL(p.parcela)}</b></span>
-      <span class="badge">🕒 Prazo: <b>${p.prazo || "—"}x</b></span>
-      <span class="badge">💳 Entrada: <b>${fmtBRL(p.entrada || 0)}</b></span>
-      <span class="badge">📌 Reajuste: <b>${String(p.reajuste||"—")}</b></span>
-      <span class="badge">📈 Valorização: <b>${fmtPct(p.valorizacaoAA)}</b></span>
-    `;
-
-    productInfo.innerHTML = (p.info||[]).map(i => `<li>${i}</li>`).join("");
-
-    // custo de esperar 1 mês
-    const loss1 = calcLoss(p.value, p.valorizacaoAA, 1);
-    kpiWait.style.display = "block";
-    kpiWaitValue.textContent = `${fmtBRL(loss1)} / mês`;
-    kpiWaitHint.textContent = `Estimativa usando ${fmtPct(p.valorizacaoAA)} a.a.`;
-
-    build12MonthTable();
-    renderGraph();
-    graphHint.textContent = `Produto ativo: ${p.name}`;
-  }
-
-  /* ===================== TABELA 12 MESES ===================== */
-  async function build12MonthTable(){
-    if(!activeProduct) return;
-
-    // garante que temos taxas (pra IPCA/IGPM/SELIC)
-    if(ECON.ipca12==null || ECON.igpm12==null || ECON.selicAA==null){
-      await loadEconomy(false);
-    }
-
-    const parcela0 = Number(activeProduct.parcela);
-    const valor0   = Number(activeProduct.value);
-    const valAA    = Number(activeProduct.valorizacaoAA);
-
-    const reajAA = resolveReajusteAnnualPct(activeProduct);
-    const reajM = effectiveMonthlyFromAnnual(reajAA);
-    const valM  = effectiveMonthlyFromAnnual(valAA);
-
-    const hasReaj = Number.isFinite(reajM);
-    const hasVal  = Number.isFinite(valM);
-
-    tbl12.innerHTML = "";
-    let sumPaid = 0;
-
-    for(let m=1; m<=12; m++){
-      const parcelaM = hasReaj ? parcela0 * Math.pow(1+reajM, m) : parcela0;
-      sumPaid += parcelaM;
-
-      const loteM = hasVal ? valor0 * Math.pow(1+valM, m) : valor0;
-      const saldo = loteM - sumPaid;
-
-      const tr = document.createElement("tr");
-      tr.innerHTML = `
-        <td>${m}</td>
-        <td>${fmtBRL(parcelaM)}</td>
-        <td>${fmtBRL(loteM)}</td>
-        <td style="font-weight:900;color:${saldo>=0 ? "var(--neon)" : "var(--danger)"}">${fmtBRL(saldo)}</td>
-      `;
-      tbl12.appendChild(tr);
-    }
-
-    tableBlock.style.display = "block";
-    tblHint.textContent =
-      `Reajuste: ${String(activeProduct.reajuste||"—")} • Taxa anual: ${
-        Number.isFinite(reajAA) ? fmtPct(reajAA) : "—"
-      } • Valorização: ${fmtPct(activeProduct.valorizacaoAA)} a.a.`;
-  }
-
-  /* ===================== OBJEÇÕES + RESPOSTAS ===================== */
-  function detectObjection(text){
-    const t = normalize(text);
-    for(const obj of BASE.objections){
-      const keys = (obj.keywords||[]).map(normalize);
-      if(keys.some(k => k && t.includes(k))) return obj;
-    }
-    return null;
-  }
-  function fillTemplate(str, data){
-    return String(str||"")
-      .replaceAll("{produto}", data.produto||"")
-      .replaceAll("{loss1}", data.loss1||"")
-      .replaceAll("{loss6}", data.loss6||"");
-  }
-
-  async function processText(){
-    const text = String(inputText.value||"").trim();
-    if(!text){
-      setStatus("Digite algo…", "warn");
-      return;
-    }
-
-    setStatus("Processando…", "warn");
-
-    const prod = detectProduct(text);
-    if(prod) showProduct(prod);
-
-    if(!activeProduct){
-      r1.textContent = "Me diga o loteamento ou um ponto de referência (ex.: ‘Posto Búfalo’, ‘André Maggi’).";
-      r2.textContent = "Assim que identificar o produto, eu te dou respostas mais fortes e com números.";
-      r3.textContent = "Escreva: ‘é caro’, ‘vou pensar’, ‘não tenho entrada’, ‘documentação’, etc.";
-      setStatus("Sem produto", "warn");
-      return;
-    }
-
-    await loadEconomy(false);
-
-    const loss1n = calcLoss(activeProduct.value, activeProduct.valorizacaoAA, 1);
-    const loss6n = calcLoss(activeProduct.value, activeProduct.valorizacaoAA, 6);
-
-    const data = { produto: activeProduct.name, loss1: fmtBRL(loss1n), loss6: fmtBRL(loss6n) };
-
-    const obj = detectObjection(text);
-
-    if(obj){
-      r1.textContent = fillTemplate(obj.leve, data);
-      r2.textContent = fillTemplate(obj.media, data);
-      r3.textContent = fillTemplate(obj.agressiva, data);
-      setStatus(`Objeção: ${obj.id}`, "good");
-    }else{
-      r1.textContent = "Entendi. O que mais pesa pra você: parcela, prazo, entrada ou confiança na documentação?";
-      r2.textContent = "Se eu te mostrar a melhor condição que encaixa no seu mês, você avança hoje?";
-      r3.textContent = `Direto: cada mês pode custar algo perto de ${data.loss1} em valorização. Quer que eu te mostre no gráfico agora?`;
-      setStatus("Objeção: genérica", "good");
-    }
-
-    build12MonthTable();
-    renderGraph();
-  }
-
-  // SOMENTE NO ENTER (Shift+Enter quebra linha)
-  inputText.addEventListener("keydown", (e) => {
-    if(e.key === "Enter" && !e.shiftKey){
-      e.preventDefault();
-      processText();
-    }
-  });
-  btnProcess.addEventListener("click", processText);
-
-  btnClear.addEventListener("click", () => {
-    inputText.value = "";
-    setStatus("Pronto");
-  });
-
-  /* ===================== MICROFONE (processa só ao final) ===================== */
-  let recognition = null;
-  let listening = false;
-
-  function setupSpeech(){
-    const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
-    if(!SR) return null;
-    const rec = new SR();
-    rec.lang = "pt-BR";
-    rec.interimResults = false; // não “atualiza cedo demais”
-    rec.continuous = false;
-    return rec;
-  }
-
-  recognition = setupSpeech();
-
-  btnMic.addEventListener("click", () => {
-    if(!recognition){
-      alert("Microfone (SpeechRecognition) não suportado. Use Chrome/Edge ou digite.");
-      setStatus("Mic não suportado", "bad");
-      return;
-    }
-    if(listening){
-      recognition.stop();
-      return;
-    }
-    try{
-      listening = true;
-      btnMic.textContent = "🛑 Parar";
-      setStatus("Ouvindo…", "warn");
-      recognition.start();
-    }catch{
-      setStatus("Microfone indisponível", "bad");
-    }
-  });
-
-  if(recognition){
-    recognition.onresult = (event) => {
-      const t = event.results?.[0]?.[0]?.transcript || "";
-      inputText.value = (inputText.value ? (inputText.value + "\n") : "") + t;
-    };
-    recognition.onend = () => {
-      listening = false;
-      btnMic.textContent = "🎙️ Microfone";
-      setStatus("Processando áudio…", "warn");
-      processText().finally(()=> setStatus("Pronto", "good"));
-    };
-    recognition.onerror = () => {
-      listening = false;
-      btnMic.textContent = "🎙️ Microfone";
-      setStatus("Erro no microfone", "bad");
-    };
-  }
-
-  /* ===================== GRÁFICO CANVAS ===================== */
-  let graphVisible = false;
-
-  btnGraphToggle.addEventListener("click", () => {
-    graphVisible = !graphVisible;
-    if(graphVisible){
-      canvasWrap.classList.add("show");
-      graphPlaceholder.style.display = "none";
-      btnGraphToggle.textContent = "📉 Esconder gráfico";
-      renderGraph();
-    }else{
-      canvasWrap.classList.remove("show");
-      graphPlaceholder.style.display = "block";
-      btnGraphToggle.textContent = "📈 Mostrar gráfico";
-    }
-  });
-
-  function renderGraph(){
-    if(!activeProduct || !graphVisible) return;
-
-    const ctx = chart.getContext("2d");
-    const W = chart.width, H = chart.height;
-
-    const months = 12;
-    const val0 = Number(activeProduct.value);
-    const parcela0 = Number(activeProduct.parcela);
-
-    const valM = effectiveMonthlyFromAnnual(activeProduct.valorizacaoAA);
-
-    const reajAA = resolveReajusteAnnualPct(activeProduct);
-    const reajM = effectiveMonthlyFromAnnual(reajAA);
-
-    let invested = [];
-    let valued = [];
-    let sum = 0;
-
-    for(let m=1; m<=months; m++){
-      const par = Number.isFinite(reajM) ? parcela0 * Math.pow(1+reajM, m) : parcela0;
-      sum += par;
-      invested.push(sum);
-
-      const vv = Number.isFinite(valM) ? val0 * Math.pow(1+valM, m) : val0;
-      valued.push(vv);
-    }
-
-    const maxY = Math.max(...invested, ...valued) * 1.08;
-    const minY = 0;
-
-    function x(i){ return 48 + (i/(months-1))*(W-68); }
-    function y(v){ return (H-34) - ((v-minY)/(maxY-minY))*(H-54); }
-
-    ctx.clearRect(0,0,W,H);
-
-    // eixos
-    ctx.lineWidth = 1;
-    ctx.strokeStyle = "rgba(120,120,120,.35)";
-    ctx.beginPath();
-    ctx.moveTo(42, 16);
-    ctx.lineTo(42, H-28);
-    ctx.lineTo(W-14, H-28);
-    ctx.stroke();
-
-    // linha investido (roxo)
-    ctx.lineWidth = 3;
-    ctx.strokeStyle = "rgba(79,70,229,.95)";
-    ctx.beginPath();
-    invested.forEach((v,i)=>{
-      const xx = x(i), yy = y(v);
-      if(i===0) ctx.moveTo(xx,yy); else ctx.lineTo(xx,yy);
-    });
-    ctx.stroke();
-
-    // linha valorizado (verde)
-    ctx.strokeStyle = "rgba(34,197,94,.95)";
-    ctx.beginPath();
-    valued.forEach((v,i)=>{
-      const xx = x(i), yy = y(v);
-      if(i===0) ctx.moveTo(xx,yy); else ctx.lineTo(xx,yy);
-    });
-    ctx.stroke();
-
-    chartLegend.textContent =
-      `Roxo = parcelas acumuladas • Verde = lote valorizado • 12 meses • Reajuste: ${String(activeProduct.reajuste||"—")} • Valorização: ${fmtPct(activeProduct.valorizacaoAA)} a.a.`;
-  }
-
-  /* ===================== ADMIN (JSON) ===================== */
-  function openAdmin(){
-    adminJson.value = JSON.stringify(BASE, null, 2);
-    adminMsg.textContent = "Edite: users[], products[], objections[].";
-    adminModal.classList.add("show");
-    adminModal.setAttribute("aria-hidden","false");
-  }
-  function closeAdmin(){
-    adminModal.classList.remove("show");
-    adminModal.setAttribute("aria-hidden","true");
-  }
-
-  btnAdminClose.addEventListener("click", closeAdmin);
-  adminModal.addEventListener("click", (e) => { if(e.target === adminModal) closeAdmin(); });
-
-  btnAdmin.addEventListener("click", () => {
-    if(!SESSION || SESSION.role !== "admin"){
-      alert("Apenas admin.");
-      return;
-    }
-    openAdmin();
-  });
-
-  btnAdminSave.addEventListener("click", () => {
-    try{
-      const parsed = JSON.parse(adminJson.value);
-      if(!parsed || !Array.isArray(parsed.users) || !Array.isArray(parsed.products) || !Array.isArray(parsed.objections)){
-        alert("JSON inválido: precisa conter users[], products[] e objections[].");
-        return;
-      }
-      BASE = parsed;
-      saveBase(BASE);
-      adminMsg.textContent = "✅ Base salva no dispositivo.";
-      setStatus("Base atualizada", "good");
-
-      // se o produto ativo foi alterado, tenta recarregar por id
-      if(activeProduct){
-        const refreshed = BASE.products.find(p => p.id === activeProduct.id) || null;
-        if(refreshed) showProduct(refreshed);
-      }
-    }catch{
-      alert("Erro ao salvar JSON. Verifique aspas e vírgulas.");
-    }
-  });
-
-  btnAdminExport.addEventListener("click", () => {
-    adminJson.value = JSON.stringify(BASE, null, 2);
-    adminMsg.textContent = "✅ JSON gerado. Copie e cole no GitHub.";
-  });
-
-  btnAdminCopy.addEventListener("click", async () => {
-    try{
-      await navigator.clipboard.writeText(adminJson.value);
-      adminMsg.textContent = "✅ Copiado.";
-    }catch{
-      adminJson.select();
-      document.execCommand("copy");
-      adminMsg.textContent = "✅ Copiado (fallback).";
-    }
-  });
-
-  btnAdminReset.addEventListener("click", () => {
-    if(!confirm("Resetar para base padrão?")) return;
-    BASE = structuredClone(DEFAULT_BASE);
-    saveBase(BASE);
-    adminJson.value = JSON.stringify(BASE, null, 2);
-    adminMsg.textContent = "✅ Base padrão restaurada.";
-    setStatus("Base resetada", "warn");
-  });
-
-  /* ===================== RESET UI ===================== */
-  function resetUI(){
-    activeProduct = null;
-    productName.textContent = "Produto não identificado";
-    productMeta.innerHTML = "";
-    productInfo.innerHTML = "";
-    kpiWait.style.display = "none";
-    tableBlock.style.display = "none";
-    r1.textContent = r2.textContent = r3.textContent = "—";
-    graphHint.textContent = "Aparece quando houver produto ativo";
-    graphVisible = false;
-    canvasWrap.classList.remove("show");
-    graphPlaceholder.style.display = "block";
-    btnGraphToggle.textContent = "📈 Mostrar gráfico";
-    setStatus("Pronto");
-  }
-
-  /* ===================== INIT ===================== */
-  (function init(){
-    setStatus("Inicializando…", "warn");
-
-    // sessão
-    const sess = loadSession();
-    if(sess){
-      SESSION = sess;
-      hideLogin();
-      applyRoleUI();
-      setStatus(`Olá, ${SESSION.name}`, "good");
-    }else{
-      showLogin();
-      applyRoleUI();
-    }
-
-    // estado inicial
-    resetUI();
-
-    // dica: pré-carregar economia não trava (mas evita atraso no 1º clique)
-    // loadEconomy(false);
-
-  })();
-
 });
+
+/* Save */
+document.getElementById("btnSave").onclick=()=>{
+  try{
+    const newBase={
+      users:JSON.parse(usersJson.value),
+      products:JSON.parse(productsJson.value),
+      objections:JSON.parse(objectionsJson.value)
+    };
+    if(!newBase.users.length) throw "Precisa de usuários";
+    saveBaseSafe(newBase);
+    BASE=newBase;
+    adminMsg.textContent="✅ Base salva com sucesso";
+  }catch(e){
+    adminMsg.textContent="❌ Erro ao salvar base";
+  }
+};
+
+/* Export */
+document.getElementById("btnExport").onclick=()=>{
+  const full=JSON.stringify(BASE,null,2);
+  navigator.clipboard.writeText(full);
+  adminMsg.textContent="📋 JSON copiado";
+};
+
+/* Reset */
+document.getElementById("btnReset").onclick=()=>{
+  if(!confirm("Resetar base padrão?"))return;
+  BASE=structuredClone(DEFAULT_BASE);
+  saveBaseSafe(BASE);
+  adminMsg.textContent="🔄 Base resetada";
+};
+
+/* ===================== FORMALIZAÇÃO ===================== */
+document.getElementById("btnFormalizacao").onclick=()=>{
+  const payload={
+    empreendimento:"",
+    entrada:"",
+    parcela:""
+  };
+  localStorage.setItem("copiloto_formalizacao_prefill",JSON.stringify(payload));
+  location.href="https://lucianabogo333-spec.github.io/formalizacao-proposta/";
+};
+
+/* ===================== THEME ===================== */
+document.getElementById("toggleTheme").onclick=()=>{
+  const cur=document.body.getAttribute("data-theme");
+  const next=cur==="dark"?"light":"dark";
+  document.body.setAttribute("data-theme",next);
+};
 </script>
 
 </body>

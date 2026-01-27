@@ -1,12 +1,10 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 <title>COPILOTO PRO — Fechamento Imobiliário</title>
-
 <style>
-/* ================== THEME ================== */
 :root{
   --bg:#f5f7fb;
   --panel:#ffffff;
@@ -19,6 +17,7 @@
 
   --neon:#22c55e;
   --danger:#ef4444;
+  --warn:#f59e0b;
 
   --radius:16px;
   --shadow:0 10px 30px rgba(0,0,0,.08);
@@ -26,14 +25,13 @@
 
 [data-theme="dark"]{
   --bg:#020617;
-  --panel:#020617;
+  --panel:#0b1220;
   --text:#e5e7eb;
   --muted:#94a3b8;
   --border:#1e293b;
   --shadow:0 12px 40px rgba(0,0,0,.55);
 }
 
-/* ================== RESET ================== */
 *{box-sizing:border-box}
 body{
   margin:0;
@@ -42,7 +40,6 @@ body{
   color:var(--text);
 }
 
-/* ================== HEADER ================== */
 header{
   position:sticky;
   top:0;
@@ -51,6 +48,7 @@ header{
   border-bottom:1px solid var(--border);
   box-shadow:var(--shadow);
 }
+
 .top{
   max-width:1400px;
   margin:auto;
@@ -60,6 +58,7 @@ header{
   align-items:center;
   gap:16px;
 }
+
 .brand h1{
   margin:0;
   font-size:20px;
@@ -70,7 +69,6 @@ header{
   color:var(--muted);
 }
 
-/* ================== BUTTONS ================== */
 .btn{
   padding:10px 14px;
   border-radius:12px;
@@ -98,8 +96,10 @@ header{
   color:var(--danger);
   border:1px solid rgba(239,68,68,.4);
 }
-.btn-ghost{
-  background:transparent;
+.btn-warn{
+  background:rgba(245,158,11,.12);
+  color:var(--warn);
+  border:1px solid rgba(245,158,11,.4);
 }
 .badge{
   display:inline-flex;
@@ -113,7 +113,6 @@ header{
 }
 [data-theme="dark"] .badge{ background:rgba(255,255,255,.04); }
 
-/* ================== MAIN GRID ================== */
 main{
   max-width:1400px;
   margin:auto;
@@ -125,7 +124,6 @@ main{
   gap:20px;
 }
 
-/* ================== CARD ================== */
 .card{
   background:var(--panel);
   border:1px solid var(--border);
@@ -133,15 +131,15 @@ main{
   box-shadow:var(--shadow);
   overflow:hidden;
 }
-.card header{
+.card .chead{
   padding:16px;
   border-bottom:1px solid var(--border);
 }
-.card header h2{
+.card .chead h2{
   margin:0;
   font-size:15px;
 }
-.card header p{
+.card .chead p{
   margin:6px 0 0;
   font-size:12px;
   color:var(--muted);
@@ -150,7 +148,6 @@ main{
   padding:16px;
 }
 
-/* ================== PRODUCT ================== */
 .product-name{
   font-size:18px;
   font-weight:900;
@@ -168,7 +165,9 @@ main{
 .product-list li{
   font-size:13px;
   margin:6px 0;
+  line-height:1.35;
 }
+
 .kpi{
   margin-top:14px;
   padding:12px;
@@ -178,8 +177,8 @@ main{
 }
 .kpi strong{display:block;font-size:12px}
 .kpi span{display:block;margin-top:6px;font-size:14px;font-weight:900;color:var(--neon)}
+.small{font-size:12px;color:var(--muted)}
 
-/* ================== INPUT ================== */
 textarea{
   width:100%;
   min-height:220px;
@@ -196,20 +195,10 @@ textarea:focus{
   border-color:var(--primary);
 }
 
-/* ================== RESPONSES ================== */
-.response{
-  margin-bottom:14px;
-}
-.response strong{
-  font-size:13px;
-}
-.response p{
-  font-size:14px;
-  line-height:1.55;
-  margin:6px 0 0;
-}
+.response{ margin-bottom:14px; }
+.response strong{ font-size:13px; }
+.response p{ font-size:14px; line-height:1.55; margin:6px 0 0; }
 
-/* ================== RATES PANEL ================== */
 .rates{
   display:none;
   margin-top:12px;
@@ -233,9 +222,7 @@ textarea:focus{
 [data-theme="dark"] .rate-item{ background:rgba(255,255,255,.04); }
 .rate-item .k{font-size:12px;color:var(--muted)}
 .rate-item .v{margin-top:4px;font-size:16px;font-weight:1000;color:var(--text)}
-.rate-foot{margin-top:10px;font-size:12px;color:var(--muted)}
 
-/* ================== TABLE ================== */
 .table-wrap{
   margin-top:14px;
   border-radius:14px;
@@ -263,7 +250,6 @@ thead th{
 }
 tbody tr:hover{background:rgba(79,70,229,.05)}
 
-/* ================== GRAPH ================== */
 .graph-box{
   border-radius:14px;
   border:1px dashed var(--border);
@@ -286,12 +272,53 @@ canvas{
   margin-bottom:10px;
 }
 
-/* ================== MODAL (ADMIN) ================== */
+/* LOGIN OVERLAY */
+.overlay{
+  position:fixed; inset:0;
+  display:none;
+  background:linear-gradient(180deg, rgba(0,0,0,.55), rgba(0,0,0,.75));
+  z-index:100;
+  align-items:center;
+  justify-content:center;
+  padding:18px;
+}
+.overlay.show{display:flex}
+.login-card{
+  width:min(520px, 100%);
+  background:var(--panel);
+  border:1px solid var(--border);
+  border-radius:18px;
+  box-shadow:var(--shadow);
+  overflow:hidden;
+}
+.login-head{
+  padding:16px;
+  border-bottom:1px solid var(--border);
+}
+.login-head h3{margin:0;font-size:16px}
+.login-head p{margin:6px 0 0;color:var(--muted);font-size:12px}
+.login-body{padding:16px}
+.inp{
+  width:100%;
+  padding:12px 12px;
+  border-radius:14px;
+  border:1px solid var(--border);
+  background:var(--panel);
+  color:var(--text);
+  font-size:14px;
+  outline:none;
+}
+.inp:focus{border-color:var(--primary)}
+.row{display:flex;gap:10px;flex-wrap:wrap}
+.chk{display:flex;gap:10px;align-items:center;margin-top:10px;font-size:13px;color:var(--muted)}
+.chk input{transform:scale(1.1)}
+
+/* ADMIN MODAL */
 .modal{
   position:fixed; inset:0;
   display:none;
   background:rgba(0,0,0,.55);
-  z-index:50;
+  z-index:90;
   padding:18px;
 }
 .modal.show{display:flex;align-items:center;justify-content:center}
@@ -318,16 +345,9 @@ canvas{
   overflow:auto;
   max-height:calc(90vh - 60px);
 }
-.field-row{
-  display:flex; gap:10px; flex-wrap:wrap; align-items:center;
-  margin-bottom:10px;
-}
-.small{
-  font-size:12px;color:var(--muted);
-}
 .textbox{
   width:100%;
-  min-height:260px;
+  min-height:280px;
   padding:12px;
   border-radius:14px;
   border:1px solid var(--border);
@@ -338,7 +358,6 @@ canvas{
   resize:vertical;
 }
 
-/* ================== MOBILE ================== */
 @media(max-width:1100px){
   .grid{grid-template-columns:1fr}
 }
@@ -346,6 +365,37 @@ canvas{
 </head>
 
 <body data-theme="light">
+
+<!-- LOGIN -->
+<div class="overlay" id="loginOverlay" aria-hidden="true">
+  <div class="login-card">
+    <div class="login-head">
+      <h3>🔐 Login — COPILOTO PRO</h3>
+      <p>Admin edita tudo. Usuário comum apenas usa.</p>
+    </div>
+    <div class="login-body">
+      <div class="row">
+        <div style="flex:1;min-width:200px">
+          <div class="small">Usuário</div>
+          <input class="inp" id="loginUser" placeholder="ex: admin" autocomplete="username"/>
+        </div>
+        <div style="flex:1;min-width:200px">
+          <div class="small">Senha</div>
+          <input class="inp" id="loginPass" placeholder="••••••" type="password" autocomplete="current-password"/>
+        </div>
+      </div>
+      <label class="chk">
+        <input type="checkbox" id="rememberSession"/>
+        Lembrar sessão neste dispositivo
+      </label>
+      <div class="row" style="margin-top:12px">
+        <button class="btn btn-primary" id="btnLogin">Entrar</button>
+        <button class="btn" id="btnLoginDemo">Entrar como usuário (demo)</button>
+      </div>
+      <div class="small" id="loginMsg" style="margin-top:10px"></div>
+    </div>
+  </div>
+</div>
 
 <header>
   <div class="top">
@@ -355,7 +405,7 @@ canvas{
     </div>
 
     <div style="display:flex;gap:10px;flex-wrap:wrap;justify-content:flex-end">
-      <button class="btn btn-neon" id="btnRates">📊 Taxas</button>
+      <button class="btn btn-neon" id="btnRates">📊 Ver Taxas</button>
       <button class="btn" id="btnAdmin">⚙️ Admin</button>
       <button class="btn" id="toggleTheme">🌙 / ☀️</button>
       <button class="btn btn-danger" id="btnExit">Sair</button>
@@ -368,15 +418,13 @@ canvas{
 
     <!-- PRODUTO -->
     <aside class="card">
-      <header>
+      <div class="chead">
         <h2>Produto ativo</h2>
         <p>Todas as informações do loteamento</p>
-      </header>
+      </div>
       <div class="body">
         <div class="product-name" id="productName">Produto não identificado</div>
-
         <div class="product-meta" id="productMeta"></div>
-
         <ul class="product-list" id="productInfo"></ul>
 
         <div class="kpi" id="kpiWait" style="display:none">
@@ -404,7 +452,7 @@ canvas{
               <div class="v" id="rateCache">—</div>
             </div>
           </div>
-          <div class="rate-foot" id="ratesFoot">—</div>
+          <div class="small" id="ratesFoot" style="margin-top:10px">—</div>
         </div>
 
         <div id="tableBlock" style="display:none">
@@ -426,38 +474,35 @@ canvas{
           </div>
           <div class="small" id="tblHint" style="margin-top:8px"></div>
         </div>
-
       </div>
     </aside>
-
     <!-- INPUT -->
     <section class="card">
-      <header>
+      <div class="chead">
         <h2>Fala do cliente</h2>
-        <p>Digite e pressione <b>Enter</b> para processar (Shift+Enter quebra linha) ou use o microfone</p>
-      </header>
+        <p>Digite e pressione <b>Enter</b> (Shift+Enter quebra linha) ou use o microfone</p>
+      </div>
       <div class="body">
         <textarea id="inputText" placeholder="Digite ou dite o que o cliente falou..."></textarea>
         <div style="display:flex;gap:10px;margin-top:12px;flex-wrap:wrap">
           <button class="btn btn-primary" id="btnMic">🎙️ Microfone</button>
-          <button class="btn" id="btnProcess">⚡ Processar</button>
+          <button class="btn btn-warn" id="btnProcess">⚡ Processar</button>
           <button class="btn btn-danger" id="btnClear">Limpar</button>
           <span class="badge" id="statusBadge">Pronto</span>
         </div>
         <div class="small" style="margin-top:10px">
-          Dica: fale “caro”, “vou pensar”, “depois”, “medo”, “entrada”, “parcelas” etc.
+          Dica: “caro”, “vou pensar”, “entrada”, “parcela”, “documentação”, “medo”, “golpe”…
         </div>
       </div>
     </section>
 
     <!-- RESPOSTAS + GRÁFICO -->
     <section>
-
       <div class="card">
-        <header>
+        <div class="chead">
           <h2>Respostas sugeridas</h2>
           <p>Baseadas na objeção detectada</p>
-        </header>
+        </div>
         <div class="body">
           <div class="response">
             <strong>Leve</strong>
@@ -475,10 +520,10 @@ canvas{
       </div>
 
       <div class="card" style="margin-top:20px">
-        <header>
+        <div class="chead">
           <h2>Valorização do investimento</h2>
           <p>Visual para apresentação ao cliente</p>
-        </header>
+        </div>
         <div class="body">
           <div class="graph-actions">
             <button class="btn btn-neon" id="btnGraphToggle">📈 Mostrar gráfico</button>
@@ -489,11 +534,10 @@ canvas{
               <canvas id="chart" width="900" height="300"></canvas>
               <div class="small" id="chartLegend" style="margin-top:8px"></div>
             </div>
-            <div id="graphPlaceholder">Selecione um produto (digitando) para gerar o gráfico.</div>
+            <div id="graphPlaceholder">Selecione um produto (pelo nome ou ponto de referência) para gerar o gráfico.</div>
           </div>
         </div>
       </div>
-
     </section>
 
   </div>
@@ -503,18 +547,18 @@ canvas{
 <div class="modal" id="adminModal" aria-hidden="true">
   <div class="modal-card">
     <div class="modal-head">
-      <h3>⚙️ Admin — Base (Produtos + Objeções)</h3>
+      <h3>⚙️ Admin — Base (Produtos + Objeções + Usuários)</h3>
       <button class="btn btn-danger" id="btnAdminClose">Fechar</button>
     </div>
     <div class="modal-body">
-      <div class="field-row">
-        <button class="btn btn-primary" id="btnAdminSave">Salvar Base</button>
+      <div style="display:flex;gap:10px;flex-wrap:wrap;margin-bottom:10px">
+        <button class="btn btn-primary" id="btnAdminSave">Salvar</button>
         <button class="btn" id="btnAdminExport">Exportar JSON</button>
         <button class="btn" id="btnAdminCopy">Copiar</button>
         <button class="btn btn-danger" id="btnAdminReset">Reset padrão</button>
       </div>
       <div class="small" style="margin-bottom:10px">
-        Exportação gera um JSON copiável (para colar no GitHub). Importação: cole o JSON aqui e clique em <b>Salvar Base</b>.
+        Cole/edite o JSON abaixo. Exportação gera JSON copiável para colar no GitHub.
       </div>
       <textarea class="textbox" id="adminJson" spellcheck="false"></textarea>
       <div class="small" id="adminMsg" style="margin-top:10px"></div>
@@ -522,819 +566,868 @@ canvas{
   </div>
 </div>
 
-</body>
-</html>
-
 <script>
-/* =========================================================
-   COPILOTO PRO — Ajustes + Financeiro + Admin Base
-   ========================================================= */
+document.addEventListener("DOMContentLoaded", () => {
 
-/* ===================== THEME ===================== */
-const themeBtn = document.getElementById("toggleTheme");
-const bodyEl = document.body;
+  /* ===================== ELEMENTOS ===================== */
+  const bodyEl = document.body;
 
-const savedTheme = localStorage.getItem("copiloto_theme");
-if(savedTheme) bodyEl.setAttribute("data-theme", savedTheme);
+  const themeBtn = document.getElementById("toggleTheme");
+  const btnRates = document.getElementById("btnRates");
+  const btnAdmin = document.getElementById("btnAdmin");
+  const btnExit  = document.getElementById("btnExit");
 
-themeBtn.onclick = () => {
-  const current = bodyEl.getAttribute("data-theme") || "light";
-  const next = current === "light" ? "dark" : "light";
-  bodyEl.setAttribute("data-theme", next);
-  localStorage.setItem("copiloto_theme", next);
-};
+  const ratesPanel = document.getElementById("ratesPanel");
+  const rateSelic = document.getElementById("rateSelic");
+  const rateIpca  = document.getElementById("rateIpca");
+  const rateIgpm  = document.getElementById("rateIgpm");
+  const rateCache = document.getElementById("rateCache");
+  const ratesFoot = document.getElementById("ratesFoot");
 
-/* ===================== ELEMENTOS ===================== */
-const productName = document.getElementById("productName");
-const productInfo = document.getElementById("productInfo");
-const productMeta = document.getElementById("productMeta");
-const inputText = document.getElementById("inputText");
+  const productName = document.getElementById("productName");
+  const productInfo = document.getElementById("productInfo");
+  const productMeta = document.getElementById("productMeta");
 
-const r1 = document.getElementById("r1");
-const r2 = document.getElementById("r2");
-const r3 = document.getElementById("r3");
+  const kpiWait = document.getElementById("kpiWait");
+  const kpiWaitValue = document.getElementById("kpiWaitValue");
+  const kpiWaitHint = document.getElementById("kpiWaitHint");
 
-const ratesBtn = document.getElementById("btnRates");
-const ratesPanel = document.getElementById("ratesPanel");
-const rateSelic = document.getElementById("rateSelic");
-const rateIpca = document.getElementById("rateIpca");
-const rateIgpm = document.getElementById("rateIgpm");
-const rateCache = document.getElementById("rateCache");
-const ratesFoot = document.getElementById("ratesFoot");
+  const tableBlock = document.getElementById("tableBlock");
+  const tbl12 = document.getElementById("tbl12");
+  const tblHint = document.getElementById("tblHint");
 
-const btnMic = document.getElementById("btnMic");
-const btnClear = document.getElementById("btnClear");
-const btnProcess = document.getElementById("btnProcess");
-const statusBadge = document.getElementById("statusBadge");
+  const inputText = document.getElementById("inputText");
+  const btnMic = document.getElementById("btnMic");
+  const btnClear = document.getElementById("btnClear");
+  const btnProcess = document.getElementById("btnProcess");
+  const statusBadge = document.getElementById("statusBadge");
 
-const kpiWait = document.getElementById("kpiWait");
-const kpiWaitValue = document.getElementById("kpiWaitValue");
-const kpiWaitHint = document.getElementById("kpiWaitHint");
+  const r1 = document.getElementById("r1");
+  const r2 = document.getElementById("r2");
+  const r3 = document.getElementById("r3");
 
-const tableBlock = document.getElementById("tableBlock");
-const tbl12 = document.getElementById("tbl12");
-const tblHint = document.getElementById("tblHint");
+  const btnGraphToggle = document.getElementById("btnGraphToggle");
+  const canvasWrap = document.getElementById("canvasWrap");
+  const graphPlaceholder = document.getElementById("graphPlaceholder");
+  const graphHint = document.getElementById("graphHint");
+  const chart = document.getElementById("chart");
+  const chartLegend = document.getElementById("chartLegend");
 
-/* ===================== ESTADO ===================== */
-let activeProduct = null;
-let ECON = {
-  selicAA: null, // anual
-  ipca12: null,  // 12 meses (anual equivalente)
-  igpm12: null,  // 12 meses (anual equivalente)
-  updatedAt: null,
-  source: "BCB/SGS"
-};
+  const loginOverlay = document.getElementById("loginOverlay");
+  const loginUser = document.getElementById("loginUser");
+  const loginPass = document.getElementById("loginPass");
+  const rememberSession = document.getElementById("rememberSession");
+  const btnLogin = document.getElementById("btnLogin");
+  const btnLoginDemo = document.getElementById("btnLoginDemo");
+  const loginMsg = document.getElementById("loginMsg");
 
-/* ===================== HELPERS ===================== */
-function brToNumber(v){
-  if(v === null || v === undefined) return NaN;
-  const s = String(v).trim().replace(/\./g, "").replace(",", ".");
-  const n = Number(s);
-  return Number.isFinite(n) ? n : NaN;
-}
-function fmtBRL(n){
-  const x = Number(n);
-  if(!Number.isFinite(x)) return "—";
-  return x.toLocaleString("pt-BR", {style:"currency", currency:"BRL", maximumFractionDigits:0});
-}
-function fmtPct(n){
-  const x = Number(n);
-  if(!Number.isFinite(x)) return "—";
-  return `${x.toFixed(2).replace(".", ",")}%`;
-}
-function clamp(n, a, b){ return Math.max(a, Math.min(b, n)); }
-function nowISO(){ return new Date().toISOString(); }
-function setStatus(text, kind=""){
-  statusBadge.textContent = text;
-  statusBadge.style.borderColor = kind==="good" ? "rgba(34,197,94,.55)" :
-                                 kind==="warn" ? "rgba(245,158,11,.55)" :
-                                 kind==="bad"  ? "rgba(239,68,68,.55)" : "";
-}
+  const adminModal = document.getElementById("adminModal");
+  const btnAdminClose = document.getElementById("btnAdminClose");
+  const adminJson = document.getElementById("adminJson");
+  const adminMsg = document.getElementById("adminMsg");
+  const btnAdminSave = document.getElementById("btnAdminSave");
+  const btnAdminExport = document.getElementById("btnAdminExport");
+  const btnAdminCopy = document.getElementById("btnAdminCopy");
+  const btnAdminReset = document.getElementById("btnAdminReset");
 
-/* ===================== BASE (LOCAL) ===================== */
-const LS_KEY_BASE = "copiloto_base_v1";
-const DEFAULT_BASE = {
-  adminPin: "1234",
-  products: [
-    {
-      id:"cedros",
-      name:"CEDROS JARDINS",
-      aliases:["cedros","cedros jardins","jardins"],
-      value:150000,
-      entrada:0,
-      parcela:753,
-      prazo:180,
-      reajuste:"IPCA",     // "IPCA" | "IGPM" | "SELIC" | "12,5%"
-      valorizacaoAA:18,
-      info:[
-        "Lotes a partir de 200 m²",
-        "Parcelas a partir de R$ 753",
-        "Sem entrada",
-        "Próximo ao Posto Búfalo"
-      ]
-    },
-    {
-      id:"morada",
-      name:"MORADA BRASIL",
-      aliases:["morada","morada brasil","andre maggi"],
-      value:170000,
-      entrada:0,
-      parcela:713,
-      prazo:240,
-      reajuste:"IGPM",
-      valorizacaoAA:18,
-      info:[
-        "Parcelas a partir de R$ 713",
-        "Até 240x",
-        "Av. André Maggi"
-      ]
+  /* ===================== HELPERS ===================== */
+  function setStatus(text, kind=""){
+    statusBadge.textContent = text;
+    statusBadge.style.borderColor =
+      kind==="good" ? "rgba(34,197,94,.55)" :
+      kind==="warn" ? "rgba(245,158,11,.55)" :
+      kind==="bad"  ? "rgba(239,68,68,.55)" : "";
+  }
+  function normalize(s){
+    return String(s||"")
+      .toLowerCase()
+      .normalize("NFD").replace(/[\u0300-\u036f]/g, "")
+      .replace(/[^a-z0-9\s]/g," ")
+      .replace(/\s+/g," ")
+      .trim();
+  }
+  function brToNumber(v){
+    if(v === null || v === undefined) return NaN;
+    const s = String(v).trim().replace(/\./g, "").replace(",", ".");
+    const n = Number(s);
+    return Number.isFinite(n) ? n : NaN;
+  }
+  function fmtBRL(n){
+    const x = Number(n);
+    if(!Number.isFinite(x)) return "—";
+    return x.toLocaleString("pt-BR", {style:"currency", currency:"BRL", maximumFractionDigits:0});
+  }
+  function fmtPct(n){
+    const x = Number(n);
+    if(!Number.isFinite(x)) return "—";
+    return `${x.toFixed(2).replace(".", ",")}%`;
+  }
+  function effectiveMonthlyFromAnnual(annualPct){
+    const a = Number(annualPct);
+    if(!Number.isFinite(a)) return NaN;
+    return Math.pow(1 + a/100, 1/12) - 1;
+  }
+  function calcLoss(value, rateAA, months){
+    const monthly = effectiveMonthlyFromAnnual(rateAA);
+    if(!Number.isFinite(monthly)) return NaN;
+    const v0 = Number(value);
+    return v0 * (Math.pow(1+monthly, months) - 1);
+  }
+  function compounded12m(monthlyArray){
+    let acc = 1;
+    for(const v of monthlyArray){
+      const n = Number(v);
+      if(!Number.isFinite(n)) continue;
+      acc *= (1 + n/100);
     }
-  ],
-  objections: [
-    {
-      id:"pensar",
-      keywords:["pensar","depois","analisar","ver com calma","mais pra frente"],
-      leve:"Tudo bem analisar. O que você quer avaliar primeiro: localização, condição ou parcela?",
-      media:"Só pra alinhar: o que precisa acontecer pra isso virar um ‘sim’ hoje?",
-      agressiva:"Entendo. Só que esperar normalmente sai mais caro: em 6 meses você pode perder cerca de {loss6}. Quer garantir no preço de agora ou pagar mais depois?"
-    },
-    {
-      id:"caro",
-      keywords:["caro","muito","pesado","não cabe","alto","fora do orçamento"],
-      leve:"Entendo. Quando você diz ‘caro’, é pela parcela ou pelo valor final?",
-      media:"Se eu ajustar prazo/entrada pra encaixar, você avança hoje? O que seria confortável por mês?",
-      agressiva:"O caro de verdade é esperar: a valorização corre todo mês. Você prefere pagar {loss1}/mês a mais no futuro ou travar a condição agora?"
-    },
-    {
-      id:"medo",
-      keywords:["medo","inseguro","receio","não confio","golpe","garantia"],
-      leve:"Totalmente justo. O que te deixaria seguro: contrato, matrícula, histórico do loteamento?",
-      media:"Se eu te mostrar documentação e cronograma, isso resolve sua insegurança?",
-      agressiva:"Se a documentação estiver 100%, não faz sentido adiar: você só compra mais caro depois. Vamos validar agora e travar a condição?"
+    return (acc - 1) * 100;
+  }
+  function nowISO(){ return new Date().toISOString(); }
+
+  /* ===================== THEME ===================== */
+  const savedTheme = localStorage.getItem("copiloto_theme");
+  if(savedTheme) bodyEl.setAttribute("data-theme", savedTheme);
+
+  themeBtn.addEventListener("click", () => {
+    const current = bodyEl.getAttribute("data-theme") || "light";
+    const next = current === "light" ? "dark" : "light";
+    bodyEl.setAttribute("data-theme", next);
+    localStorage.setItem("copiloto_theme", next);
+  });
+
+  /* ===================== BASE + SESSÃO ===================== */
+  const LS_KEY_BASE = "copiloto_base_v2";
+  const LS_KEY_SESSION = "copiloto_session_v1";
+
+  const DEFAULT_BASE = {
+    users: [
+      { id:"admin", name:"Administrador", role:"admin", username:"admin", password:"1234" },
+      { id:"user",  name:"Corretor",      role:"user",  username:"user",  password:"1234" }
+    ],
+    products: [
+      {
+        id:"cedros",
+        name:"CEDROS JARDINS",
+        aliases:["cedros","cedros jardins","posto bufalo","posto búfalo","santa catarina","pontinho vermelho","super center","fastech"],
+        value:150000,
+        entrada:0,
+        parcela:753,
+        prazo:180,
+        reajuste:"IPCA",
+        valorizacaoAA:18,
+        info:[
+          "Lotes a partir de 200 m²",
+          "Parcelas a partir de R$ 753",
+          "Sem entrada",
+          "Atrás do Posto Búfalo",
+          "Próximo ao Residencial Santa Catarina"
+        ]
+      },
+      {
+        id:"morada",
+        name:"MORADA BRASIL",
+        aliases:["morada","morada brasil","andre maggi","andré maggi","região andre maggi"],
+        value:170000,
+        entrada:0,
+        parcela:713,
+        prazo:240,
+        reajuste:"IGPM",
+        valorizacaoAA:18,
+        info:[
+          "Parcelas a partir de R$ 713",
+          "Até 240x",
+          "Região da Av. André Maggi",
+          "Fase de obras (lançamento)"
+        ]
+      }
+    ],
+    objections: [
+      {
+        id:"pensar",
+        keywords:["pensar","depois","analisar","ver com calma","mais pra frente","avaliar"],
+        leve:"Tranquilo. O que você quer analisar primeiro: localização, condição ou prazo?",
+        media:"Pra eu te ajudar certo: o que precisa acontecer pra virar um ‘sim’ hoje?",
+        agressiva:"Vou ser direto: esperar costuma custar caro. Em 6 meses você pode perder cerca de {loss6}. Quer travar o preço de agora ou pagar mais depois?"
+      },
+      {
+        id:"caro",
+        keywords:["caro","muito","pesado","alto","fora do orçamento"],
+        leve:"Entendi. Quando você diz ‘caro’, é pela parcela ou pelo valor final?",
+        media:"Se eu encaixar uma condição que te deixe confortável por mês, você avança hoje?",
+        agressiva:"Caro é esperar. Se você adia, a valorização corre todo mês. Isso dá cerca de {loss1}/mês. Quer garantir agora ou comprar mais caro depois?"
+      },
+      {
+        id:"entrada",
+        keywords:["entrada","sem entrada","não tenho entrada","dinheiro de entrada","sinal"],
+        leve:"Beleza. Você prefere sem entrada ou consegue um sinal simbólico pra melhorar condição?",
+        media:"Se eu montar um cenário com entrada baixa e parcela menor, encaixa pra você?",
+        agressiva:"Entrada não é o problema — o problema é perder tempo e comprar mais caro. Vamos travar a melhor condição agora e você decide o formato de entrada."
+      },
+      {
+        id:"parcela",
+        keywords:["parcela","mensal","cabe no bolso","valor da parcela","prestação"],
+        leve:"Perfeito. Qual faixa de parcela seria confortável pra você hoje?",
+        media:"Se eu ajustar prazo/entrada pra bater nessa faixa, você fecha agora?",
+        agressiva:"O cliente que fecha pensa no mês e no patrimônio: você paga parcela e o lote valoriza. Se eu te provar isso no gráfico, você avança?"
+      },
+      {
+        id:"documentacao",
+        keywords:["documento","documentação","contrato","matrícula","registro","cartório","golpe","confio","seguro"],
+        leve:"Totalmente justo. Você quer ver matrícula/contrato e o histórico do empreendimento?",
+        media:"Se eu te mandar a documentação e cronograma, resolve essa insegurança?",
+        agressiva:"Se estiver 100% documentado, adiar não te protege — só te faz pagar mais caro depois. Vamos validar tudo agora e travar a condição."
+      }
+    ]
+  };
+
+  function loadBase(){
+    try{
+      const raw = localStorage.getItem(LS_KEY_BASE);
+      if(!raw) return structuredClone(DEFAULT_BASE);
+      const parsed = JSON.parse(raw);
+      if(!parsed.users) parsed.users = structuredClone(DEFAULT_BASE.users);
+      if(!parsed.products) parsed.products = structuredClone(DEFAULT_BASE.products);
+      if(!parsed.objections) parsed.objections = structuredClone(DEFAULT_BASE.objections);
+      return parsed;
+    }catch{
+      return structuredClone(DEFAULT_BASE);
     }
-  ]
-};
-
-function loadBase(){
-  try{
-    const raw = localStorage.getItem(LS_KEY_BASE);
-    if(!raw) return structuredClone(DEFAULT_BASE);
-    const parsed = JSON.parse(raw);
-    // fallback mínimo
-    if(!parsed.products || !Array.isArray(parsed.products)) parsed.products = structuredClone(DEFAULT_BASE.products);
-    if(!parsed.objections || !Array.isArray(parsed.objections)) parsed.objections = structuredClone(DEFAULT_BASE.objections);
-    if(!parsed.adminPin) parsed.adminPin = DEFAULT_BASE.adminPin;
-    return parsed;
-  }catch{
-    return structuredClone(DEFAULT_BASE);
   }
-}
-function saveBase(base){
-  localStorage.setItem(LS_KEY_BASE, JSON.stringify(base, null, 2));
-}
-let BASE = loadBase();
-<script>
-/* ===================== ECONOMIA (BCB/SGS) + CACHE 6H ===================== */
-const LS_KEY_ECON = "copiloto_econ_cache_v1";
-const ECON_TTL_MS = 6 * 60 * 60 * 1000;
+  function saveBase(base){ localStorage.setItem(LS_KEY_BASE, JSON.stringify(base, null, 2)); }
+  let BASE = loadBase();
 
-async function fetchSGS(series, lastN){
-  const url = `https://api.bcb.gov.br/dados/serie/bcdata.sgs.${series}/dados/ultimos/${lastN}?formato=json`;
-  const res = await fetch(url, {cache:"no-store"});
-  if(!res.ok) throw new Error("Falha BCB/SGS");
-  const data = await res.json();
-  return Array.isArray(data) ? data : [];
-}
-
-function compounded12m(monthlyArray){
-  // monthlyArray: [%] mês a mês
-  // retorna taxa 12 meses composta
-  let acc = 1;
-  for(const v of monthlyArray){
-    const n = Number(v);
-    if(!Number.isFinite(n)) continue;
-    acc *= (1 + n/100);
+  let SESSION = null; // {username, role, name}
+  /* ===================== LOGIN / SESSÃO ===================== */
+  function showLogin(){
+    loginOverlay.classList.add("show");
+    loginOverlay.setAttribute("aria-hidden","false");
+    loginMsg.textContent = "";
+    loginUser.value = "";
+    loginPass.value = "";
+    rememberSession.checked = true;
+    setStatus("Login necessário", "warn");
   }
-  return (acc - 1) * 100;
-}
-
-function effectiveMonthlyFromAnnual(annualPct){
-  const a = Number(annualPct);
-  if(!Number.isFinite(a)) return NaN;
-  return Math.pow(1 + a/100, 1/12) - 1;
-}
-
-function econFromCache(){
-  try{
-    const raw = localStorage.getItem(LS_KEY_ECON);
-    if(!raw) return null;
-    const obj = JSON.parse(raw);
-    if(!obj || !obj.savedAt || !obj.data) return null;
-    const age = Date.now() - obj.savedAt;
-    if(age > ECON_TTL_MS) return null;
-    return obj.data;
-  }catch{
-    return null;
-  }
-}
-
-function saveEconCache(data){
-  localStorage.setItem(LS_KEY_ECON, JSON.stringify({
-    savedAt: Date.now(),
-    data
-  }));
-}
-
-async function loadEconomy(force=false){
-  const cached = !force ? econFromCache() : null;
-  if(cached){
-    ECON = cached;
-    updateRatesUI("cache");
-    return ECON;
-  }
-
-  setStatus("Carregando taxas…", "warn");
-  try{
-    // SELIC: usar Meta Selic (432) e pegar o último valor (a.a.)
-    const selicArr = await fetchSGS(432, 1);
-    const selicAA = selicArr.length ? brToNumber(selicArr[0].valor) : NaN;
-
-    // IPCA mensal (433) e IGP-M mensal (189) — pegar últimos 12 e compor
-    const ipcaArr = await fetchSGS(433, 12);
-    const igpmArr = await fetchSGS(189, 12);
-
-    const ipcaMonthly = ipcaArr.map(x => brToNumber(x.valor)).filter(Number.isFinite);
-    const igpmMonthly = igpmArr.map(x => brToNumber(x.valor)).filter(Number.isFinite);
-
-    const ipca12 = compounded12m(ipcaMonthly);
-    const igpm12 = compounded12m(igpmMonthly);
-
-    ECON = {
-      selicAA,
-      ipca12,
-      igpm12,
-      updatedAt: nowISO(),
-      source: "BCB/SGS (432/433/189)"
-    };
-
-    saveEconCache(ECON);
-    updateRatesUI("live");
+  function hideLogin(){
+    loginOverlay.classList.remove("show");
+    loginOverlay.setAttribute("aria-hidden","true");
     setStatus("Pronto", "good");
-    return ECON;
-  }catch(e){
-    updateRatesUI("erro");
-    setStatus("Sem taxas (offline)", "bad");
-    return ECON;
   }
-}
-
-function updateRatesUI(mode){
-  rateSelic.textContent = ECON.selicAA!=null ? fmtPct(ECON.selicAA) : "—";
-  rateIpca.textContent  = ECON.ipca12!=null  ? fmtPct(ECON.ipca12)  : "—";
-  rateIgpm.textContent  = ECON.igpm12!=null  ? fmtPct(ECON.igpm12)  : "—";
-
-  const cache = econFromCache();
-  if(cache){
-    const raw = JSON.parse(localStorage.getItem(LS_KEY_ECON) || "{}");
-    const ageMs = raw.savedAt ? (Date.now() - raw.savedAt) : null;
-    const ageMin = ageMs!=null ? Math.round(ageMs/60000) : null;
-    rateCache.textContent = ageMin!=null ? `${ageMin} min` : "—";
-  }else{
-    rateCache.textContent = "—";
+  function saveSession(sess, remember){
+    SESSION = sess;
+    if(remember){
+      localStorage.setItem(LS_KEY_SESSION, JSON.stringify({
+        ...sess,
+        savedAt: Date.now(),
+        ttl: 7*24*60*60*1000 // 7 dias
+      }));
+    }else{
+      localStorage.removeItem(LS_KEY_SESSION);
+    }
+  }
+  function loadSession(){
+    try{
+      const raw = localStorage.getItem(LS_KEY_SESSION);
+      if(!raw) return null;
+      const obj = JSON.parse(raw);
+      if(!obj || !obj.savedAt || !obj.ttl) return null;
+      if(Date.now() - obj.savedAt > obj.ttl) return null;
+      return { username: obj.username, role: obj.role, name: obj.name };
+    }catch{
+      return null;
+    }
   }
 
-  const when = ECON.updatedAt ? new Date(ECON.updatedAt).toLocaleString("pt-BR") : "—";
-  ratesFoot.textContent = `Fonte: ${ECON.source} • Atualizado: ${when} • Modo: ${mode}`;
-}
-
-/* painel econômico recolhível */
-ratesBtn.onclick = async () => {
-  const willShow = !ratesPanel.classList.contains("show");
-  if(willShow){
-    ratesPanel.classList.add("show");
-    await loadEconomy(false);
-  }else{
-    ratesPanel.classList.remove("show");
+  function authenticate(username, password){
+    const u = String(username||"").trim();
+    const p = String(password||"").trim();
+    const user = BASE.users.find(x => x.username === u && x.password === p);
+    if(!user) return null;
+    return { username: user.username, role: user.role, name: user.name };
   }
-};
 
-/* ===================== DETECTAR PRODUTO ===================== */
-function normalize(s){
-  return String(s||"")
-    .toLowerCase()
-    .normalize("NFD").replace(/[\u0300-\u036f]/g, "")
-    .replace(/[^a-z0-9\s]/g," ")
-    .replace(/\s+/g," ")
-    .trim();
-}
+  function applyRoleUI(){
+    // usuário comum não abre admin
+    if(!SESSION || SESSION.role !== "admin"){
+      btnAdmin.disabled = true;
+      btnAdmin.style.opacity = "0.6";
+      btnAdmin.title = "Apenas admin";
+    }else{
+      btnAdmin.disabled = false;
+      btnAdmin.style.opacity = "1";
+      btnAdmin.title = "Admin";
+    }
+  }
 
-function detectProduct(text){
-  const t = normalize(text);
-  let best = null;
-  let bestScore = 0;
+  btnLogin.addEventListener("click", () => {
+    const sess = authenticate(loginUser.value, loginPass.value);
+    if(!sess){
+      loginMsg.textContent = "❌ Usuário ou senha inválidos.";
+      setStatus("Login inválido", "bad");
+      return;
+    }
+    saveSession(sess, rememberSession.checked);
+    hideLogin();
+    applyRoleUI();
+  });
 
-  for(const p of BASE.products){
-    const aliases = [p.name, ...(p.aliases||[])].map(normalize);
-    for(const a of aliases){
-      if(!a) continue;
-      if(t.includes(a)){
-        const score = a.length;
+  btnLoginDemo.addEventListener("click", () => {
+    const user = BASE.users.find(x => x.role === "user") || BASE.users[0];
+    saveSession({username:user.username, role:user.role, name:user.name}, true);
+    hideLogin();
+    applyRoleUI();
+  });
+
+  btnExit.addEventListener("click", () => {
+    localStorage.removeItem(LS_KEY_SESSION);
+    SESSION = null;
+    resetUI();
+    showLogin();
+  });
+
+  /* ===================== ECONOMIA (BCB/SGS) + CACHE 6H ===================== */
+  const LS_KEY_ECON = "copiloto_econ_cache_v2";
+  const ECON_TTL_MS = 6 * 60 * 60 * 1000;
+
+  let ECON = { selicAA:null, ipca12:null, igpm12:null, updatedAt:null, source:"BCB/SGS" };
+
+  function econFromCache(){
+    try{
+      const raw = localStorage.getItem(LS_KEY_ECON);
+      if(!raw) return null;
+      const obj = JSON.parse(raw);
+      if(!obj || !obj.savedAt || !obj.data) return null;
+      if(Date.now() - obj.savedAt > ECON_TTL_MS) return null;
+      return obj;
+    }catch{ return null; }
+  }
+  function saveEconCache(data){
+    localStorage.setItem(LS_KEY_ECON, JSON.stringify({ savedAt: Date.now(), data }));
+  }
+  async function fetchSGS(series, lastN){
+    const url = `https://api.bcb.gov.br/dados/serie/bcdata.sgs.${series}/dados/ultimos/${lastN}?formato=json`;
+    const res = await fetch(url, {cache:"no-store"});
+    if(!res.ok) throw new Error("Falha BCB/SGS");
+    const data = await res.json();
+    return Array.isArray(data) ? data : [];
+  }
+  function updateRatesUI(mode){
+    rateSelic.textContent = ECON.selicAA!=null ? fmtPct(ECON.selicAA) : "—";
+    rateIpca.textContent  = ECON.ipca12!=null  ? fmtPct(ECON.ipca12)  : "—";
+    rateIgpm.textContent  = ECON.igpm12!=null  ? fmtPct(ECON.igpm12)  : "—";
+
+    const cache = econFromCache();
+    if(cache){
+      const ageMin = Math.round((Date.now() - cache.savedAt)/60000);
+      rateCache.textContent = `${ageMin} min`;
+    }else{
+      rateCache.textContent = "—";
+    }
+
+    const when = ECON.updatedAt ? new Date(ECON.updatedAt).toLocaleString("pt-BR") : "—";
+    ratesFoot.textContent = `Fonte: ${ECON.source} • Atualizado: ${when} • Modo: ${mode}`;
+  }
+  async function loadEconomy(force=false){
+    const cached = !force ? econFromCache() : null;
+    if(cached){
+      ECON = cached.data;
+      updateRatesUI("cache");
+      return ECON;
+    }
+    try{
+      setStatus("Carregando taxas…", "warn");
+
+      // SELIC a.a. correta: Meta Selic (432) último valor
+      const selicArr = await fetchSGS(432, 1);
+      const selicAA = selicArr.length ? brToNumber(selicArr[0].valor) : NaN;
+
+      // IPCA mensal (433) e IGP-M mensal (189): últimos 12 e compor
+      const ipcaArr = await fetchSGS(433, 12);
+      const igpmArr = await fetchSGS(189, 12);
+
+      const ipcaMonthly = ipcaArr.map(x => brToNumber(x.valor)).filter(Number.isFinite);
+      const igpmMonthly = igpmArr.map(x => brToNumber(x.valor)).filter(Number.isFinite);
+
+      const ipca12 = compounded12m(ipcaMonthly);
+      const igpm12 = compounded12m(igpmMonthly);
+
+      ECON = {
+        selicAA,
+        ipca12,
+        igpm12,
+        updatedAt: nowISO(),
+        source: "BCB/SGS (432/433/189)"
+      };
+      saveEconCache(ECON);
+      updateRatesUI("live");
+      setStatus("Pronto", "good");
+      return ECON;
+    }catch{
+      updateRatesUI("erro");
+      setStatus("Sem taxas (offline)", "bad");
+      return ECON;
+    }
+  }
+
+  btnRates.addEventListener("click", async () => {
+    const willShow = !ratesPanel.classList.contains("show");
+    if(willShow){
+      ratesPanel.classList.add("show");
+      await loadEconomy(false);
+    }else{
+      ratesPanel.classList.remove("show");
+    }
+  });
+
+  /* ===================== DETECÇÃO PRODUTO (NOME + PONTO DE REFERÊNCIA) ===================== */
+  let activeProduct = null;
+
+  function detectProduct(text){
+    const t = normalize(text);
+    let best = null;
+    let bestScore = 0;
+
+    for(const p of BASE.products){
+      const aliasList = [p.name, ...(p.aliases||[])].map(normalize);
+
+      // também permite detectar por frases do info (ponto de referência fica lá muitas vezes)
+      const infoList = (p.info||[]).map(normalize);
+
+      for(const key of [...aliasList, ...infoList]){
+        if(!key) continue;
+        if(t.includes(key)){
+          const score = key.length;
+          if(score > bestScore){ bestScore = score; best = p; }
+        }
+      }
+
+      // bônus: detectar por palavras avulsas fortes (ex: "búfalo", "andré maggi")
+      const words = aliasList.flatMap(a => a.split(" ")).filter(w => w.length >= 5);
+      let hits = 0;
+      for(const w of words){
+        if(t.includes(w)) hits++;
+      }
+      if(hits >= 2){
+        const score = 20 + hits;
         if(score > bestScore){ bestScore = score; best = p; }
       }
     }
-  }
-  return best;
-}
-
-function showProduct(p){
-  activeProduct = p;
-
-  productName.textContent = p.name;
-
-  // meta badges
-  const reaj = String(p.reajuste||"—");
-  productMeta.innerHTML = `
-    <span class="badge">💰 Valor: <b>${fmtBRL(p.value)}</b></span>
-    <span class="badge">🧾 Parcela: <b>${fmtBRL(p.parcela)}</b></span>
-    <span class="badge">🕒 Prazo: <b>${p.prazo || "—"}x</b></span>
-    <span class="badge">📌 Reajuste: <b>${reaj}</b></span>
-    <span class="badge">📈 Valorização: <b>${fmtPct(p.valorizacaoAA)}</b></span>
-  `;
-
-  // infos completas (sem cortar)
-  productInfo.innerHTML = (p.info||[]).map(i=>`<li>${i}</li>`).join("");
-
-  // custo de esperar (1 mês)
-  const loss1 = calcLoss(p.value, p.valorizacaoAA, 1);
-  kpiWait.style.display = "block";
-  kpiWaitValue.textContent = `${fmtBRL(loss1)} / mês`;
-  kpiWaitHint.textContent = `Estimativa usando ${fmtPct(p.valorizacaoAA)} a.a. (Sinop-MT).`;
-
-  // tabela 12 meses + gráfico
-  build12MonthTable();
-  renderGraph();
-  updateGraphVisibilityHints();
-}
-
-/* ===================== CALCULADORA PERDA (valorização) ===================== */
-function calcLoss(value, rateAA, months){
-  const monthly = effectiveMonthlyFromAnnual(rateAA);
-  if(!Number.isFinite(monthly)) return NaN;
-  const v0 = Number(value);
-  return v0 * (Math.pow(1+monthly, months) - 1);
-}
-
-/* ===================== REAJUSTE (produto) ===================== */
-function resolveReajusteAnnualPct(prod){
-  // Se for IPCA/IGPM/SELIC => pega anual atual (12m para IPCA/IGPM; a.a. para SELIC)
-  const r = String(prod.reajuste||"").trim().toUpperCase();
-  if(r === "IPCA") return ECON.ipca12;
-  if(r === "IGPM" || r === "IGP-M") return ECON.igpm12;
-  if(r === "SELIC") return ECON.selicAA;
-
-  // manual: "12,5%" ou "12.5"
-  const m = r.match(/([\d.,]+)\s*%?/);
-  if(m){
-    const n = brToNumber(m[1]);
-    return Number.isFinite(n) ? n : null;
-  }
-  return null;
-}
-
-/* ===================== TABELA 12 MESES ===================== */
-async function build12MonthTable(){
-  if(!activeProduct) return;
-
-  // garante economia carregada (sem travar)
-  if(ECON.selicAA==null || ECON.ipca12==null || ECON.igpm12==null){
-    await loadEconomy(false);
+    return best;
   }
 
-  const parcela0 = Number(activeProduct.parcela);
-  const valor0   = Number(activeProduct.value);
-  const valAA    = Number(activeProduct.valorizacaoAA);
+  function resolveReajusteAnnualPct(prod){
+    const r = String(prod.reajuste||"").trim().toUpperCase();
+    if(r === "IPCA") return ECON.ipca12;
+    if(r === "IGPM" || r === "IGP-M") return ECON.igpm12;
+    if(r === "SELIC") return ECON.selicAA;
 
-  const reajAA = resolveReajusteAnnualPct(activeProduct);
-  const reajM = effectiveMonthlyFromAnnual(reajAA);
+    const m = r.match(/([\d.,]+)\s*%?/);
+    if(m){
+      const n = brToNumber(m[1]);
+      return Number.isFinite(n) ? n : null;
+    }
+    return null;
+  }
 
-  const valM = effectiveMonthlyFromAnnual(valAA);
+  function showProduct(p){
+    activeProduct = p;
+    productName.textContent = p.name;
 
-  const hasReaj = Number.isFinite(reajM);
-  const hasVal  = Number.isFinite(valM);
-
-  tbl12.innerHTML = "";
-  let sumPaid = 0;
-
-  for(let m=1; m<=12; m++){
-    const parcelaM = hasReaj ? parcela0 * Math.pow(1+reajM, m) : parcela0;
-    sumPaid += parcelaM;
-
-    const loteM = hasVal ? valor0 * Math.pow(1+valM, m) : valor0;
-    const saldo = loteM - sumPaid;
-
-    const tr = document.createElement("tr");
-    tr.innerHTML = `
-      <td>${m}</td>
-      <td>${fmtBRL(parcelaM)}</td>
-      <td>${fmtBRL(loteM)}</td>
-      <td style="font-weight:900;color:${saldo>=0 ? "var(--neon)" : "var(--danger)"}">${fmtBRL(saldo)}</td>
+    productMeta.innerHTML = `
+      <span class="badge">💰 Valor: <b>${fmtBRL(p.value)}</b></span>
+      <span class="badge">🧾 Parcela: <b>${fmtBRL(p.parcela)}</b></span>
+      <span class="badge">🕒 Prazo: <b>${p.prazo || "—"}x</b></span>
+      <span class="badge">💳 Entrada: <b>${fmtBRL(p.entrada || 0)}</b></span>
+      <span class="badge">📌 Reajuste: <b>${String(p.reajuste||"—")}</b></span>
+      <span class="badge">📈 Valorização: <b>${fmtPct(p.valorizacaoAA)}</b></span>
     `;
-    tbl12.appendChild(tr);
-  }
 
-  tableBlock.style.display = "block";
-  const reajLabel = (String(activeProduct.reajuste||"—") || "—");
-  tblHint.textContent = `Reajuste usado: ${reajLabel} • Taxa anual considerada: ${Number.isFinite(reajAA) ? fmtPct(reajAA) : "—"} • Valorização: ${fmtPct(activeProduct.valorizacaoAA)} a.a.`;
-}
+    productInfo.innerHTML = (p.info||[]).map(i => `<li>${i}</li>`).join("");
 
-/* ===================== OBJEÇÕES ===================== */
-function detectObjection(text){
-  const t = normalize(text);
-  for(const obj of BASE.objections){
-    const keys = (obj.keywords||[]).map(normalize);
-    if(keys.some(k => k && t.includes(k))) return obj;
-  }
-  return null;
-}
+    // custo de esperar 1 mês
+    const loss1 = calcLoss(p.value, p.valorizacaoAA, 1);
+    kpiWait.style.display = "block";
+    kpiWaitValue.textContent = `${fmtBRL(loss1)} / mês`;
+    kpiWaitHint.textContent = `Estimativa usando ${fmtPct(p.valorizacaoAA)} a.a.`;
 
-function fillTemplate(str, data){
-  return String(str||"")
-    .replaceAll("{produto}", data.produto||"")
-    .replaceAll("{loss1}", data.loss1||"")
-    .replaceAll("{loss6}", data.loss6||"");
-}
-
-async function processText(){
-  const raw = inputText.value;
-  const text = raw.trim();
-  if(!text){
-    setStatus("Digite algo…", "warn");
-    return;
-  }
-
-  setStatus("Processando…", "warn");
-
-  // produto
-  const prod = detectProduct(text);
-  if(prod) showProduct(prod);
-
-  if(!activeProduct){
-    r1.textContent = "Diga o nome do loteamento ou um ponto de referência (ex: Posto Búfalo).";
-    r2.textContent = "Se você me disser o que o cliente falou, eu te dou 3 respostas prontas.";
-    r3.textContent = "Me diga o produto (ex: CEDROS) pra eu usar números e valorização.";
-    setStatus("Sem produto", "warn");
-    return;
-  }
-
-  // economia (pra reajuste)
-  await loadEconomy(false);
-
-  // custo de esperar
-  const loss1n = calcLoss(activeProduct.value, activeProduct.valorizacaoAA, 1);
-  const loss6n = calcLoss(activeProduct.value, activeProduct.valorizacaoAA, 6);
-
-  const data = {
-    produto: activeProduct.name,
-    loss1: fmtBRL(loss1n),
-    loss6: fmtBRL(loss6n)
-  };
-
-  // objeção
-  const obj = detectObjection(text);
-
-  if(obj){
-    r1.textContent = fillTemplate(obj.leve, data);
-    r2.textContent = fillTemplate(obj.media, data);
-    r3.textContent = fillTemplate(obj.agressiva, data);
-    setStatus(`Objeção: ${obj.id}`, "good");
-  }else{
-    // fallback (genérico bom)
-    r1.textContent = "Entendi. Me diz: o que mais pesa pra você — parcela, prazo ou localização?";
-    r2.textContent = "Se eu encaixar no que você quer por mês, você avança hoje?";
-    r3.textContent = `Só um ponto direto: cada mês que passa você pode perder cerca de ${data.loss1} em valorização. Quer que eu te mostre a melhor condição agora?`;
-    setStatus("Objeção: genérica", "good");
-  }
-
-  // atualizar tabela/gráfico
-  build12MonthTable();
-  renderGraph();
-}
-
-/* ===================== INPUT: SÓ PROCESSAR NO ENTER ===================== */
-inputText.addEventListener("keydown", (e) => {
-  if(e.key === "Enter" && !e.shiftKey){
-    e.preventDefault();
-    processText();
-  }
-});
-btnProcess.onclick = () => processText();
-
-btnClear.onclick = () => {
-  inputText.value = "";
-  setStatus("Pronto");
-};
-
-/* ===================== SAIR (limpa sessão local) ===================== */
-document.getElementById("btnExit").onclick = () => {
-  // aqui você decide se quer limpar base/theme/econ, ou só “resetar tela”
-  activeProduct = null;
-  productName.textContent = "Produto não identificado";
-  productMeta.innerHTML = "";
-  productInfo.innerHTML = "";
-  kpiWait.style.display = "none";
-  tableBlock.style.display = "none";
-  r1.textContent = r2.textContent = r3.textContent = "—";
-  document.getElementById("graphPlaceholder").style.display = "block";
-  document.getElementById("canvasWrap").classList.remove("show");
-  setStatus("Pronto");
-};
-
-/* ===================== MICROFONE (Web Speech API) ===================== */
-let recognition = null;
-let listening = false;
-
-function setupSpeech(){
-  const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
-  if(!SR) return null;
-  const rec = new SR();
-  rec.lang = "pt-BR";
-  rec.interimResults = false;    // não processa antes do fim da fala
-  rec.continuous = false;        // encerra sozinho ao terminar
-  return rec;
-}
-
-recognition = setupSpeech();
-
-btnMic.onclick = () => {
-  if(!recognition){
-    setStatus("Microfone não suportado", "bad");
-    alert("Seu navegador não suporta SpeechRecognition. Use Chrome/Edge no desktop ou digite.");
-    return;
-  }
-
-  if(listening){
-    recognition.stop();
-    return;
-  }
-
-  try{
-    listening = true;
-    btnMic.textContent = "🛑 Parar";
-    setStatus("Ouvindo…", "warn");
-    recognition.start();
-  }catch(e){
-    // start pode falhar se já estiver ativo
-    setStatus("Microfone indisponível", "bad");
-  }
-};
-
-if(recognition){
-  recognition.onresult = (event) => {
-    const t = event.results?.[0]?.[0]?.transcript || "";
-    // adiciona no textarea e processa APÓS final da fala
-    inputText.value = (inputText.value ? (inputText.value + "\n") : "") + t;
-  };
-  recognition.onend = () => {
-    listening = false;
-    btnMic.textContent = "🎙️ Microfone";
-    setStatus("Processando áudio…", "warn");
-    // processa só ao final do áudio
-    processText().finally(()=> setStatus("Pronto", "good"));
-  };
-  recognition.onerror = () => {
-    listening = false;
-    btnMic.textContent = "🎙️ Microfone";
-    setStatus("Erro no microfone", "bad");
-  };
-}
-<script>
-/* ===================== GRÁFICO CANVAS ===================== */
-const btnGraphToggle = document.getElementById("btnGraphToggle");
-const canvasWrap = document.getElementById("canvasWrap");
-const graphPlaceholder = document.getElementById("graphPlaceholder");
-const chart = document.getElementById("chart");
-const chartLegend = document.getElementById("chartLegend");
-const graphHint = document.getElementById("graphHint");
-
-let graphVisible = false;
-
-function updateGraphVisibilityHints(){
-  if(activeProduct){
-    graphHint.textContent = `Produto ativo: ${activeProduct.name}`;
-  }else{
-    graphHint.textContent = "Aparece quando houver produto ativo";
-  }
-}
-
-btnGraphToggle.onclick = () => {
-  graphVisible = !graphVisible;
-  if(graphVisible){
-    canvasWrap.classList.add("show");
-    graphPlaceholder.style.display = "none";
-    btnGraphToggle.textContent = "📉 Esconder gráfico";
+    build12MonthTable();
     renderGraph();
-  }else{
+    graphHint.textContent = `Produto ativo: ${p.name}`;
+  }
+
+  /* ===================== TABELA 12 MESES ===================== */
+  async function build12MonthTable(){
+    if(!activeProduct) return;
+
+    // garante que temos taxas (pra IPCA/IGPM/SELIC)
+    if(ECON.ipca12==null || ECON.igpm12==null || ECON.selicAA==null){
+      await loadEconomy(false);
+    }
+
+    const parcela0 = Number(activeProduct.parcela);
+    const valor0   = Number(activeProduct.value);
+    const valAA    = Number(activeProduct.valorizacaoAA);
+
+    const reajAA = resolveReajusteAnnualPct(activeProduct);
+    const reajM = effectiveMonthlyFromAnnual(reajAA);
+    const valM  = effectiveMonthlyFromAnnual(valAA);
+
+    const hasReaj = Number.isFinite(reajM);
+    const hasVal  = Number.isFinite(valM);
+
+    tbl12.innerHTML = "";
+    let sumPaid = 0;
+
+    for(let m=1; m<=12; m++){
+      const parcelaM = hasReaj ? parcela0 * Math.pow(1+reajM, m) : parcela0;
+      sumPaid += parcelaM;
+
+      const loteM = hasVal ? valor0 * Math.pow(1+valM, m) : valor0;
+      const saldo = loteM - sumPaid;
+
+      const tr = document.createElement("tr");
+      tr.innerHTML = `
+        <td>${m}</td>
+        <td>${fmtBRL(parcelaM)}</td>
+        <td>${fmtBRL(loteM)}</td>
+        <td style="font-weight:900;color:${saldo>=0 ? "var(--neon)" : "var(--danger)"}">${fmtBRL(saldo)}</td>
+      `;
+      tbl12.appendChild(tr);
+    }
+
+    tableBlock.style.display = "block";
+    tblHint.textContent =
+      `Reajuste: ${String(activeProduct.reajuste||"—")} • Taxa anual: ${
+        Number.isFinite(reajAA) ? fmtPct(reajAA) : "—"
+      } • Valorização: ${fmtPct(activeProduct.valorizacaoAA)} a.a.`;
+  }
+
+  /* ===================== OBJEÇÕES + RESPOSTAS ===================== */
+  function detectObjection(text){
+    const t = normalize(text);
+    for(const obj of BASE.objections){
+      const keys = (obj.keywords||[]).map(normalize);
+      if(keys.some(k => k && t.includes(k))) return obj;
+    }
+    return null;
+  }
+  function fillTemplate(str, data){
+    return String(str||"")
+      .replaceAll("{produto}", data.produto||"")
+      .replaceAll("{loss1}", data.loss1||"")
+      .replaceAll("{loss6}", data.loss6||"");
+  }
+
+  async function processText(){
+    const text = String(inputText.value||"").trim();
+    if(!text){
+      setStatus("Digite algo…", "warn");
+      return;
+    }
+
+    setStatus("Processando…", "warn");
+
+    const prod = detectProduct(text);
+    if(prod) showProduct(prod);
+
+    if(!activeProduct){
+      r1.textContent = "Me diga o loteamento ou um ponto de referência (ex.: ‘Posto Búfalo’, ‘André Maggi’).";
+      r2.textContent = "Assim que identificar o produto, eu te dou respostas mais fortes e com números.";
+      r3.textContent = "Escreva: ‘é caro’, ‘vou pensar’, ‘não tenho entrada’, ‘documentação’, etc.";
+      setStatus("Sem produto", "warn");
+      return;
+    }
+
+    await loadEconomy(false);
+
+    const loss1n = calcLoss(activeProduct.value, activeProduct.valorizacaoAA, 1);
+    const loss6n = calcLoss(activeProduct.value, activeProduct.valorizacaoAA, 6);
+
+    const data = { produto: activeProduct.name, loss1: fmtBRL(loss1n), loss6: fmtBRL(loss6n) };
+
+    const obj = detectObjection(text);
+
+    if(obj){
+      r1.textContent = fillTemplate(obj.leve, data);
+      r2.textContent = fillTemplate(obj.media, data);
+      r3.textContent = fillTemplate(obj.agressiva, data);
+      setStatus(`Objeção: ${obj.id}`, "good");
+    }else{
+      r1.textContent = "Entendi. O que mais pesa pra você: parcela, prazo, entrada ou confiança na documentação?";
+      r2.textContent = "Se eu te mostrar a melhor condição que encaixa no seu mês, você avança hoje?";
+      r3.textContent = `Direto: cada mês pode custar algo perto de ${data.loss1} em valorização. Quer que eu te mostre no gráfico agora?`;
+      setStatus("Objeção: genérica", "good");
+    }
+
+    build12MonthTable();
+    renderGraph();
+  }
+
+  // SOMENTE NO ENTER (Shift+Enter quebra linha)
+  inputText.addEventListener("keydown", (e) => {
+    if(e.key === "Enter" && !e.shiftKey){
+      e.preventDefault();
+      processText();
+    }
+  });
+  btnProcess.addEventListener("click", processText);
+
+  btnClear.addEventListener("click", () => {
+    inputText.value = "";
+    setStatus("Pronto");
+  });
+
+  /* ===================== MICROFONE (processa só ao final) ===================== */
+  let recognition = null;
+  let listening = false;
+
+  function setupSpeech(){
+    const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
+    if(!SR) return null;
+    const rec = new SR();
+    rec.lang = "pt-BR";
+    rec.interimResults = false; // não “atualiza cedo demais”
+    rec.continuous = false;
+    return rec;
+  }
+
+  recognition = setupSpeech();
+
+  btnMic.addEventListener("click", () => {
+    if(!recognition){
+      alert("Microfone (SpeechRecognition) não suportado. Use Chrome/Edge ou digite.");
+      setStatus("Mic não suportado", "bad");
+      return;
+    }
+    if(listening){
+      recognition.stop();
+      return;
+    }
+    try{
+      listening = true;
+      btnMic.textContent = "🛑 Parar";
+      setStatus("Ouvindo…", "warn");
+      recognition.start();
+    }catch{
+      setStatus("Microfone indisponível", "bad");
+    }
+  });
+
+  if(recognition){
+    recognition.onresult = (event) => {
+      const t = event.results?.[0]?.[0]?.transcript || "";
+      inputText.value = (inputText.value ? (inputText.value + "\n") : "") + t;
+    };
+    recognition.onend = () => {
+      listening = false;
+      btnMic.textContent = "🎙️ Microfone";
+      setStatus("Processando áudio…", "warn");
+      processText().finally(()=> setStatus("Pronto", "good"));
+    };
+    recognition.onerror = () => {
+      listening = false;
+      btnMic.textContent = "🎙️ Microfone";
+      setStatus("Erro no microfone", "bad");
+    };
+  }
+
+  /* ===================== GRÁFICO CANVAS ===================== */
+  let graphVisible = false;
+
+  btnGraphToggle.addEventListener("click", () => {
+    graphVisible = !graphVisible;
+    if(graphVisible){
+      canvasWrap.classList.add("show");
+      graphPlaceholder.style.display = "none";
+      btnGraphToggle.textContent = "📉 Esconder gráfico";
+      renderGraph();
+    }else{
+      canvasWrap.classList.remove("show");
+      graphPlaceholder.style.display = "block";
+      btnGraphToggle.textContent = "📈 Mostrar gráfico";
+    }
+  });
+
+  function renderGraph(){
+    if(!activeProduct || !graphVisible) return;
+
+    const ctx = chart.getContext("2d");
+    const W = chart.width, H = chart.height;
+
+    const months = 12;
+    const val0 = Number(activeProduct.value);
+    const parcela0 = Number(activeProduct.parcela);
+
+    const valM = effectiveMonthlyFromAnnual(activeProduct.valorizacaoAA);
+
+    const reajAA = resolveReajusteAnnualPct(activeProduct);
+    const reajM = effectiveMonthlyFromAnnual(reajAA);
+
+    let invested = [];
+    let valued = [];
+    let sum = 0;
+
+    for(let m=1; m<=months; m++){
+      const par = Number.isFinite(reajM) ? parcela0 * Math.pow(1+reajM, m) : parcela0;
+      sum += par;
+      invested.push(sum);
+
+      const vv = Number.isFinite(valM) ? val0 * Math.pow(1+valM, m) : val0;
+      valued.push(vv);
+    }
+
+    const maxY = Math.max(...invested, ...valued) * 1.08;
+    const minY = 0;
+
+    function x(i){ return 48 + (i/(months-1))*(W-68); }
+    function y(v){ return (H-34) - ((v-minY)/(maxY-minY))*(H-54); }
+
+    ctx.clearRect(0,0,W,H);
+
+    // eixos
+    ctx.lineWidth = 1;
+    ctx.strokeStyle = "rgba(120,120,120,.35)";
+    ctx.beginPath();
+    ctx.moveTo(42, 16);
+    ctx.lineTo(42, H-28);
+    ctx.lineTo(W-14, H-28);
+    ctx.stroke();
+
+    // linha investido (roxo)
+    ctx.lineWidth = 3;
+    ctx.strokeStyle = "rgba(79,70,229,.95)";
+    ctx.beginPath();
+    invested.forEach((v,i)=>{
+      const xx = x(i), yy = y(v);
+      if(i===0) ctx.moveTo(xx,yy); else ctx.lineTo(xx,yy);
+    });
+    ctx.stroke();
+
+    // linha valorizado (verde)
+    ctx.strokeStyle = "rgba(34,197,94,.95)";
+    ctx.beginPath();
+    valued.forEach((v,i)=>{
+      const xx = x(i), yy = y(v);
+      if(i===0) ctx.moveTo(xx,yy); else ctx.lineTo(xx,yy);
+    });
+    ctx.stroke();
+
+    chartLegend.textContent =
+      `Roxo = parcelas acumuladas • Verde = lote valorizado • 12 meses • Reajuste: ${String(activeProduct.reajuste||"—")} • Valorização: ${fmtPct(activeProduct.valorizacaoAA)} a.a.`;
+  }
+
+  /* ===================== ADMIN (JSON) ===================== */
+  function openAdmin(){
+    adminJson.value = JSON.stringify(BASE, null, 2);
+    adminMsg.textContent = "Edite: users[], products[], objections[].";
+    adminModal.classList.add("show");
+    adminModal.setAttribute("aria-hidden","false");
+  }
+  function closeAdmin(){
+    adminModal.classList.remove("show");
+    adminModal.setAttribute("aria-hidden","true");
+  }
+
+  btnAdminClose.addEventListener("click", closeAdmin);
+  adminModal.addEventListener("click", (e) => { if(e.target === adminModal) closeAdmin(); });
+
+  btnAdmin.addEventListener("click", () => {
+    if(!SESSION || SESSION.role !== "admin"){
+      alert("Apenas admin.");
+      return;
+    }
+    openAdmin();
+  });
+
+  btnAdminSave.addEventListener("click", () => {
+    try{
+      const parsed = JSON.parse(adminJson.value);
+      if(!parsed || !Array.isArray(parsed.users) || !Array.isArray(parsed.products) || !Array.isArray(parsed.objections)){
+        alert("JSON inválido: precisa conter users[], products[] e objections[].");
+        return;
+      }
+      BASE = parsed;
+      saveBase(BASE);
+      adminMsg.textContent = "✅ Base salva no dispositivo.";
+      setStatus("Base atualizada", "good");
+
+      // se o produto ativo foi alterado, tenta recarregar por id
+      if(activeProduct){
+        const refreshed = BASE.products.find(p => p.id === activeProduct.id) || null;
+        if(refreshed) showProduct(refreshed);
+      }
+    }catch{
+      alert("Erro ao salvar JSON. Verifique aspas e vírgulas.");
+    }
+  });
+
+  btnAdminExport.addEventListener("click", () => {
+    adminJson.value = JSON.stringify(BASE, null, 2);
+    adminMsg.textContent = "✅ JSON gerado. Copie e cole no GitHub.";
+  });
+
+  btnAdminCopy.addEventListener("click", async () => {
+    try{
+      await navigator.clipboard.writeText(adminJson.value);
+      adminMsg.textContent = "✅ Copiado.";
+    }catch{
+      adminJson.select();
+      document.execCommand("copy");
+      adminMsg.textContent = "✅ Copiado (fallback).";
+    }
+  });
+
+  btnAdminReset.addEventListener("click", () => {
+    if(!confirm("Resetar para base padrão?")) return;
+    BASE = structuredClone(DEFAULT_BASE);
+    saveBase(BASE);
+    adminJson.value = JSON.stringify(BASE, null, 2);
+    adminMsg.textContent = "✅ Base padrão restaurada.";
+    setStatus("Base resetada", "warn");
+  });
+
+  /* ===================== RESET UI ===================== */
+  function resetUI(){
+    activeProduct = null;
+    productName.textContent = "Produto não identificado";
+    productMeta.innerHTML = "";
+    productInfo.innerHTML = "";
+    kpiWait.style.display = "none";
+    tableBlock.style.display = "none";
+    r1.textContent = r2.textContent = r3.textContent = "—";
+    graphHint.textContent = "Aparece quando houver produto ativo";
+    graphVisible = false;
     canvasWrap.classList.remove("show");
     graphPlaceholder.style.display = "block";
     btnGraphToggle.textContent = "📈 Mostrar gráfico";
-  }
-};
-
-function renderGraph(){
-  if(!activeProduct) return;
-  if(!graphVisible) return;
-
-  const ctx = chart.getContext("2d");
-  const W = chart.width, H = chart.height;
-
-  // série de 12 meses
-  const months = 12;
-  const val0 = Number(activeProduct.value);
-  const parcela0 = Number(activeProduct.parcela);
-
-  // valorização e reajuste
-  const valM = effectiveMonthlyFromAnnual(activeProduct.valorizacaoAA);
-
-  const reajAA = resolveReajusteAnnualPct(activeProduct);
-  const reajM = effectiveMonthlyFromAnnual(reajAA);
-
-  // dados
-  let invested = [];
-  let valued = [];
-  let sum = 0;
-
-  for(let m=1; m<=months; m++){
-    const par = Number.isFinite(reajM) ? parcela0 * Math.pow(1+reajM, m) : parcela0;
-    sum += par;
-    invested.push(sum);
-
-    const vv = Number.isFinite(valM) ? val0 * Math.pow(1+valM, m) : val0;
-    valued.push(vv);
+    setStatus("Pronto");
   }
 
-  const maxY = Math.max(...invested, ...valued) * 1.08;
-  const minY = 0;
+  /* ===================== INIT ===================== */
+  (function init(){
+    setStatus("Inicializando…", "warn");
 
-  function x(i){ return 48 + (i/(months-1))*(W-68); }
-  function y(v){ return (H-34) - ((v-minY)/(maxY-minY))*(H-54); }
-
-  // limpar
-  ctx.clearRect(0,0,W,H);
-
-  // eixos
-  ctx.globalAlpha = 1;
-  ctx.lineWidth = 1;
-  ctx.strokeStyle = "rgba(120,120,120,.35)";
-  ctx.beginPath();
-  ctx.moveTo(42, 16);
-  ctx.lineTo(42, H-28);
-  ctx.lineTo(W-14, H-28);
-  ctx.stroke();
-
-  // grid horizontal
-  for(let g=1; g<=4; g++){
-    const yy = 16 + g*((H-44)/5);
-    ctx.strokeStyle = "rgba(120,120,120,.18)";
-    ctx.beginPath();
-    ctx.moveTo(42, yy);
-    ctx.lineTo(W-14, yy);
-    ctx.stroke();
-  }
-
-  // linha 1 (investido) — roxo
-  ctx.lineWidth = 3;
-  ctx.strokeStyle = "rgba(79,70,229,.95)";
-  ctx.beginPath();
-  invested.forEach((v,i)=>{
-    const xx = x(i), yy = y(v);
-    if(i===0) ctx.moveTo(xx,yy); else ctx.lineTo(xx,yy);
-  });
-  ctx.stroke();
-
-  // linha 2 (lote valorizado) — verde neon
-  ctx.strokeStyle = "rgba(34,197,94,.95)";
-  ctx.beginPath();
-  valued.forEach((v,i)=>{
-    const xx = x(i), yy = y(v);
-    if(i===0) ctx.moveTo(xx,yy); else ctx.lineTo(xx,yy);
-  });
-  ctx.stroke();
-
-  // pontos finais
-  const lastInv = invested[invested.length-1];
-  const lastVal = valued[valued.length-1];
-
-  ctx.fillStyle = "rgba(79,70,229,1)";
-  ctx.beginPath(); ctx.arc(x(months-1), y(lastInv), 5, 0, Math.PI*2); ctx.fill();
-
-  ctx.fillStyle = "rgba(34,197,94,1)";
-  ctx.beginPath(); ctx.arc(x(months-1), y(lastVal), 5, 0, Math.PI*2); ctx.fill();
-
-  // labels simples
-  ctx.fillStyle = "rgba(120,120,120,.9)";
-  ctx.font = "12px Inter, system-ui, -apple-system, Segoe UI, Roboto, Arial";
-  ctx.fillText("Mês", W-40, H-10);
-  ctx.fillText("R$", 18, 24);
-
-  chartLegend.textContent =
-    `Roxo = valor investido (parcelas acumuladas) • Verde = lote valorizado • 12 meses • Reajuste: ${
-      String(activeProduct.reajuste||"—")
-    } • Valorização: ${fmtPct(activeProduct.valorizacaoAA)} a.a.`;
-}
-
-/* ===================== ADMIN (PIN + EXPORT/IMPORT) ===================== */
-const adminModal = document.getElementById("adminModal");
-const btnAdmin = document.getElementById("btnAdmin");
-const btnAdminClose = document.getElementById("btnAdminClose");
-const adminJson = document.getElementById("adminJson");
-const adminMsg = document.getElementById("adminMsg");
-
-const btnAdminSave = document.getElementById("btnAdminSave");
-const btnAdminExport = document.getElementById("btnAdminExport");
-const btnAdminCopy = document.getElementById("btnAdminCopy");
-const btnAdminReset = document.getElementById("btnAdminReset");
-
-function openAdmin(){
-  adminJson.value = JSON.stringify(BASE, null, 2);
-  adminMsg.textContent = "Dica: edite com cuidado. Ex.: products[], objections[].";
-  adminModal.classList.add("show");
-  adminModal.setAttribute("aria-hidden","false");
-}
-function closeAdmin(){
-  adminModal.classList.remove("show");
-  adminModal.setAttribute("aria-hidden","true");
-}
-btnAdminClose.onclick = closeAdmin;
-
-btnAdmin.onclick = () => {
-  const pin = prompt("PIN Admin:");
-  if(pin === null) return;
-  if(String(pin).trim() !== String(BASE.adminPin).trim()){
-    alert("PIN incorreto.");
-    return;
-  }
-  openAdmin();
-};
-
-btnAdminSave.onclick = () => {
-  try{
-    const parsed = JSON.parse(adminJson.value);
-    if(!parsed || !Array.isArray(parsed.products) || !Array.isArray(parsed.objections)){
-      alert("JSON inválido: precisa conter products[] e objections[].");
-      return;
+    // sessão
+    const sess = loadSession();
+    if(sess){
+      SESSION = sess;
+      hideLogin();
+      applyRoleUI();
+      setStatus(`Olá, ${SESSION.name}`, "good");
+    }else{
+      showLogin();
+      applyRoleUI();
     }
-    BASE = parsed;
-    saveBase(BASE);
-    adminMsg.textContent = "✅ Base salva no dispositivo (localStorage).";
-    setStatus("Base atualizada", "good");
 
-    // se produto ativo foi editado, recarrega UI
-    if(activeProduct){
-      const refreshed = BASE.products.find(p => p.id === activeProduct.id) || null;
-      if(refreshed) showProduct(refreshed);
-    }
-  }catch(e){
-    alert("Erro ao salvar JSON. Verifique vírgulas/aspas.");
-  }
-};
+    // estado inicial
+    resetUI();
 
-btnAdminExport.onclick = () => {
-  // export já está no textarea, mas garantimos formatação
-  adminJson.value = JSON.stringify(BASE, null, 2);
-  adminMsg.textContent = "✅ JSON gerado. Use Copiar e cole no GitHub.";
-};
+    // dica: pré-carregar economia não trava (mas evita atraso no 1º clique)
+    // loadEconomy(false);
 
-btnAdminCopy.onclick = async () => {
-  try{
-    await navigator.clipboard.writeText(adminJson.value);
-    adminMsg.textContent = "✅ Copiado para a área de transferência.";
-  }catch{
-    // fallback
-    adminJson.select();
-    document.execCommand("copy");
-    adminMsg.textContent = "✅ Copiado (fallback).";
-  }
-};
+  })();
 
-btnAdminReset.onclick = () => {
-  if(!confirm("Resetar para base padrão? Isso substitui sua base atual.")) return;
-  BASE = structuredClone(DEFAULT_BASE);
-  saveBase(BASE);
-  adminJson.value = JSON.stringify(BASE, null, 2);
-  adminMsg.textContent = "✅ Base padrão restaurada.";
-  setStatus("Base resetada", "warn");
-};
-
-/* fechar modal ao clicar fora */
-adminModal.addEventListener("click", (e) => {
-  if(e.target === adminModal) closeAdmin();
 });
-
-/* ===================== INIT ===================== */
-(async function init(){
-  setStatus("Pronto");
-  updateGraphVisibilityHints();
-  // pré-carrega economia em cache se quiser (não trava)
-  // await loadEconomy(false);
-})();
 </script>
+
+</body>
+</html>

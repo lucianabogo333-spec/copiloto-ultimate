@@ -1,179 +1,612 @@
 <!DOCTYPE html>
-<html lang="pt-BR" data-theme="light">
-<head>
+<html lang="pt-BR"><head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>COPILOTO — Assistente de Objeções em Tempo Real</title>
 
 <style>
-/* ===================== THEME ===================== */
-:root{
-  --bg:#f6f7fb;
-  --panel:#ffffff;
-  --text:#0b1220;
-  --muted:#5b6474;
-  --border:#e5e7eb;
-  --shadow:0 14px 34px rgba(17,24,39,.10);
-  --shadow2:0 8px 22px rgba(17,24,39,.08);
-  --primary:#4c5bd4;
-  --primary2:#3f4bd0;
-  --ring:rgba(76,91,212,.22);
-  --good:#16a34a;
-  --warn:#f59e0b;
-  --bad:#ef4444;
-  --chip:#f3f4f6;
-  --radius:16px;
-  --radius2:22px;
-  --tap:48px;
-}
+  :root{
+    --bg:#f6f7fb;
+    --panel:#ffffff;
+    --text:#0b1220;
+    --muted:#5b6474;
+    --border:#e5e7eb;
+    --shadow: 0 14px 34px rgba(17,24,39,.10);
+    --shadow2: 0 8px 22px rgba(17,24,39,.08);
 
-[data-theme="dark"]{
-  --bg:#0b1220;
-  --panel:#0f172a;
-  --text:#e5e7eb;
-  --muted:#9ca3af;
-  --border:#1f2937;
-  --shadow:0 14px 34px rgba(0,0,0,.45);
-  --shadow2:0 8px 22px rgba(0,0,0,.35);
-  --chip:#111827;
-}
+    --primary:#4c5bd4;
+    --primary2:#3f4bd0;
+    --ring: rgba(76,91,212,.22);
 
-*{box-sizing:border-box}
-body{
-  margin:0;
-  font-family:Inter,system-ui,Arial;
-  background:var(--bg);
-  color:var(--text);
-}
+    --good:#16a34a;
+    --warn:#f59e0b;
+    --bad:#ef4444;
 
-/* ===================== BASIC ===================== */
-button{
-  min-height:var(--tap);
-  padding:12px 14px;
-  border-radius:14px;
-  border:1px solid var(--border);
-  background:var(--panel);
-  font-weight:800;
-  cursor:pointer;
-}
-.primary{
-  background:linear-gradient(180deg,var(--primary),var(--primary2));
-  color:#fff;border:none;
-}
-.ghost{
-  background:rgba(76,91,212,.08);
-  border-color:rgba(76,91,212,.22);
-  color:#1f2a9a;
-}
-.danger{
-  background:rgba(239,68,68,.10);
-  color:#7f1d1d;
-  border-color:rgba(239,68,68,.22);
-}
-.card{
-  background:var(--panel);
-  border:1px solid var(--border);
-  border-radius:var(--radius);
-  padding:14px;
-  box-shadow:var(--shadow2);
-}
-.chip{
-  padding:6px 10px;
-  border-radius:999px;
-  background:var(--chip);
-  font-size:12px;
-  font-weight:700;
-}
-header{
-  position:sticky;top:0;z-index:5;
-  background:rgba(255,255,255,.85);
-  backdrop-filter:blur(10px);
-  border-bottom:1px solid var(--border);
-}
-[data-theme="dark"] header{background:rgba(15,23,42,.9)}
-.topbar{
-  max-width:1200px;margin:auto;
-  display:flex;justify-content:space-between;
-  padding:14px;gap:10px;
-}
-main{max-width:1200px;margin:auto;padding:16px}
-.grid{
-  display:grid;
-  grid-template-columns:320px 1fr 430px;
-  gap:16px;
-}
-@media(max-width:980px){
-  .grid{grid-template-columns:1fr}
-}
+    --chip:#f3f4f6;
+    --radius:16px;
+    --radius2:22px;
 
-/* ===================== MODALS ===================== */
-.overlay{
-  position:fixed;inset:0;
-  background:rgba(0,0,0,.6);
-  display:flex;align-items:center;justify-content:center;
-  z-index:20;
-}
-.modal{
-  background:var(--panel);
-  padding:20px;
-  border-radius:22px;
-  width:min(420px,100%);
-}
-.modal h2{margin-top:0}
+    --tap:48px; /* alvos clicáveis maiores */
+    --fx: 860ms; /* animações 700–900ms */
+  }
 
-/* ===================== INPUT ===================== */
-textarea,input{
-  width:100%;
-  padding:12px;
-  border-radius:14px;
-  border:1px solid var(--border);
-  background:var(--panel);
-  color:var(--text);
-}
+  *{box-sizing:border-box}
+  html,body{height:100%}
+  body{
+    margin:0;
+    font-family: Inter, ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+    color:var(--text);
+    background:
+      radial-gradient(1000px 520px at 12% -4%, rgba(76,91,212,.14), transparent 58%),
+      radial-gradient(900px 520px at 92% 10%, rgba(245,158,11,.10), transparent 58%),
+      radial-gradient(720px 520px at 40% 100%, rgba(22,163,74,.07), transparent 60%),
+      var(--bg);
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    text-rendering: optimizeLegibility;
+    font-size:16px;
+    line-height:1.45;
+  }
 
-/* ===================== TOAST ===================== */
-.toast{
-  position:fixed;bottom:16px;right:16px;
-  background:#111;color:#fff;
-  padding:12px 14px;
-  border-radius:14px;
-  display:none;
-}
-.toast.show{display:block}
+  /* ===================== TOPBAR ===================== */
+  header{
+    position:sticky; top:0; z-index:5;
+    background:rgba(255,255,255,.86);
+    backdrop-filter: blur(12px);
+    border-bottom:1px solid rgba(229,231,235,.95);
+  }
+  .topbar{
+    display:flex; align-items:center; justify-content:space-between;
+    padding:14px 18px;
+    max-width:1200px; margin:0 auto;
+    gap:12px;
+  }
+  .brand{display:flex; flex-direction:column; gap:2px}
+  .brand h1{
+    margin:0;
+    font-size:18px;
+    letter-spacing:.3px;
+    font-weight:900;
+  }
+  .brand span{
+    font-size:12px;
+    color:var(--muted);
+    font-weight:600;
+  }
+  .statusline{display:flex; align-items:center; gap:10px; flex-wrap:wrap}
+
+  .pill{
+    display:inline-flex; align-items:center; gap:8px;
+    padding:8px 10px;
+    border:1px solid rgba(229,231,235,.95);
+    border-radius:999px;
+    background:rgba(255,255,255,.92);
+    box-shadow: 0 1px 0 rgba(17,24,39,.03);
+    font-size:12px;
+    color:var(--muted);
+    font-weight:600;
+  }
+  .dot{width:8px; height:8px; border-radius:999px; background:#cbd5e1}
+  .dot.on{background: var(--good)}
+  .kbd{
+    font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+    font-size:11px;
+    padding:3px 7px;
+    border:1px solid rgba(229,231,235,.95);
+    border-bottom-color:#d1d5db;
+    background:#fff;
+    border-radius:9px;
+    color:#374151;
+  }
+
+  /* ===================== LAYOUT ===================== */
+  main{max-width:1200px; margin:0 auto; padding:18px}
+  .grid{
+    display:grid;
+    grid-template-columns: 320px 1fr 430px;
+    gap:16px;
+    align-items:start;
+  }
+
+  /* ===================== CARDS ===================== */
+  .card{
+    background:rgba(255,255,255,.92);
+    border:1px solid rgba(229,231,235,.92);
+    border-radius:var(--radius);
+    box-shadow: var(--shadow2);
+    overflow:hidden;
+  }
+  .card .head{
+    padding:14px 14px 10px;
+    border-bottom:1px solid rgba(229,231,235,.78);
+    display:flex; align-items:flex-start; justify-content:space-between; gap:10px;
+  }
+  .card .body{padding:14px}
+
+  .title{display:flex; flex-direction:column; gap:4px}
+  .title h2,.title h3,.title h4{
+    margin:0;
+    font-weight:900;
+    letter-spacing:.2px;
+    color:#0b1220;
+  }
+  .title h2,.title h3,.title h4{font-size:14px}
+  .subtitle{
+    margin:0;
+    font-size:12px;
+    color:var(--muted);
+    line-height:1.35;
+    font-weight:600;
+  }
+
+  .chip{
+    display:inline-flex; align-items:center; gap:6px;
+    padding:7px 10px;
+    border-radius:999px;
+    background:rgba(243,244,246,.72);
+    color:#111827;
+    border:1px solid rgba(229,231,235,.92);
+    font-size:12px;
+    white-space:nowrap;
+    font-weight:700;
+  }
+  .chip.good{background: rgba(22,163,74,.10); border-color: rgba(22,163,74,.22); color:#065f46}
+  .chip.warn{background: rgba(245,158,11,.12); border-color: rgba(245,158,11,.25); color:#7c2d12}
+  .chip.bad{background: rgba(239,68,68,.11); border-color: rgba(239,68,68,.24); color:#7f1d1d}
+
+  .updated-badge{
+    display:none;
+    align-items:center;
+    gap:6px;
+    padding:7px 10px;
+    border-radius:999px;
+    background: rgba(76,91,212,.10);
+    border: 1px solid rgba(76,91,212,.22);
+    color: #1f2a9a;
+    font-size:12px;
+    white-space:nowrap;
+    font-weight:800;
+    animation: badgePop var(--fx) ease-out 1;
+  }
+  .updated-badge.show{display:inline-flex}
+  @keyframes badgePop{
+    0%{opacity:.0; transform: translateY(-6px) scale(.98)}
+    55%{opacity:1; transform: translateY(0) scale(1.01)}
+    100%{opacity:1; transform: translateY(0) scale(1)}
+  }
+
+  /* ===================== PRODUTO ===================== */
+  .productName{font-size:17px; margin:0; line-height:1.2; font-weight:950}
+  .productMeta{padding:10px 14px 14px; display:flex; flex-direction:column; gap:10px}
+  .infoList{margin:0; padding-left:18px}
+  .infoList li{margin:6px 0; font-size:13px; line-height:1.4; color:#111827; font-weight:600}
+  .hint{font-size:12px; color:var(--muted); margin:0; font-weight:600}
+
+  /* ===================== INPUT ===================== */
+  .inputWrap{display:flex; flex-direction:column; gap:10px}
+  textarea{
+    width:100%;
+    min-height:260px;
+    resize:vertical;
+    padding:14px 14px;
+    font-size:15px;
+    line-height:1.6;
+    border-radius:14px;
+    border:1px solid rgba(229,231,235,.95);
+    outline:none;
+    background:rgba(255,255,255,.96);
+    box-shadow: 0 1px 0 rgba(17,24,39,.04);
+    transition: box-shadow .2s ease, border-color .2s ease, transform .18s ease;
+  }
+  textarea:focus{
+    border-color: rgba(76,91,212,.55);
+    box-shadow: 0 0 0 5px var(--ring);
+  }
+
+  .toolbar{
+    display:flex; gap:10px; flex-wrap:wrap;
+    align-items:center; justify-content:space-between;
+  }
+  .btnRow{display:flex; gap:10px; align-items:center; flex-wrap:wrap}
+
+  /* ===================== BUTTONS ===================== */
+  button{
+    border:1px solid rgba(229,231,235,.95);
+    background:rgba(255,255,255,.96);
+    color:#0b1220;
+    padding:12px 14px;
+    min-height: var(--tap);
+    border-radius:14px;
+    cursor:pointer;
+    font-weight:900;
+    font-size:14px;
+    letter-spacing:.1px;
+    box-shadow: 0 2px 0 rgba(17,24,39,.03);
+    transition:
+      transform .08s ease,
+      box-shadow .22s ease,
+      border-color .22s ease,
+      background .22s ease,
+      filter .22s ease;
+    user-select:none;
+  }
+  button:hover{
+    border-color: rgba(76,91,212,.34);
+    box-shadow: 0 14px 26px rgba(17,24,39,.10);
+    transform: translateY(-1px);
+  }
+  button:active{
+    transform: translateY(0px);
+    filter: brightness(.98);
+  }
+  button:focus-visible{
+    outline:none;
+    box-shadow: 0 0 0 5px var(--ring), 0 14px 26px rgba(17,24,39,.10);
+    border-color: rgba(76,91,212,.55);
+  }
+  button:disabled{opacity:.55; cursor:not-allowed; transform:none}
+
+  .primary{
+    background: linear-gradient(180deg, var(--primary), var(--primary2));
+    color:#fff;
+    border:none;
+  }
+  .primary:hover{box-shadow: 0 16px 28px rgba(76,91,212,.24)}
+  .danger{
+    background: rgba(239,68,68,.10);
+    border-color: rgba(239,68,68,.22);
+    color:#7f1d1d;
+  }
+  .ghost{
+    background: rgba(76,91,212,.08);
+    border-color: rgba(76,91,212,.22);
+    color:#1f2a9a;
+  }
+
+  /* ===================== RESPOSTAS ===================== */
+  .responsesGrid{display:flex; flex-direction:column; gap:12px}
+  .responseCard .body{padding-top:12px; display:flex; flex-direction:column; gap:10px}
+  .responseText{
+    margin:0;
+    font-size:15px;
+    line-height:1.65;
+    white-space:pre-wrap;
+    font-weight:650;
+    color:#0b1220;
+  }
+  .responseFooter{
+    display:flex; align-items:center; justify-content:space-between;
+    gap:10px; flex-wrap:wrap;
+  }
+
+  /* ===================== FX ===================== */
+  .fx{position:relative}
+
+  .fxPulse{animation: pulseGlow var(--fx) ease-out 1}
+  .fxSlideFade{animation: slideFadeIn var(--fx) cubic-bezier(.2,.8,.2,1) 1}
+
+  @keyframes slideFadeIn{
+    0%{opacity:.35; transform: translateY(10px)}
+    60%{opacity:1; transform: translateY(0)}
+    100%{opacity:1; transform: translateY(0)}
+  }
+
+  @keyframes pulseGlow{
+    0%{box-shadow: 0 0 0 0 rgba(76,91,212,.00)}
+    25%{box-shadow: 0 0 0 10px rgba(76,91,212,.18)}
+    70%{box-shadow: 0 0 0 3px rgba(76,91,212,.08)}
+    100%{box-shadow: 0 0 0 0 rgba(76,91,212,.00)}
+  }
+
+  .highlightBorder{border-color: rgba(76,91,212,.55) !important}
+
+  /* efeito extra perceptível sem exagero */
+  .fx::after{
+    content:"";
+    position:absolute;
+    inset:-2px;
+    border-radius: calc(var(--radius) + 2px);
+    pointer-events:none;
+    opacity:0;
+    transition: opacity var(--fx) ease;
+    background:
+      radial-gradient(420px 220px at 12% 8%, rgba(76,91,212,.12), transparent 55%),
+      radial-gradient(420px 220px at 88% 12%, rgba(245,158,11,.10), transparent 55%);
+  }
+  .fxPulse.fxSlideFade::after{opacity:1}
+
+  /* ===================== TOAST ===================== */
+  .toast{
+    position: fixed;
+    right: 16px;
+    bottom: 16px;
+    z-index: 30;
+    display:none;
+    align-items:center;
+    gap:10px;
+    padding:12px 14px;
+    border-radius:16px;
+    background: rgba(11,18,32,.92);
+    color:#fff;
+    border:1px solid rgba(255,255,255,.12);
+    box-shadow: 0 18px 34px rgba(0,0,0,.18);
+    max-width: min(520px, calc(100vw - 32px));
+    font-size:13px;
+    font-weight:700;
+  }
+  .toast.show{display:flex; animation: toastIn 420ms ease-out 1}
+  @keyframes toastIn{
+    from{opacity:0; transform: translateY(8px) scale(.98)}
+    to{opacity:1; transform: translateY(0) scale(1)}
+  }
+  .toast .mini{width:10px; height:10px; border-radius:999px; background: var(--good)}
+
+  /* ===================== MODAL / OVERLAY ===================== */
+  .overlay{
+    position:fixed; inset:0;
+    background:rgba(11,18,32,.58);
+    display:flex; align-items:center; justify-content:center;
+    z-index:20;
+    padding:16px;
+  }
+  .modal{
+    width:min(580px, 100%);
+    background: rgba(255,255,255,.98);
+    border:1px solid rgba(229,231,235,.92);
+    border-radius: var(--radius2);
+    box-shadow: var(--shadow);
+    overflow:hidden;
+    transform: translateY(0);
+    animation: modalIn 520ms ease-out 1;
+  }
+  @keyframes modalIn{
+    from{opacity:.0; transform: translateY(10px) scale(.985)}
+    to{opacity:1; transform: translateY(0) scale(1)}
+  }
+  .modal .mHead{padding:18px 18px 0}
+  .modal .mHead h1{margin:0; font-size:20px; letter-spacing:.3px; font-weight:950}
+  .modal .mHead h3{margin:8px 0 0; font-size:14px; color:var(--muted); font-weight:800}
+  .modal .mBody{padding:14px 18px 18px; color:#374151; line-height:1.6; font-size:14px; font-weight:650}
+  .modal-actions{display:flex; justify-content:flex-end; gap:10px; padding:0 18px 18px; flex-wrap:wrap}
+
+  /* ===================== DRAWER ADMIN ===================== */
+  .drawer{
+    position:fixed; inset:0;
+    display:none;
+    z-index:25;
+  }
+  .drawer.show{display:block}
+  .drawer .backdrop{
+    position:absolute; inset:0;
+    background:rgba(11,18,32,.62);
+  }
+  .drawer .panel{
+    position:absolute;
+    right:0; top:0; height:100%;
+    width:min(760px, 100%);
+    background: rgba(255,255,255,.98);
+    border-left:1px solid rgba(229,231,235,.95);
+    box-shadow: -22px 0 44px rgba(0,0,0,.18);
+    display:flex;
+    flex-direction:column;
+    animation: drawerIn 520ms ease-out 1;
+  }
+  @keyframes drawerIn{
+    from{opacity:.0; transform: translateX(16px)}
+    to{opacity:1; transform: translateX(0)}
+  }
+
+  .panelHeader{
+    padding:14px 14px 10px;
+    border-bottom:1px solid rgba(229,231,235,.88);
+    display:flex; align-items:flex-start; justify-content:space-between; gap:10px;
+  }
+  .panelHeader h2{margin:0; font-size:14px; font-weight:950}
+  .tabs{
+    display:flex;
+    gap:8px;
+    padding:10px 14px;
+    border-bottom:1px solid rgba(229,231,235,.88);
+    flex-wrap:wrap;
+  }
+  .tabBtn{
+    padding:10px 12px;
+    border-radius:999px;
+    font-size:12px;
+    min-height:42px;
+  }
+  .tabBtn.active{
+    background: rgba(76,91,212,.12);
+    border-color: rgba(76,91,212,.25);
+    color:#1f2a9a;
+  }
+  .panelBody{
+    padding:14px;
+    overflow:auto;
+    display:flex;
+    flex-direction:column;
+    gap:14px;
+  }
+
+  /* ===================== FORMS ===================== */
+  .formGrid{display:grid; gap:10px}
+  .formGrid.two{grid-template-columns: 1fr 1fr}
+  .formGrid.three{grid-template-columns: 1fr 1fr 1fr}
+  label{font-size:12px; color:var(--muted); font-weight:900; letter-spacing:.15px}
+  input[type="text"], input[type="password"], textarea.smallArea{
+    width:100%;
+    padding:12px 12px;
+    border-radius:14px;
+    border:1px solid rgba(229,231,235,.95);
+    outline:none;
+    background:rgba(255,255,255,.98);
+    font-size:14px;
+    line-height:1.45;
+    font-weight:650;
+    transition: box-shadow .2s ease, border-color .2s ease;
+  }
+  textarea.smallArea{min-height:96px; resize:vertical}
+  input[type="text"]:focus, input[type="password"]:focus, textarea.smallArea:focus{
+    border-color: rgba(76,91,212,.55);
+    box-shadow: 0 0 0 5px var(--ring);
+  }
+
+  .row{display:flex; gap:10px; align-items:center; flex-wrap:wrap}
+  .muted{color:var(--muted); font-size:12px; margin:0; line-height:1.35; font-weight:650}
+
+  .list{
+    display:flex; flex-direction:column; gap:10px;
+    border:1px dashed rgba(229,231,235,.95);
+    border-radius:14px;
+    padding:12px;
+    background: rgba(243,244,246,.42);
+  }
+  .item{
+    background: rgba(255,255,255,.98);
+    border:1px solid rgba(229,231,235,.95);
+    border-radius:14px;
+    padding:12px;
+    display:flex;
+    align-items:flex-start;
+    justify-content:space-between;
+    gap:12px;
+  }
+  .item h5{margin:0; font-size:13px; font-weight:950}
+  .item p{margin:6px 0 0; font-size:12px; color:var(--muted); line-height:1.35; font-weight:650}
+  .actions{display:flex; gap:8px; align-items:center; flex-wrap:wrap}
+  .miniBtn{padding:10px 12px; border-radius:12px; font-size:12px; min-height:42px}
+
+  .notice{
+    background: rgba(245,158,11,.10);
+    border:1px solid rgba(245,158,11,.25);
+    border-radius:14px;
+    padding:12px 12px;
+    color:#7c2d12;
+    font-size:12px;
+    line-height:1.45;
+    font-weight:750;
+  }
+  .success{
+    background: rgba(22,163,74,.10);
+    border:1px solid rgba(22,163,74,.22);
+    border-radius:14px;
+    padding:12px 12px;
+    color:#065f46;
+    font-size:12px;
+    line-height:1.45;
+    font-weight:750;
+  }
+
+  /* ===================== MOBILE ===================== */
+  @media (max-width: 980px){
+    .grid{grid-template-columns: 1fr; gap:14px}
+    .area-product{order:1}
+    .area-input{order:2}
+    .area-resp{order:3}
+
+    main{padding:14px}
+    .topbar{padding:12px 14px}
+    textarea{min-height:220px; font-size:16px} /* maior no mobile */
+    .responseText{font-size:16px}
+    button{width:auto}
+    .formGrid.two, .formGrid.three{grid-template-columns: 1fr}
+  }
+
+  @media (max-width: 520px){
+    .statusline{gap:8px}
+    .pill{padding:7px 10px}
+    .brand h1{font-size:17px}
+    button{min-height:50px}
+  }
+
+  /* Reduce motion */
+  @media (prefers-reduced-motion: reduce){
+    *{animation:none !important; transition:none !important}
+  }
 </style>
 </head>
 
 <body>
 
-<!-- LOGIN -->
-<div id="loginOverlay" class="overlay">
+<!-- WELCOME -->
+<div id="welcome" class="overlay" style="display:none">
   <div class="modal">
-    <h2>Entrar no COPILOTO</h2>
-    <input id="loginUser" placeholder="login">
-    <input id="loginPass" type="password" placeholder="senha" style="margin-top:8px">
-    <button class="primary" onclick="doLogin()" style="margin-top:12px;width:100%">Entrar</button>
-    <div id="loginError" style="color:#ef4444;margin-top:8px;display:none">Login inválido</div>
+    <div class="mHead">
+      <h1>COPILOTO</h1>
+      <h3>Assistente de Objeções em Tempo Real</h3>
+    </div>
+    <div class="mBody">
+      Digite (ou dite) a fala do cliente. O sistema identifica <strong>produto</strong> e <strong>objeção</strong> por palavras no texto
+      e mostra 3 respostas (leve, média, agressiva).
+      <br><br>
+      <strong>Novo:</strong> a caixa de diálogo limpa automaticamente após processar, para manter leve e sempre atualizando.
+    </div>
+    <div class="modal-actions">
+      <button onclick="closeWelcome()">Entendi</button>
+      <button class="primary" onclick="closeWelcome()">Começar</button>
+    </div>
   </div>
 </div>
 
-<!-- THEME CHOICE -->
-<div id="themeOverlay" class="overlay" style="display:none">
+<!-- LOGIN -->
+<div id="loginOverlay" class="overlay" style="display: none;">
   <div class="modal">
-    <h2>Escolha o tema</h2>
-    <p>Qual tema você prefere usar agora?</p>
-    <div style="display:flex;gap:10px;margin-top:14px">
-      <button class="ghost" onclick="setTheme('light')">☀️ Claro</button>
-      <button class="ghost" onclick="setTheme('dark')">🌙 Escuro</button>
+    <div class="mHead">
+      <h1>Entrar no COPILOTO</h1>
+      <h3>Acesso controlado (Admin edita / Usuários só usam)</h3>
+    </div>
+    <div class="mBody">
+      <div class="formGrid two">
+        <div>
+          <label>Login</label>
+          <input id="loginUser" type="text" placeholder="ex: edson" autocomplete="username">
+        </div>
+        <div>
+          <label>Senha</label>
+          <input id="loginPass" type="password" placeholder="••••••" autocomplete="current-password">
+        </div>
+      </div>
+      <div class="row" style="margin-top:12px; justify-content:space-between">
+        <label style="display:flex; align-items:center; gap:10px; font-weight:900; color:#111827">
+          <input type="checkbox" id="rememberMe" style="width:18px; height:18px; accent-color: var(--primary)">
+          Salvar neste dispositivo
+        </label>
+        <span class="chip" title="Dica">Sem credenciais visíveis</span>
+      </div>
+      <div id="loginError" class="notice" style="display:none; margin-top:12px">
+        Login ou senha inválidos.
+      </div>
+    </div>
+    <div class="modal-actions">
+      <button class="primary" onclick="doLogin()">Entrar</button>
     </div>
   </div>
 </div>
 
 <header>
   <div class="topbar">
-    <strong>COPILOTO</strong>
-    <div style="display:flex;gap:8px">
-      <button id="proposalBtn" class="ghost" onclick="openProposal()" style="display:none">📄 Formalização</button>
-      <button id="logoutBtn" class="danger" onclick="logout()" style="display:none">Sair</button>
+    <div class="brand">
+      <h1>COPILOTO</h1>
+      <span>Assistente de Objeções em Tempo Real</span>
+    </div>
+
+    <div class="statusline">
+      <div class="pill" title="Microfone manual (não fica escutando infinito)">
+        <span class="dot" id="micDot"></span>
+        <span id="micLabel">Microfone: desligado</span>
+      </div>
+
+      <div class="pill" title="Sessão / acesso">
+        <span id="rolePill">Acesso: Admin (edson)</span>
+      </div>
+
+      <div class="pill" title="Atalho para limpar">
+        <span class="kbd">Ctrl</span><span class="kbd">K</span>
+        <span style="color:var(--muted)">Limpar</span>
+      </div>
+
+      <button id="adminBtn" class="ghost" style="display: inline-flex;" onclick="openAdmin()">⚙️ Admin</button>
+      <button class="danger" onclick="logout()">Sair</button>
     </div>
   </div>
 </header>
@@ -182,108 +615,1549 @@ textarea,input{
   <div class="grid">
 
     <!-- PRODUTO -->
-    <div class="card">
-      <strong id="prodName">Produto não identificado</strong>
-      <ul id="prodInfo"></ul>
-    </div>
+    <aside class="card area-product fx" id="productCard">
+      <div class="head">
+        <div class="title">
+          <h2>Produto ativo</h2>
+          <p class="subtitle">Identifica por palavras-chave + informações do produto (ex.: “André Maggi”). “Sinop” é ignorado.</p>
+        </div>
+        <div class="updated-badge" id="prodBadge">✨ Atualizado</div>
+      </div>
+
+      <div class="productMeta">
+        <h3 class="productName" id="prod-name">Produto não identificado</h3>
+        <div class="row">
+          <span class="chip good" id="prodChip">—</span>
+          <span class="chip" style="color:var(--muted)">Entrada limpa automaticamente</span>
+        </div>
+        <ul class="infoList" id="prod-info"></ul>
+        <p class="hint">Dica: infos específicas ajudam a detectar por frases como “André Maggi” mesmo sem citar o nome do produto.</p>
+      </div>
+    </aside>
 
     <!-- INPUT -->
-    <div class="card">
-      <textarea id="input" placeholder="Digite a fala do cliente..."></textarea>
-    </div>
+    <section class="card area-input fx" id="inputCard">
+      <div class="head">
+        <div class="title">
+          <h3>Caixa de diálogo</h3>
+          <p class="subtitle">Digite ou dite. Ao processar, o texto é limpo automaticamente para manter desempenho.</p>
+        </div>
+        <div class="updated-badge" id="objBadge">⚡ Atualizado</div>
+      </div>
+
+      <div class="body inputWrap">
+        <textarea id="input" placeholder="Digite ou dite o que o cliente disse..."></textarea>
+
+        <div class="toolbar">
+          <div class="btnRow">
+            <button class="primary" id="micBtn" onclick="toggleListening()">🎙️ Ouvir microfone</button>
+            <button class="danger" onclick="clearAll()">Limpar</button>
+          </div>
+
+          <div class="row" style="justify-content:flex-end">
+            <span class="chip" id="objChip">Objeção: —</span>
+          </div>
+        </div>
+      </div>
+    </section>
 
     <!-- RESPOSTAS -->
-    <div>
-      <div class="card"><strong>Quebra Leve</strong><p id="r1">—</p></div>
-      <div class="card"><strong>Quebra Média</strong><p id="r2">—</p></div>
-      <div class="card"><strong>Quebra Agressiva</strong><p id="r3">—</p></div>
+    <section class="responsesGrid area-resp fx" id="responsesWrap">
 
-      <!-- CALCULADORA -->
-      <div class="card">
-        <strong>Calculadora de Procrastinação</strong>
-        <input id="pcValor" placeholder="Valor base R$">
-        <input id="pcDias" placeholder="Dias adiando" style="margin-top:6px">
-        <input id="pcReaj" placeholder="Reajuste mensal %" style="margin-top:6px">
-        <button class="primary" onclick="calcPro()" style="margin-top:8px">Calcular</button>
-        <pre id="pcOut">—</pre>
+      <div class="card responseCard">
+        <div class="head">
+          <div class="title">
+            <h4>Quebra Leve</h4>
+            <p class="subtitle">Acolhe + direciona com pergunta (cliente frio).</p>
+          </div>
+          <span class="chip good">Leve</span>
+        </div>
+        <div class="body">
+          <p id="r1" class="responseText">—</p>
+          <div class="responseFooter">
+            <span class="chip">Tom: humano e consultivo</span>
+            <button onclick="copy('r1')">Copiar</button>
+          </div>
+        </div>
       </div>
-    </div>
+
+      <div class="card responseCard">
+        <div class="head">
+          <div class="title">
+            <h4>Quebra Média</h4>
+            <p class="subtitle">Reenquadra + pede critério (puxa o próximo passo).</p>
+          </div>
+          <span class="chip warn">Média</span>
+        </div>
+        <div class="body">
+          <p id="r2" class="responseText">—</p>
+          <div class="responseFooter">
+            <span class="chip">Tom: firme, sem pressão</span>
+            <button onclick="copy('r2')">Copiar</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="card responseCard">
+        <div class="head">
+          <div class="title">
+            <h4>Quebra Agressiva</h4>
+            <p class="subtitle">Custo da inação + decisão (direto, sem grosseria).</p>
+          </div>
+          <span class="chip bad">Agressiva</span>
+        </div>
+        <div class="body">
+          <p id="r3" class="responseText">—</p>
+          <div class="responseFooter">
+            <span class="chip">Tom: objetivo e decisivo</span>
+            <button onclick="copy('r3')">Copiar</button>
+          </div>
+        </div>
+      </div>
+
+    </section>
 
   </div>
 </main>
 
-<div id="toast" class="toast">OK</div>
+<!-- ADMIN DRAWER -->
+<div id="adminDrawer" class="drawer show">
+  <div class="backdrop" onclick="closeAdmin()"></div>
+  <div class="panel">
+    <div class="panelHeader">
+      <div>
+        <h2>Admin — Gerenciar base (Produtos / Objeções / Usuários)</h2>
+        <p class="subtitle" style="margin-top:4px">Só o admin pode editar. Ao final, exporte a base e substitua este index.html no GitHub.</p>
+      </div>
+      <button class="danger" onclick="closeAdmin()">Fechar</button>
+    </div>
+
+    <div class="tabs">
+      <button class="tabBtn" id="tabProducts" onclick="setTab('products')">Produtos</button>
+      <button class="tabBtn" id="tabObjections" onclick="setTab('objections')">Objeções</button>
+      <button class="tabBtn" id="tabUsers" onclick="setTab('users')">Usuários</button>
+      <button class="tabBtn active" id="tabExport" onclick="setTab('export')">Exportar/Importar</button>
+    </div>
+
+    <div class="panelBody">
+      <!-- PRODUCTS TAB -->
+      <div id="viewProducts" style="display: none;">
+        <div class="card">
+          <div class="head">
+            <div class="title">
+              <h3>Novo / Editar Produto</h3>
+              <p class="subtitle">Busca por <strong>keys + infos</strong>. “Sinop” é ignorado automaticamente.</p>
+            </div>
+            <span class="chip" id="prodEditState">Modo: adicionar</span>
+          </div>
+          <div class="body">
+            <div class="formGrid">
+              <div>
+                <label>Nome do produto</label>
+                <input id="pName" type="text" placeholder="ex: CEDROS JARDINS">
+              </div>
+              <div>
+                <label>Palavras-chave (separe por vírgula)</label>
+                <input id="pKeys" type="text" placeholder="ex: cedros, búfalo, posto búfalo">
+              </div>
+              <div>
+                <label>Informações do produto (1 por linha)</label>
+                <textarea id="pInfo" class="smallArea" placeholder="ex:
+Lotes 200 m²
+Parcelas a partir de R$ 753
+Entrada: não
+Av. André Maggi"></textarea>
+              </div>
+
+              <div class="row" style="justify-content:flex-end">
+                <button class="ghost" onclick="resetProductForm()">Limpar</button>
+                <button class="primary" onclick="saveProduct()">Salvar produto</button>
+              </div>
+              <p class="muted">Dica: infos específicas detectam frases como “André Maggi” mesmo sem citar o nome do produto.</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="head">
+            <div class="title">
+              <h3>Produtos cadastrados</h3>
+              <p class="subtitle">Clique em “Editar” para carregar no formulário.</p>
+            </div>
+            <span class="chip" id="countProducts">5</span>
+          </div>
+          <div class="body">
+            <div class="list" id="productsList"><div class="item">
+      <div style="min-width:0">
+        <h5>MORADA BRASIL</h5>
+        <p><strong>Keys:</strong> morada</p>
+        <p><strong>Info:</strong> Loteamento residencial • Parcelas a partir de R$ 713 • Entrada: não • Av. André Maggi</p>
+      </div>
+      <div class="actions">
+        <button class="miniBtn" onclick="editProduct(0)">Editar</button>
+        <button class="miniBtn danger" onclick="removeProduct(0)">Remover</button>
+      </div>
+    </div><div class="item">
+      <div style="min-width:0">
+        <h5>CASA PRONTA – SINOP</h5>
+        <p><strong>Keys:</strong> casa, mcmv</p>
+        <p><strong>Info:</strong> Casa 2 quartos • Parcelas a partir de R$ 699 • Entrada: R$ 1.500 • Financiamento Caixa</p>
+      </div>
+      <div class="actions">
+        <button class="miniBtn" onclick="editProduct(1)">Editar</button>
+        <button class="miniBtn danger" onclick="removeProduct(1)">Remover</button>
+      </div>
+    </div><div class="item">
+      <div style="min-width:0">
+        <h5>CHÁCARAS – SANTA CARMEM</h5>
+        <p><strong>Keys:</strong> chacara, chácara</p>
+        <p><strong>Info:</strong> 1.800 m² • Parcelas a partir de R$ 695 • Entrada: não • 6 km de Santa Carmem</p>
+      </div>
+      <div class="actions">
+        <button class="miniBtn" onclick="editProduct(2)">Editar</button>
+        <button class="miniBtn danger" onclick="removeProduct(2)">Remover</button>
+      </div>
+    </div><div class="item">
+      <div style="min-width:0">
+        <h5>GRAN CANÁRIO</h5>
+        <p><strong>Keys:</strong> canario, gran</p>
+        <p><strong>Info:</strong> Loteamento urbano • Parcelas a partir de R$ 595 • Entrada: sim / não • MT-140</p>
+      </div>
+      <div class="actions">
+        <button class="miniBtn" onclick="editProduct(3)">Editar</button>
+        <button class="miniBtn danger" onclick="removeProduct(3)">Remover</button>
+      </div>
+    </div><div class="item">
+      <div style="min-width:0">
+        <h5>CEDROS JARDINS</h5>
+        <p><strong>Keys:</strong> cedros, búfalo</p>
+        <p><strong>Info:</strong> Lotes 200 m² • Parcelas a partir de R$ 753 • Entrada: não • Posto Búfalo</p>
+      </div>
+      <div class="actions">
+        <button class="miniBtn" onclick="editProduct(4)">Editar</button>
+        <button class="miniBtn danger" onclick="removeProduct(4)">Remover</button>
+      </div>
+    </div></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- OBJECTIONS TAB -->
+      <div id="viewObjections" style="display:none">
+        <div class="card">
+          <div class="head">
+            <div class="title">
+              <h3>Novo / Editar Objeção</h3>
+              <p class="subtitle">Detecção por palavras-chave (match no texto). Retorna 3 respostas.</p>
+            </div>
+            <span class="chip" id="objEditState">Modo: adicionar</span>
+          </div>
+          <div class="body">
+            <div class="formGrid">
+              <div>
+                <label>Palavras-chave da objeção (vírgula)</label>
+                <input id="oKeys" type="text" placeholder="ex: caro, preço alto, muito caro">
+              </div>
+
+              <div class="formGrid three">
+                <div>
+                  <label>Quebra Leve</label>
+                  <textarea id="oA" class="smallArea" placeholder="Valida + pergunta curta..."></textarea>
+                </div>
+                <div>
+                  <label>Quebra Média</label>
+                  <textarea id="oB" class="smallArea" placeholder="Reenquadra + pede critério..."></textarea>
+                </div>
+                <div>
+                  <label>Quebra Agressiva</label>
+                  <textarea id="oC" class="smallArea" placeholder="Custo da inação + decisão..."></textarea>
+                </div>
+              </div>
+
+              <div class="row" style="justify-content:flex-end">
+                <button class="ghost" onclick="resetObjectionForm()">Limpar</button>
+                <button class="primary" onclick="saveObjection()">Salvar objeção</button>
+              </div>
+              <p class="muted">Dica: adicione sinônimos nas keywords para detectar mais falas diferentes do cliente.</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="head">
+            <div class="title">
+              <h3>Objeções cadastradas</h3>
+              <p class="subtitle">Clique em “Editar” para carregar no formulário.</p>
+            </div>
+            <span class="chip" id="countObjections">7</span>
+          </div>
+          <div class="body">
+            <div class="list" id="objectionsList"><div class="item">
+      <div style="min-width:0">
+        <h5>caro, muito caro, valor alto, preço alto</h5>
+        <p><strong>Leve:</strong> Entendo totalmente. Só pra eu te orientar certo: quando você diz caro, é pelo valor total ou pela parcela?</p>
+        <p><strong>Média:</strong> Caro comparado com qual opção? Se for só condição, eu consigo te mostrar o melhor encaixe pro seu bolso.</p>
+        <p><strong>Agressiva:</strong> Se eu ajustar pra caber sem te apertar (entrada/parcela/prazo), você avança agora ou ainda fica em dúvida?</p>
+      </div>
+      <div class="actions">
+        <button class="miniBtn" onclick="editObjection(0)">Editar</button>
+        <button class="miniBtn danger" onclick="removeObjection(0)">Remover</button>
+      </div>
+    </div><div class="item">
+      <div style="min-width:0">
+        <h5>orçamento, sem orçamento, estourado, limite, apertado</h5>
+        <p><strong>Leve:</strong> Faz sentido cuidar do orçamento. Qual faixa mensal fica confortável pra você hoje?</p>
+        <p><strong>Média:</strong> O ponto é a parcela ou o prazo? Se me disser o limite, eu te passo a melhor configuração.</p>
+        <p><strong>Agressiva:</strong> Se eu encaixar dentro do seu limite sem surpresa, você dá o próximo passo ou prefere encerrar?</p>
+      </div>
+      <div class="actions">
+        <button class="miniBtn" onclick="editObjection(1)">Editar</button>
+        <button class="miniBtn danger" onclick="removeObjection(1)">Remover</button>
+      </div>
+    </div><div class="item">
+      <div style="min-width:0">
+        <h5>vou pensar, pensar, analisar, vou analisar, ver depois, vou ver</h5>
+        <p><strong>Leve:</strong> Perfeito, analisar é o certo. O que você quer avaliar primeiro: preço, condição ou localização?</p>
+        <p><strong>Média:</strong> Pra sua análise não virar só “deixar pra depois”: o que precisa acontecer pra virar um sim?</p>
+        <p><strong>Agressiva:</strong> Se nada mudar nas condições, sua resposta tende mais pra sim ou pra não? Só pra eu não te prender aqui.</p>
+      </div>
+      <div class="actions">
+        <button class="miniBtn" onclick="editObjection(2)">Editar</button>
+        <button class="miniBtn danger" onclick="removeObjection(2)">Remover</button>
+      </div>
+    </div><div class="item">
+      <div style="min-width:0">
+        <h5>depois, mais pra frente, não agora, agora não, outro momento, não é o momento</h5>
+        <p><strong>Leve:</strong> Tudo bem. O que faz não ser o momento: grana, prioridade ou insegurança?</p>
+        <p><strong>Média:</strong> Só pra eu te ajudar: quando seria um bom timing? Semana que vem, mês que vem… o que você tem em mente?</p>
+        <p><strong>Agressiva:</strong> Se a condição mudar e ficar pior depois, tudo bem pra você? Ou prefere garantir agora e ir ajustando no caminho?</p>
+      </div>
+      <div class="actions">
+        <button class="miniBtn" onclick="editObjection(3)">Editar</button>
+        <button class="miniBtn danger" onclick="removeObjection(3)">Remover</button>
+      </div>
+    </div><div class="item">
+      <div style="min-width:0">
+        <h5>esposa, marido, familia, família, minha mulher, meu marido</h5>
+        <p><strong>Leve:</strong> Claro, faz sentido alinhar. O que ela(e) costuma perguntar primeiro: parcela, localização ou segurança?</p>
+        <p><strong>Média:</strong> Me diz a dúvida principal dele(a) que eu te mando uma mensagem curta pronta pra você encaminhar.</p>
+        <p><strong>Agressiva:</strong> Se ele(a) disser ok com a condição, você fecha? Porque aí eu te ajudo a conduzir do jeito mais rápido.</p>
+      </div>
+      <div class="actions">
+        <button class="miniBtn" onclick="editObjection(4)">Editar</button>
+        <button class="miniBtn danger" onclick="removeObjection(4)">Remover</button>
+      </div>
+    </div><div class="item">
+      <div style="min-width:0">
+        <h5>comparar, comparando, vou ver outro, outros, mais barato em outro lugar, tem outro</h5>
+        <p><strong>Leve:</strong> Normal comparar. Você tá comparando mais pelo preço ou pela localização?</p>
+        <p><strong>Média:</strong> Pra comparar certo, olha 3 pontos: documentação, acesso/local e potencial de valorização. Qual deles te chama mais atenç…</p>
+        <p><strong>Agressiva:</strong> Se eu te provar que aqui faz mais sentido no conjunto (não só no preço), você decide por aqui?</p>
+      </div>
+      <div class="actions">
+        <button class="miniBtn" onclick="editObjection(5)">Editar</button>
+        <button class="miniBtn danger" onclick="removeObjection(5)">Remover</button>
+      </div>
+    </div><div class="item">
+      <div style="min-width:0">
+        <h5>medo, receio, inseguro, insegurança, não confio, desconfio, golpe</h5>
+        <p><strong>Leve:</strong> Justíssimo. Medo de quê exatamente: documentação, localização ou experiência passada?</p>
+        <p><strong>Média:</strong> Pra você ficar tranquilo: eu te mostro o básico que valida tudo (mapa/registro/condição por escrito). O que você quer ve…</p>
+        <p><strong>Agressiva:</strong> Você prefere validar por documento agora ou por visita? Se a validação ficar ok, você avança?</p>
+      </div>
+      <div class="actions">
+        <button class="miniBtn" onclick="editObjection(6)">Editar</button>
+        <button class="miniBtn danger" onclick="removeObjection(6)">Remover</button>
+      </div>
+    </div></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- USERS TAB -->
+      <div id="viewUsers" style="display: none;">
+        <div class="notice">
+          <strong>Administrador fixo:</strong> conta de administrador do sistema (não removível).
+          <br>Usuários abaixo só podem <strong>usar</strong> (não editam).
+        </div>
+
+        <div class="card">
+          <div class="head">
+            <div class="title">
+              <h3>Criar / Editar Usuário</h3>
+              <p class="subtitle">Os usuários comuns não veem o painel Admin.</p>
+            </div>
+            <span class="chip" id="userEditState">Modo: adicionar</span>
+          </div>
+          <div class="body">
+            <div class="formGrid two">
+              <div>
+                <label>Login</label>
+                <input id="uLogin" type="text" placeholder="ex: vendedor1">
+              </div>
+              <div>
+                <label>Senha</label>
+                <input id="uPass" type="password" placeholder="••••••">
+              </div>
+            </div>
+
+            <div class="row" style="justify-content:flex-end; margin-top:10px">
+              <button class="ghost" onclick="resetUserForm()">Limpar</button>
+              <button class="primary" onclick="saveUser()">Salvar usuário</button>
+            </div>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="head">
+            <div class="title">
+              <h3>Usuários cadastrados</h3>
+              <p class="subtitle">Exceto admin, você pode remover/editar.</p>
+            </div>
+            <span class="chip" id="countUsers">3</span>
+          </div>
+          <div class="body">
+            <div class="list" id="usersList"><div class="item">
+    <div style="min-width:0">
+      <h5>Administrador <span class="chip good" style="margin-left:8px">Admin</span></h5>
+      <p>Conta fixa do sistema (pode editar tudo).</p>
+    </div>
+    <div class="actions">
+      <button class="miniBtn" disabled="" title="Admin fixo">Fixado</button>
+    </div>
+  </div><div class="item">
+      <div style="min-width:0">
+        <h5>vendedor <span class="chip" style="margin-left:8px">Usuário</span></h5>
+        <p>Sem acesso ao painel Admin.</p>
+      </div>
+      <div class="actions">
+        <button class="miniBtn" onclick="editUser(0)">Editar</button>
+        <button class="miniBtn danger" onclick="removeUser(0)">Remover</button>
+      </div>
+    </div><div class="item">
+      <div style="min-width:0">
+        <h5>luciana <span class="chip" style="margin-left:8px">Usuário</span></h5>
+        <p>Sem acesso ao painel Admin.</p>
+      </div>
+      <div class="actions">
+        <button class="miniBtn" onclick="editUser(1)">Editar</button>
+        <button class="miniBtn danger" onclick="removeUser(1)">Remover</button>
+      </div>
+    </div></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- EXPORT TAB -->
+      <div id="viewExport" style="display: block;">
+        <div class="success">
+          <strong>Fluxo simples:</strong> Clique em <strong>Código atualizado</strong> → copie o <code>index.html</code> completo → no GitHub abra <code>index.html</code> → Ctrl+A → apagar → colar → salvar.
+          <br><span class="muted" style="display:inline-block; margin-top:6px">Obs: esta função já embute a base no <code>DEFAULT_BASE</code> e incrementa a versão local (BUILD_ID) para evitar base antiga presa no <code>localStorage</code>.</span>
+        </div>
+
+        <!-- NOVO: CÓDIGO ATUALIZADO -->
+        <div class="card">
+          <div class="head">
+            <div class="title">
+              <h3>Código atualizado</h3>
+              <p class="subtitle">Gera o <code>index.html</code> completo com a base atual embutida no <code>DEFAULT_BASE</code>.</p>
+            </div>
+            <button class="primary" onclick="generateUpdatedCode()">Código atualizado</button>
+          </div>
+          <div class="body">
+            <label>index.html gerado (copie tudo)</label>
+            <textarea id="codeOut" class="smallArea" style="min-height:320px" placeholder="Clique em “Código atualizado” para gerar o index.html completo..."></textarea>
+            <div class="row" style="justify-content:flex-end; margin-top:10px">
+              <button onclick="copyCodeOut()">Copiar código</button>
+            </div>
+            <p class="muted">Dica: depois de colar no GitHub Pages, atualize a página (Ctrl+F5) para validar.</p>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="head">
+            <div class="title">
+              <h3>Exportar base completa</h3>
+              <p class="subtitle">Produtos + Objeções + Usuários (admin é fixo).</p>
+            </div>
+            <button class="primary" onclick="exportBase()">Exportar</button>
+          </div>
+          <div class="body">
+            <label>Base exportada (copie tudo)</label>
+            <textarea id="exportOut" class="smallArea" style="min-height:220px" placeholder="Clique em Exportar..."></textarea>
+            <div class="row" style="justify-content:flex-end; margin-top:10px">
+              <button onclick="copyExport()">Copiar</button>
+            </div>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="head">
+            <div class="title">
+              <h3>Importar base</h3>
+              <p class="subtitle">Cole uma base exportada aqui e aplique (salva no navegador).</p>
+            </div>
+            <button class="primary" onclick="importBase()">Aplicar</button>
+          </div>
+          <div class="body">
+            <label>Base para importar</label>
+            <textarea id="importIn" class="smallArea" style="min-height:220px" placeholder="Cole aqui a base exportada..."></textarea>
+
+            <div class="row" style="justify-content:space-between; margin-top:10px">
+              <button class="danger" onclick="resetToDefaults()">Restaurar padrão</button>
+              <span class="chip" id="importStatus">—</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div><!-- panelBody -->
+  </div><!-- panel -->
+</div><!-- drawer -->
+
+<!-- TOAST -->
+<div class="toast" id="toast">
+  <span class="mini"></span>
+  <span id="toastText">Usuário criado</span>
+</div>
 
 <script>
-/* ===================== BASE ===================== */
-const base={
-  products:[
-    {name:"CEDROS JARDINS",keys:["cedros","búfalo"],info:["200m²","Parcelas R$753","Sem entrada"]}
+/* ===================== BASE PADRÃO ===================== */
+const DEFAULT_BASE = {
+  "products": [
+    {
+      "name": "MORADA BRASIL",
+      "keys": [
+        "morada"
+      ],
+      "info": [
+        "Loteamento residencial",
+        "Parcelas a partir de R$ 713",
+        "Entrada: não",
+        "Av. André Maggi"
+      ]
+    },
+    {
+      "name": "CASA PRONTA – SINOP",
+      "keys": [
+        "casa",
+        "mcmv"
+      ],
+      "info": [
+        "Casa 2 quartos",
+        "Parcelas a partir de R$ 699",
+        "Entrada: R$ 1.500",
+        "Financiamento Caixa"
+      ]
+    },
+    {
+      "name": "CHÁCARAS – SANTA CARMEM",
+      "keys": [
+        "chacara",
+        "chácara"
+      ],
+      "info": [
+        "1.800 m²",
+        "Parcelas a partir de R$ 695",
+        "Entrada: não",
+        "6 km de Santa Carmem"
+      ]
+    },
+    {
+      "name": "GRAN CANÁRIO",
+      "keys": [
+        "canario",
+        "gran"
+      ],
+      "info": [
+        "Loteamento urbano",
+        "Parcelas a partir de R$ 595",
+        "Entrada: sim / não",
+        "MT-140"
+      ]
+    },
+    {
+      "name": "CEDROS JARDINS",
+      "keys": [
+        "cedros",
+        "búfalo"
+      ],
+      "info": [
+        "Lotes 200 m²",
+        "Parcelas a partir de R$ 753",
+        "Entrada: não",
+        "Posto Búfalo"
+      ]
+    }
   ],
-  objections:[
-    {keys:["caro","preço"],a:"Entendo.",b:"Comparado com o quê?",c:"Se ajustar, fecha?"}
+  "objections": [
+    {
+      "keys": [
+        "caro",
+        "muito caro",
+        "valor alto",
+        "preço alto"
+      ],
+      "a": "Entendo totalmente. Só pra eu te orientar certo: quando você diz caro, é pelo valor total ou pela parcela?",
+      "b": "Caro comparado com qual opção? Se for só condição, eu consigo te mostrar o melhor encaixe pro seu bolso.",
+      "c": "Se eu ajustar pra caber sem te apertar (entrada/parcela/prazo), você avança agora ou ainda fica em dúvida?"
+    },
+    {
+      "keys": [
+        "orçamento",
+        "sem orçamento",
+        "estourado",
+        "limite",
+        "apertado"
+      ],
+      "a": "Faz sentido cuidar do orçamento. Qual faixa mensal fica confortável pra você hoje?",
+      "b": "O ponto é a parcela ou o prazo? Se me disser o limite, eu te passo a melhor configuração.",
+      "c": "Se eu encaixar dentro do seu limite sem surpresa, você dá o próximo passo ou prefere encerrar?"
+    },
+    {
+      "keys": [
+        "vou pensar",
+        "pensar",
+        "analisar",
+        "vou analisar",
+        "ver depois",
+        "vou ver"
+      ],
+      "a": "Perfeito, analisar é o certo. O que você quer avaliar primeiro: preço, condição ou localização?",
+      "b": "Pra sua análise não virar só “deixar pra depois”: o que precisa acontecer pra virar um sim?",
+      "c": "Se nada mudar nas condições, sua resposta tende mais pra sim ou pra não? Só pra eu não te prender aqui."
+    },
+    {
+      "keys": [
+        "depois",
+        "mais pra frente",
+        "não agora",
+        "agora não",
+        "outro momento",
+        "não é o momento"
+      ],
+      "a": "Tudo bem. O que faz não ser o momento: grana, prioridade ou insegurança?",
+      "b": "Só pra eu te ajudar: quando seria um bom timing? Semana que vem, mês que vem… o que você tem em mente?",
+      "c": "Se a condição mudar e ficar pior depois, tudo bem pra você? Ou prefere garantir agora e ir ajustando no caminho?"
+    },
+    {
+      "keys": [
+        "esposa",
+        "marido",
+        "familia",
+        "família",
+        "minha mulher",
+        "meu marido"
+      ],
+      "a": "Claro, faz sentido alinhar. O que ela(e) costuma perguntar primeiro: parcela, localização ou segurança?",
+      "b": "Me diz a dúvida principal dele(a) que eu te mando uma mensagem curta pronta pra você encaminhar.",
+      "c": "Se ele(a) disser ok com a condição, você fecha? Porque aí eu te ajudo a conduzir do jeito mais rápido."
+    },
+    {
+      "keys": [
+        "comparar",
+        "comparando",
+        "vou ver outro",
+        "outros",
+        "mais barato em outro lugar",
+        "tem outro"
+      ],
+      "a": "Normal comparar. Você tá comparando mais pelo preço ou pela localização?",
+      "b": "Pra comparar certo, olha 3 pontos: documentação, acesso/local e potencial de valorização. Qual deles te chama mais atenção?",
+      "c": "Se eu te provar que aqui faz mais sentido no conjunto (não só no preço), você decide por aqui?"
+    },
+    {
+      "keys": [
+        "medo",
+        "receio",
+        "inseguro",
+        "insegurança",
+        "não confio",
+        "desconfio",
+        "golpe"
+      ],
+      "a": "Justíssimo. Medo de quê exatamente: documentação, localização ou experiência passada?",
+      "b": "Pra você ficar tranquilo: eu te mostro o básico que valida tudo (mapa/registro/condição por escrito). O que você quer ver primeiro?",
+      "c": "Você prefere validar por documento agora ou por visita? Se a validação ficar ok, você avança?"
+    }
   ],
-  users:[{login:"vendedor",pass:"1234"}]
+  "users": [
+    {
+      "login": "vendedor",
+      "pass": "1234"
+    },
+    {
+      "login": "luciana",
+      "pass": "2023"
+    }
+  ]
 };
 
-let currentUser=null;
+/* ===================== VERSÃO DO ARQUIVO (novo) ===================== */
+/* Essa versão é atualizada automaticamente pelo botão "Código atualizado". */
+const BUILD_ID = "2026-01-25T12:43:00.862Z";
+
+/* ===================== STORAGE ===================== */
+/* NOVO: LS_BASE versionado por BUILD_ID para evitar base antiga presa no localStorage */
+const LS_BASE = "copiloto_base_v5__" + BUILD_ID;
+const LS_SESSION = "copiloto_session_v2";
+const LS_WELCOME = "copiloto_welcome_seen_v1";
+
+/* ===================== AUTO-LIMPAR ENTRADA (NOVO) ===================== */
+const AUTO_CLEAR_ENABLED = true;
+const AUTO_CLEAR_TYPING_MS = 900; // após parar de digitar
+let autoClearTimer = null;
+
+/* ===================== ESTADO GLOBAL ===================== */
+let base = { products:[], objections:[], users:[] };
+let currentUser = null;
+
+let editingProductIndex = null;
+let editingObjectionIndex = null;
+let editingUserIndex = null;
+
+let lastProduct = null;      // mantém último produto ativo
+let lastObjection = null;    // mantém última objeção (assinatura)
+let lastObjectionKey = "";
+let lastTextProcessed = "";
+
+/* ===================== ELEMENTOS ===================== */
+const input = document.getElementById("input");
+const r1 = document.getElementById("r1");
+const r2 = document.getElementById("r2");
+const r3 = document.getElementById("r3");
+
+const prodNameEl = document.getElementById("prod-name");
+const prodInfoEl = document.getElementById("prod-info");
+const prodCard = document.getElementById("productCard");
+const prodBadge = document.getElementById("prodBadge");
+const prodChip = document.getElementById("prodChip");
+
+const objChip = document.getElementById("objChip");
+const objBadge = document.getElementById("objBadge");
+const responsesWrap = document.getElementById("responsesWrap");
+
+const toast = document.getElementById("toast");
+const toastText = document.getElementById("toastText");
+
+const micDot = document.getElementById("micDot");
+const micLabel = document.getElementById("micLabel");
+const micBtn = document.getElementById("micBtn");
+
+const rolePill = document.getElementById("rolePill");
+const adminBtn = document.getElementById("adminBtn");
+
+const loginOverlay = document.getElementById("loginOverlay");
+const loginUser = document.getElementById("loginUser");
+const loginPass = document.getElementById("loginPass");
+const rememberMe = document.getElementById("rememberMe");
+const loginError = document.getElementById("loginError");
+
+const welcome = document.getElementById("welcome");
+
+/* Admin drawer */
+const adminDrawer = document.getElementById("adminDrawer");
+const viewProducts = document.getElementById("viewProducts");
+const viewObjections = document.getElementById("viewObjections");
+const viewUsers = document.getElementById("viewUsers");
+const viewExport = document.getElementById("viewExport");
+
+const tabProducts = document.getElementById("tabProducts");
+const tabObjections = document.getElementById("tabObjections");
+const tabUsers = document.getElementById("tabUsers");
+const tabExport = document.getElementById("tabExport");
+
+const productsList = document.getElementById("productsList");
+const objectionsList = document.getElementById("objectionsList");
+const usersList = document.getElementById("usersList");
+
+const countProducts = document.getElementById("countProducts");
+const countObjections = document.getElementById("countObjections");
+const countUsers = document.getElementById("countUsers");
+
+const prodEditState = document.getElementById("prodEditState");
+const objEditState = document.getElementById("objEditState");
+const userEditState = document.getElementById("userEditState");
+
+const pName = document.getElementById("pName");
+const pKeys = document.getElementById("pKeys");
+const pInfo = document.getElementById("pInfo");
+
+const oKeys = document.getElementById("oKeys");
+const oA = document.getElementById("oA");
+const oB = document.getElementById("oB");
+const oC = document.getElementById("oC");
+
+const uLogin = document.getElementById("uLogin");
+const uPass = document.getElementById("uPass");
+
+const exportOut = document.getElementById("exportOut");
+const importIn = document.getElementById("importIn");
+const importStatus = document.getElementById("importStatus");
+
+/* NOVO: output do código atualizado */
+const codeOut = document.getElementById("codeOut");
+
+/* ===================== UTIL ===================== */
+function showToast(msg){
+  toastText.textContent = msg;
+  toast.classList.add("show");
+  clearTimeout(showToast._t);
+  showToast._t = setTimeout(()=> toast.classList.remove("show"), 1400);
+}
+function flashUpdated(elBadge){
+  elBadge.classList.add("show");
+  setTimeout(()=> elBadge.classList.remove("show"), 1100);
+}
+function animateUpdate(elCard){
+  elCard.classList.add("fxPulse","fxSlideFade","highlightBorder");
+  setTimeout(()=>{
+    elCard.classList.remove("fxPulse","fxSlideFade","highlightBorder");
+  }, 880);
+}
+function escapeHtml(str){
+  return String(str ?? "")
+    .replaceAll("&","&amp;")
+    .replaceAll("<","&lt;")
+    .replaceAll(">","&gt;")
+    .replaceAll('"',"&quot;")
+    .replaceAll("'","&#039;");
+}
+function normalizeText(str){
+  return String(str || "")
+    .toLowerCase()
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g, "")
+    .replace(/[^a-z0-9\s]/g, " ")
+    .replace(/\s+/g, " ")
+    .trim();
+}
+
+/* ===================== AUTO-CLEAR (NOVO) ===================== */
+function clearInputNow(){
+  input.value = "";
+  lastTextProcessed = ""; // garante que a próxima entrada sempre processe
+}
+function scheduleAutoClearAfterTyping(){
+  if(!AUTO_CLEAR_ENABLED) return;
+  clearTimeout(autoClearTimer);
+  autoClearTimer = setTimeout(()=>{
+    // só limpa se ainda tiver conteúdo (evita "piscar" desnecessário)
+    if((input.value || "").trim()){
+      clearInputNow();
+    }
+  }, AUTO_CLEAR_TYPING_MS);
+}
+
+/* ===================== MATCH DE PRODUTO (keys + info, ignorando "sinop") ===================== */
+const PRODUCT_IGNORE_TERMS = new Set(["sinop"]);
+const INFO_PREFIX_IGNORE = new Set(["av","avenida","rua","rodovia","br","mt","km","santa","carmem"]);
+
+function buildProductTerms(product){
+  const raw = [
+    ...(product.keys || []),
+    ...(product.info || [])
+  ].map(normalizeText).filter(Boolean);
+
+  const terms = new Set();
+
+  for(const line of raw){
+    if(!line) continue;
+    if(PRODUCT_IGNORE_TERMS.has(line)) continue;
+
+    if(line.length >= 4) terms.add(line);
+
+    const words = line.split(" ").filter(Boolean);
+    const cleaned = words.filter(w => w.length >= 3 && !PRODUCT_IGNORE_TERMS.has(w) && !INFO_PREFIX_IGNORE.has(w));
+
+    for(let n=2; n<=4; n++){
+      for(let i=0; i<=cleaned.length-n; i++){
+        const gram = cleaned.slice(i, i+n).join(" ");
+        if(gram.length >= 5 && !PRODUCT_IGNORE_TERMS.has(gram)) terms.add(gram);
+      }
+    }
+
+    for(const w of cleaned){
+      if(w.length >= 4 && !PRODUCT_IGNORE_TERMS.has(w)) terms.add(w);
+    }
+  }
+
+  return Array.from(terms);
+}
+
+function productMatchesText(product, textNorm){
+  const terms = buildProductTerms(product);
+  return terms.some(term => term && textNorm.includes(term));
+}
+
+/* ===================== BASE LOAD/SAVE ===================== */
+function structuredClone(obj){
+  return JSON.parse(JSON.stringify(obj));
+}
+function loadBase(){
+  const saved = localStorage.getItem(LS_BASE);
+  if(saved){
+    try{
+      const parsed = JSON.parse(saved);
+      if(parsed && Array.isArray(parsed.products) && Array.isArray(parsed.objections) && Array.isArray(parsed.users)){
+        base = parsed;
+        return;
+      }
+    }catch(e){}
+  }
+  base = structuredClone(DEFAULT_BASE);
+  saveBase();
+}
+function saveBase(){
+  localStorage.setItem(LS_BASE, JSON.stringify(base));
+}
 
 /* ===================== LOGIN ===================== */
-function doLogin(){
-  const u=loginUser.value.trim();
-  const p=loginPass.value.trim();
-  if(u==="edson"&&p==="2026"){
-    currentUser={login:"edson",role:"admin"};
-  }else{
-    const f=base.users.find(x=>x.login===u&&x.pass===p);
-    if(!f){loginError.style.display="block";return}
-    currentUser={login:u,role:"user"};
-  }
-  loginOverlay.style.display="none";
-  themeOverlay.style.display="flex";
+function getSession(){
+  const s = localStorage.getItem(LS_SESSION) || sessionStorage.getItem(LS_SESSION);
+  if(!s) return null;
+  try{
+    const parsed = JSON.parse(s);
+    if(parsed && parsed.login && parsed.role) return parsed;
+  }catch(e){}
+  return null;
 }
-function logout(){
-  currentUser=null;
-  loginOverlay.style.display="flex";
-  proposalBtn.style.display="none";
-  logoutBtn.style.display="none";
+function setSession(sess, remember){
+  const str = JSON.stringify(sess);
+  if(remember) localStorage.setItem(LS_SESSION, str);
+  else sessionStorage.setItem(LS_SESSION, str);
 }
-function setTheme(t){
-  document.documentElement.setAttribute("data-theme",t);
-  themeOverlay.style.display="none";
-  proposalBtn.style.display="inline-flex";
-  logoutBtn.style.display="inline-flex";
+function clearSession(){
+  localStorage.removeItem(LS_SESSION);
+  sessionStorage.removeItem(LS_SESSION);
 }
 
-/* ===================== FORMALIZAÇÃO ===================== */
-function openProposal(){
-  window.open("https://lucianabogo333-spec.github.io/formalizacao-proposta/","_blank");
+function doLogin(){
+  const u = (loginUser.value || "").trim();
+  const p = (loginPass.value || "").trim();
+  loginError.style.display = "none";
+
+  if(!u || !p){
+    loginError.textContent = "Preencha login e senha.";
+    loginError.style.display = "block";
+    return;
+  }
+
+  // ADMIN FIXO
+  if(u === "edson" && p === "2026"){
+    currentUser = {login:"edson", role:"admin"};
+    setSession(currentUser, !!rememberMe.checked);
+    afterLogin();
+    return;
+  }
+
+  // usuário comum
+  const found = (base.users || []).find(x => (x.login || "").toLowerCase() === u.toLowerCase() && String(x.pass || "") === p);
+  if(found){
+    currentUser = {login: found.login, role:"user"};
+    setSession(currentUser, !!rememberMe.checked);
+    afterLogin();
+    return;
+  }
+
+  loginError.textContent = "Login ou senha inválidos.";
+  loginError.style.display = "block";
+}
+
+function afterLogin(){
+  loginOverlay.style.display = "none";
+  rolePill.textContent = `Acesso: ${currentUser.role === "admin" ? "Admin" : "Usuário"} (${currentUser.login})`;
+  adminBtn.style.display = (currentUser.role === "admin") ? "inline-flex" : "none";
+
+  if(!localStorage.getItem(LS_WELCOME)){
+    welcome.style.display = "flex";
+  }
+
+  renderAdminAll();
+  setTimeout(()=> input.focus(), 120);
+}
+
+function logout(){
+  stopListening();
+  currentUser = null;
+  clearSession();
+  adminBtn.style.display = "none";
+  rolePill.textContent = "Acesso: —";
+  closeAdmin();
+  loginOverlay.style.display = "flex";
+  showToast("Sessão encerrada");
+}
+
+function closeWelcome(){
+  localStorage.setItem(LS_WELCOME, "1");
+  welcome.style.display = "none";
+}
+
+/* ===================== ADMIN UI ===================== */
+function openAdmin(){
+  if(!currentUser || currentUser.role !== "admin") return;
+  adminDrawer.classList.add("show");
+  setTab("products");
+  renderAdminAll();
+}
+function closeAdmin(){
+  adminDrawer.classList.remove("show");
+}
+function setTab(tab){
+  tabProducts.classList.toggle("active", tab==="products");
+  tabObjections.classList.toggle("active", tab==="objections");
+  tabUsers.classList.toggle("active", tab==="users");
+  tabExport.classList.toggle("active", tab==="export");
+
+  viewProducts.style.display = (tab==="products") ? "block" : "none";
+  viewObjections.style.display = (tab==="objections") ? "block" : "none";
+  viewUsers.style.display = (tab==="users") ? "block" : "none";
+  viewExport.style.display = (tab==="export") ? "block" : "none";
+}
+function renderAdminAll(){
+  renderProductsList();
+  renderObjectionsList();
+  renderUsersList();
+  countProducts.textContent = String((base.products||[]).length);
+  countObjections.textContent = String((base.objections||[]).length);
+  countUsers.textContent = String((base.users||[]).length + 1); // + admin fixo
+}
+
+/* ===================== PRODUCTS CRUD ===================== */
+function resetProductForm(){
+  editingProductIndex = null;
+  prodEditState.textContent = "Modo: adicionar";
+  pName.value = "";
+  pKeys.value = "";
+  pInfo.value = "";
+}
+function saveProduct(){
+  if(!currentUser || currentUser.role !== "admin") return;
+
+  const name = (pName.value || "").trim();
+  const keys = (pKeys.value || "").split(",").map(s=>s.trim()).filter(Boolean);
+  const info = (pInfo.value || "").split("\n").map(s=>s.trim()).filter(Boolean);
+
+  if(!name){ showToast("Informe o nome do produto"); return; }
+  if(keys.length === 0 && info.length === 0){ showToast("Adicione pelo menos 1 keyword ou 1 informação"); return; }
+
+  const obj = {name, keys, info};
+
+  if(editingProductIndex === null){
+    base.products.push(obj);
+    showToast("Produto adicionado");
+  }else{
+    base.products[editingProductIndex] = obj;
+    showToast("Produto atualizado");
+  }
+
+  saveBase();
+  renderProductsList();
+  countProducts.textContent = String(base.products.length);
+  resetProductForm();
+}
+function editProduct(i){
+  const p = base.products[i];
+  if(!p) return;
+  editingProductIndex = i;
+  prodEditState.textContent = "Modo: editar";
+  pName.value = p.name || "";
+  pKeys.value = (p.keys || []).join(", ");
+  pInfo.value = (p.info || []).join("\n");
+}
+function removeProduct(i){
+  if(!confirm("Remover este produto?")) return;
+  base.products.splice(i,1);
+  saveBase();
+  renderProductsList();
+  countProducts.textContent = String(base.products.length);
+  showToast("Produto removido");
+  lastProduct = null;
+  processText(true);
+}
+function renderProductsList(){
+  const arr = base.products || [];
+  productsList.innerHTML = "";
+  if(arr.length === 0){
+    productsList.innerHTML = `<div class="item"><div><h5>Nenhum produto</h5><p>Cadastre acima para começar.</p></div></div>`;
+    return;
+  }
+  arr.forEach((p, i)=>{
+    const keys = (p.keys || []).join(", ");
+    const info = (p.info || []).slice(0,4).join(" • ");
+    const el = document.createElement("div");
+    el.className = "item";
+    el.innerHTML = `
+      <div style="min-width:0">
+        <h5>${escapeHtml(p.name || "")}</h5>
+        <p><strong>Keys:</strong> ${escapeHtml(keys || "—")}</p>
+        <p><strong>Info:</strong> ${escapeHtml(info || "—")}</p>
+      </div>
+      <div class="actions">
+        <button class="miniBtn" onclick="editProduct(${i})">Editar</button>
+        <button class="miniBtn danger" onclick="removeProduct(${i})">Remover</button>
+      </div>
+    `;
+    productsList.appendChild(el);
+  });
+}
+
+/* ===================== OBJECTIONS CRUD ===================== */
+function resetObjectionForm(){
+  editingObjectionIndex = null;
+  objEditState.textContent = "Modo: adicionar";
+  oKeys.value = "";
+  oA.value = "";
+  oB.value = "";
+  oC.value = "";
+}
+function saveObjection(){
+  if(!currentUser || currentUser.role !== "admin") return;
+
+  const keys = (oKeys.value || "").split(",").map(s=>s.trim()).filter(Boolean);
+  const a = (oA.value || "").trim();
+  const b = (oB.value || "").trim();
+  const c = (oC.value || "").trim();
+
+  if(keys.length === 0){ showToast("Informe as palavras-chave da objeção"); return; }
+  if(!a || !b || !c){ showToast("Preencha as 3 respostas (leve/média/agressiva)"); return; }
+
+  const obj = {keys, a, b, c};
+
+  if(editingObjectionIndex === null){
+    base.objections.push(obj);
+    showToast("Objeção adicionada");
+  }else{
+    base.objections[editingObjectionIndex] = obj;
+    showToast("Objeção atualizada");
+  }
+
+  saveBase();
+  renderObjectionsList();
+  countObjections.textContent = String(base.objections.length);
+  resetObjectionForm();
+}
+function editObjection(i){
+  const o = base.objections[i];
+  if(!o) return;
+  editingObjectionIndex = i;
+  objEditState.textContent = "Modo: editar";
+  oKeys.value = (o.keys || []).join(", ");
+  oA.value = o.a || "";
+  oB.value = o.b || "";
+  oC.value = o.c || "";
+}
+function removeObjection(i){
+  if(!confirm("Remover esta objeção?")) return;
+  base.objections.splice(i,1);
+  saveBase();
+  renderObjectionsList();
+  countObjections.textContent = String(base.objections.length);
+  showToast("Objeção removida");
+  lastObjection = null;
+  lastObjectionKey = "";
+  processText(true);
+}
+function renderObjectionsList(){
+  const arr = base.objections || [];
+  objectionsList.innerHTML = "";
+  if(arr.length === 0){
+    objectionsList.innerHTML = `<div class="item"><div><h5>Nenhuma objeção</h5><p>Cadastre acima para começar.</p></div></div>`;
+    return;
+  }
+  arr.forEach((o, i)=>{
+    const keys = (o.keys || []).join(", ");
+    const el = document.createElement("div");
+    el.className = "item";
+    el.innerHTML = `
+      <div style="min-width:0">
+        <h5>${escapeHtml(keys || "—")}</h5>
+        <p><strong>Leve:</strong> ${escapeHtml((o.a||"").slice(0,120))}${(o.a||"").length>120?"…":""}</p>
+        <p><strong>Média:</strong> ${escapeHtml((o.b||"").slice(0,120))}${(o.b||"").length>120?"…":""}</p>
+        <p><strong>Agressiva:</strong> ${escapeHtml((o.c||"").slice(0,120))}${(o.c||"").length>120?"…":""}</p>
+      </div>
+      <div class="actions">
+        <button class="miniBtn" onclick="editObjection(${i})">Editar</button>
+        <button class="miniBtn danger" onclick="removeObjection(${i})">Remover</button>
+      </div>
+    `;
+    objectionsList.appendChild(el);
+  });
+}
+
+/* ===================== USERS CRUD ===================== */
+function resetUserForm(){
+  editingUserIndex = null;
+  userEditState.textContent = "Modo: adicionar";
+  uLogin.value = "";
+  uPass.value = "";
+}
+function saveUser(){
+  if(!currentUser || currentUser.role !== "admin") return;
+
+  const login = (uLogin.value || "").trim();
+  const pass = (uPass.value || "").trim();
+
+  if(!login){ showToast("Informe o login"); return; }
+  if(login.toLowerCase() === "edson"){ showToast("“edson” é reservado para o admin fixo"); return; }
+  if(!pass){ showToast("Informe a senha"); return; }
+
+  const existsIndex = (base.users || []).findIndex(u => (u.login||"").toLowerCase() === login.toLowerCase());
+  const obj = {login, pass};
+
+  if(editingUserIndex === null){
+    if(existsIndex !== -1){ showToast("Já existe um usuário com esse login"); return; }
+    base.users.push(obj);
+    showToast("Usuário criado");
+  }else{
+    base.users[editingUserIndex] = obj;
+    showToast("Usuário atualizado");
+  }
+
+  saveBase();
+  renderUsersList();
+  countUsers.textContent = String((base.users||[]).length + 1);
+  resetUserForm();
+}
+function editUser(i){
+  const u = base.users[i];
+  if(!u) return;
+  editingUserIndex = i;
+  userEditState.textContent = "Modo: editar";
+  uLogin.value = u.login || "";
+  uPass.value = u.pass || "";
+}
+function removeUser(i){
+  const u = base.users[i];
+  if(!u) return;
+  if(!confirm("Remover este usuário?")) return;
+  base.users.splice(i,1);
+  saveBase();
+  renderUsersList();
+  countUsers.textContent = String((base.users||[]).length + 1);
+  showToast("Usuário removido");
+}
+function renderUsersList(){
+  usersList.innerHTML = "";
+  const adminEl = document.createElement("div");
+  adminEl.className = "item";
+  adminEl.innerHTML = `
+    <div style="min-width:0">
+      <h5>Administrador <span class="chip good" style="margin-left:8px">Admin</span></h5>
+      <p>Conta fixa do sistema (pode editar tudo).</p>
+    </div>
+    <div class="actions">
+      <button class="miniBtn" disabled title="Admin fixo">Fixado</button>
+    </div>
+  `;
+  usersList.appendChild(adminEl);
+
+  const arr = base.users || [];
+  if(arr.length === 0){
+    const empty = document.createElement("div");
+    empty.className = "item";
+    empty.innerHTML = `<div><h5>Nenhum usuário comum</h5><p>Crie usuários para uso (sem edição).</p></div>`;
+    usersList.appendChild(empty);
+    return;
+  }
+  arr.forEach((u, i)=>{
+    const el = document.createElement("div");
+    el.className = "item";
+    el.innerHTML = `
+      <div style="min-width:0">
+        <h5>${escapeHtml(u.login || "")} <span class="chip" style="margin-left:8px">Usuário</span></h5>
+        <p>Sem acesso ao painel Admin.</p>
+      </div>
+      <div class="actions">
+        <button class="miniBtn" onclick="editUser(${i})">Editar</button>
+        <button class="miniBtn danger" onclick="removeUser(${i})">Remover</button>
+      </div>
+    `;
+    usersList.appendChild(el);
+  });
+}
+
+/* ===================== EXPORT/IMPORT ===================== */
+function exportBase(){
+  if(!currentUser || currentUser.role !== "admin") return;
+  exportOut.value = JSON.stringify(structuredClone(base), null, 2);
+  showToast("Base exportada (copie tudo)");
+  importStatus.textContent = "—";
+}
+function copyExport(){
+  const txt = (exportOut.value || "").trim();
+  if(!txt){ showToast("Nada para copiar"); return; }
+  navigator.clipboard.writeText(txt).then(()=> showToast("Copiado ✅")).catch(()=> showToast("Não foi possível copiar"));
+}
+function importBase(){
+  if(!currentUser || currentUser.role !== "admin") return;
+  const txt = (importIn.value || "").trim();
+  if(!txt){ importStatus.textContent = "Cole uma base primeiro"; return; }
+  try{
+    const parsed = JSON.parse(txt);
+    if(!parsed || !Array.isArray(parsed.products) || !Array.isArray(parsed.objections) || !Array.isArray(parsed.users)){
+      importStatus.textContent = "Formato inválido";
+      return;
+    }
+    base = parsed;
+    saveBase();
+    renderAdminAll();
+    importStatus.textContent = "Base aplicada ✅";
+    showToast("Base importada");
+    lastProduct = null; lastObjection = null; lastObjectionKey = "";
+    processText(true);
+  }catch(e){
+    importStatus.textContent = "JSON inválido";
+  }
+}
+function resetToDefaults(){
+  if(!currentUser || currentUser.role !== "admin") return;
+  if(!confirm("Restaurar a base padrão?")) return;
+  base = structuredClone(DEFAULT_BASE);
+  saveBase();
+  renderAdminAll();
+  showToast("Padrão restaurado");
+  importStatus.textContent = "Padrão restaurado";
+  lastProduct = null; lastObjection = null; lastObjectionKey = "";
+  processText(true);
+}
+
+/* ===================== NOVO: CÓDIGO ATUALIZADO (Admin) ===================== */
+function safeJSONStringifyForScript(obj){
+  // JSON é válido como literal JS, mas protegemos contra "</script" dentro de textos.
+  let json = JSON.stringify(obj, null, 2);
+  json = json.replace(/<\/script/gi, "<\\/script");
+  return json;
+}
+function generateUpdatedCode(){
+  if(!currentUser || currentUser.role !== "admin") return;
+
+  const baseToEmbed = structuredClone(base);
+  const newBuild = new Date().toISOString();
+
+  // Pega o HTML atual inteiro (offline, sem fetch)
+  let html = "<!DOCTYPE html>\n" + document.documentElement.outerHTML;
+
+  // Atualiza BUILD_ID (para versionar o LS_BASE e evitar base antiga presa no localStorage)
+  const buildRe = /const\s+BUILD_ID\s*=\s*"[^"]*";/;
+  if(buildRe.test(html)){
+    html = html.replace(buildRe, `const BUILD_ID = "${newBuild}";`);
+  }else{
+    // Se por algum motivo não encontrar, ainda segue (não trava)
+  }
+
+  // Substitui o bloco do DEFAULT_BASE pelo JSON atual
+  const baseJson = safeJSONStringifyForScript(baseToEmbed);
+  const defRe = /const\s+DEFAULT_BASE\s*=\s*{[\s\S]*?};/;
+
+  if(!defRe.test(html)){
+    showToast("Não encontrei DEFAULT_BASE no código");
+    return;
+  }
+
+  html = html.replace(defRe, `const DEFAULT_BASE = ${baseJson};`);
+
+  codeOut.value = html;
+  showToast("Código atualizado gerado ✅");
+}
+function copyCodeOut(){
+  const txt = (codeOut.value || "").trim();
+  if(!txt){ showToast("Nada para copiar"); return; }
+  navigator.clipboard.writeText(txt).then(()=> showToast("Copiado ✅")).catch(()=> showToast("Não foi possível copiar"));
 }
 
 /* ===================== CORE ===================== */
-input.addEventListener("input",()=>{
-  const t=input.value.toLowerCase();
-  const p=base.products.find(p=>p.keys.some(k=>t.includes(k)));
+function processText(force){
+  const tRaw = input.value || "";
+  const tNorm = normalizeText(tRaw);
+
+  if(!force && tNorm === lastTextProcessed) return;
+  lastTextProcessed = tNorm;
+
+  // Produto
+  const products = base.products || [];
+  const p = products.find(prod => productMatchesText(prod, tNorm));
+
   if(p){
-    prodName.textContent=p.name;
-    prodInfo.innerHTML=p.info.map(i=>"<li>"+i+"</li>").join("");
+    if(!lastProduct || lastProduct.name !== p.name){
+      prodNameEl.textContent = p.name;
+      prodInfoEl.innerHTML = (p.info || []).map(i => "<li>"+escapeHtml(i)+"</li>").join("");
+      prodChip.textContent = "Ativo";
+      lastProduct = p;
+      flashUpdated(prodBadge);
+      animateUpdate(prodCard);
+    }else{
+      prodNameEl.textContent = lastProduct.name;
+      prodInfoEl.innerHTML = (lastProduct.info || []).map(i => "<li>"+escapeHtml(i)+"</li>").join("");
+      prodChip.textContent = "Ativo";
+    }
+  }else{
+    if(lastProduct){
+      prodNameEl.textContent = lastProduct.name;
+      prodInfoEl.innerHTML = (lastProduct.info || []).map(i => "<li>"+escapeHtml(i)+"</li>").join("");
+      prodChip.textContent = "Ativo";
+    }else{
+      prodNameEl.textContent = "Produto não identificado";
+      prodInfoEl.innerHTML = "";
+      prodChip.textContent = "—";
+    }
   }
-  const o=base.objections.find(o=>o.keys.some(k=>t.includes(k)));
+
+  // Objeção
+  const objections = base.objections || [];
+  const o = objections.find(obj => (obj.keys || []).some(k => tNorm.includes(normalizeText(k))));
+
   if(o){
-    r1.textContent=o.a;
-    r2.textContent=o.b;
-    r3.textContent=o.c;
+    const hit = (o.keys || []).map(normalizeText).find(k => k && tNorm.includes(k)) || "";
+    const signature = (o.a + "||" + o.b + "||" + o.c);
+
+    if(!lastObjection || lastObjection.signature !== signature){
+      r1.textContent = o.a || "—";
+      r2.textContent = o.b || "—";
+      r3.textContent = o.c || "—";
+
+      lastObjection = { signature };
+      lastObjectionKey = hit;
+      objChip.textContent = "Objeção: " + (hit ? ("“" + hit + "”") : "detectada");
+
+      flashUpdated(objBadge);
+      animateUpdate(responsesWrap);
+    }else{
+      objChip.textContent = "Objeção: " + (lastObjectionKey ? ("“" + lastObjectionKey + "”") : "detectada");
+    }
+  }else{
+    if(lastObjection){
+      objChip.textContent = "Objeção: " + (lastObjectionKey ? ("“" + lastObjectionKey + "”") : "—");
+    }else{
+      objChip.textContent = "Objeção: —";
+    }
+  }
+}
+
+/* ===================== COPY/CLEAR ===================== */
+function copy(id){
+  const text = (document.getElementById(id).innerText || "").trim();
+  if(!text || text === "—") { showToast("Nada para copiar"); return; }
+  navigator.clipboard.writeText(text)
+    .then(()=> showToast("Copiado ✅"))
+    .catch(()=> showToast("Não foi possível copiar"));
+}
+function clearAll(){
+  input.value = "";
+  lastTextProcessed = "";
+  lastProduct = null;
+  lastObjection = null;
+  lastObjectionKey = "";
+
+  prodNameEl.textContent = "Produto não identificado";
+  prodInfoEl.innerHTML = "";
+  prodChip.textContent = "—";
+  objChip.textContent = "Objeção: —";
+
+  r1.textContent = "—";
+  r2.textContent = "—";
+  r3.textContent = "—";
+
+  animateUpdate(document.getElementById("inputCard"));
+}
+
+/* ===================== MICROFONE (manual) ===================== */
+let recognition = null;
+let listening = false;
+
+function toggleListening(){
+  if(listening){ stopListening(); return; }
+  startListening();
+}
+function startListening(){
+  if(!('webkitSpeechRecognition' in window)){
+    alert("Seu navegador não suporta reconhecimento de voz.");
+    return;
+  }
+
+  recognition = new webkitSpeechRecognition();
+  recognition.lang = "pt-BR";
+  recognition.continuous = false;
+  recognition.interimResults = false;
+
+  recognition.onstart = () => {
+    listening = true;
+    micDot.classList.add("on");
+    micLabel.textContent = "Microfone: ouvindo";
+    micBtn.textContent = "⏹️ Parar microfone";
+    micBtn.classList.add("danger");
+    micBtn.classList.remove("primary");
+  };
+
+  recognition.onend = () => {
+    listening = false;
+    micDot.classList.remove("on");
+    micLabel.textContent = "Microfone: desligado";
+    micBtn.textContent = "🎙️ Ouvir microfone";
+    micBtn.classList.remove("danger");
+    micBtn.classList.add("primary");
+  };
+
+  recognition.onerror = () => { listening = false; };
+
+  recognition.onresult = (e) => {
+    const transcript = e.results?.[0]?.[0]?.transcript || "";
+    if(transcript){
+      // processa o trecho novo
+      input.value = transcript;
+      processText(true);
+      animateUpdate(document.getElementById("inputCard"));
+
+      // NOVO: limpa imediatamente após receber do microfone
+      if(AUTO_CLEAR_ENABLED){
+        clearInputNow();
+      }
+    }
+  };
+
+  recognition.start();
+}
+function stopListening(){
+  try{ recognition && recognition.stop(); }catch(e){}
+}
+
+/* ===================== EVENTOS ===================== */
+input.addEventListener("input", ()=>{
+  // processa (para mostrar produto/objeção)
+  processText(false);
+  // NOVO: auto-limpa depois que parar de digitar (mantém leve)
+  scheduleAutoClearAfterTyping();
+});
+
+// Ctrl+K limpar
+window.addEventListener("keydown", (e)=>{
+  const isMac = navigator.platform.toUpperCase().includes("MAC");
+  const ctrlOrCmd = isMac ? e.metaKey : e.ctrlKey;
+  if(ctrlOrCmd && e.key.toLowerCase() === "k"){
+    e.preventDefault();
+    clearAll();
+  }
+  if(e.key === "Enter" && loginOverlay.style.display !== "none"){
+    doLogin();
   }
 });
 
-/* ===================== CALC ===================== */
-function calcPro(){
-  const v=Number(pcValor.value||0);
-  const d=Number(pcDias.value||0);
-  const r=Number(pcReaj.value||0)/100/30;
-  const vf=v*Math.pow(1+r,d);
-  pcOut.textContent=`Valor hoje: R$ ${v}\nApós ${d} dias: R$ ${vf.toFixed(2)}\nCusto da demora: R$ ${(vf-v).toFixed(2)}`;
-}
+/* ===================== BOOT ===================== */
+(function init(){
+  loadBase();
+
+  const sess = getSession();
+  if(sess){
+    currentUser = sess;
+    afterLogin();
+  }else{
+    loginOverlay.style.display = "flex";
+  }
+
+  processText(true);
+})();
 </script>
-</body>
-</html>
+
+
+
+</body></html>
+

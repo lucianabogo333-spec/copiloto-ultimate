@@ -300,7 +300,6 @@
 
   .highlightBorder{border-color: rgba(76,91,212,.55) !important}
 
-  /* efeito extra perceptível sem exagero */
   .fx::after{
     content:"";
     position:absolute;
@@ -506,7 +505,7 @@
 
     main{padding:14px}
     .topbar{padding:12px 14px}
-    textarea{min-height:220px; font-size:16px} /* maior no mobile */
+    textarea{min-height:220px; font-size:16px}
     .responseText{font-size:16px}
     button{width:auto}
     .formGrid.two, .formGrid.three{grid-template-columns: 1fr}
@@ -519,7 +518,6 @@
     button{min-height:50px}
   }
 
-  /* Reduce motion */
   @media (prefers-reduced-motion: reduce){
     *{animation:none !important; transition:none !important}
   }
@@ -548,8 +546,8 @@
   </div>
 </div>
 
-<!-- LOGIN -->
-<div id="loginOverlay" class="overlay" style="display: none;">
+<!-- LOGIN (AGORA INICIA VISÍVEL: garante que GitHub Pages sempre abra no login) -->
+<div id="loginOverlay" class="overlay" style="display:flex;">
   <div class="modal">
     <div class="mHead">
       <h1>Entrar no COPILOTO</h1>
@@ -597,7 +595,7 @@
       </div>
 
       <div class="pill" title="Sessão / acesso">
-        <span id="rolePill">Acesso: Admin (edson)</span>
+        <span id="rolePill">Acesso: —</span>
       </div>
 
       <div class="pill" title="Atalho para limpar">
@@ -605,8 +603,9 @@
         <span style="color:var(--muted)">Limpar</span>
       </div>
 
-      <button id="adminBtn" class="ghost" style="display: inline-flex;" onclick="openAdmin()">⚙️ Admin</button>
-      <button class="danger" onclick="logout()">Sair</button>
+      <!-- AGORA: Admin começa invisível SEMPRE -->
+      <button id="adminBtn" class="ghost" style="display:none" onclick="openAdmin()">⚙️ Admin</button>
+      <button id="logoutBtn" class="danger" style="display:none" onclick="logout()">Sair</button>
     </div>
   </div>
 </header>
@@ -720,8 +719,8 @@
   </div>
 </main>
 
-<!-- ADMIN DRAWER -->
-<div id="adminDrawer" class="drawer show">
+<!-- ADMIN DRAWER (AGORA INICIA FECHADO e será TRAVADO para não-admin) -->
+<div id="adminDrawer" class="drawer">
   <div class="backdrop" onclick="closeAdmin()"></div>
   <div class="panel">
     <div class="panelHeader">
@@ -784,60 +783,10 @@ Av. André Maggi"></textarea>
               <h3>Produtos cadastrados</h3>
               <p class="subtitle">Clique em “Editar” para carregar no formulário.</p>
             </div>
-            <span class="chip" id="countProducts">5</span>
+            <span class="chip" id="countProducts">0</span>
           </div>
           <div class="body">
-            <div class="list" id="productsList"><div class="item">
-      <div style="min-width:0">
-        <h5>MORADA BRASIL</h5>
-        <p><strong>Keys:</strong> morada</p>
-        <p><strong>Info:</strong> Loteamento residencial • Parcelas a partir de R$ 713 • Entrada: não • Av. André Maggi</p>
-      </div>
-      <div class="actions">
-        <button class="miniBtn" onclick="editProduct(0)">Editar</button>
-        <button class="miniBtn danger" onclick="removeProduct(0)">Remover</button>
-      </div>
-    </div><div class="item">
-      <div style="min-width:0">
-        <h5>CASA PRONTA – SINOP</h5>
-        <p><strong>Keys:</strong> casa, mcmv</p>
-        <p><strong>Info:</strong> Casa 2 quartos • Parcelas a partir de R$ 699 • Entrada: R$ 1.500 • Financiamento Caixa</p>
-      </div>
-      <div class="actions">
-        <button class="miniBtn" onclick="editProduct(1)">Editar</button>
-        <button class="miniBtn danger" onclick="removeProduct(1)">Remover</button>
-      </div>
-    </div><div class="item">
-      <div style="min-width:0">
-        <h5>CHÁCARAS – SANTA CARMEM</h5>
-        <p><strong>Keys:</strong> chacara, chácara</p>
-        <p><strong>Info:</strong> 1.800 m² • Parcelas a partir de R$ 695 • Entrada: não • 6 km de Santa Carmem</p>
-      </div>
-      <div class="actions">
-        <button class="miniBtn" onclick="editProduct(2)">Editar</button>
-        <button class="miniBtn danger" onclick="removeProduct(2)">Remover</button>
-      </div>
-    </div><div class="item">
-      <div style="min-width:0">
-        <h5>GRAN CANÁRIO</h5>
-        <p><strong>Keys:</strong> canario, gran</p>
-        <p><strong>Info:</strong> Loteamento urbano • Parcelas a partir de R$ 595 • Entrada: sim / não • MT-140</p>
-      </div>
-      <div class="actions">
-        <button class="miniBtn" onclick="editProduct(3)">Editar</button>
-        <button class="miniBtn danger" onclick="removeProduct(3)">Remover</button>
-      </div>
-    </div><div class="item">
-      <div style="min-width:0">
-        <h5>CEDROS JARDINS</h5>
-        <p><strong>Keys:</strong> cedros, búfalo</p>
-        <p><strong>Info:</strong> Lotes 200 m² • Parcelas a partir de R$ 753 • Entrada: não • Posto Búfalo</p>
-      </div>
-      <div class="actions">
-        <button class="miniBtn" onclick="editProduct(4)">Editar</button>
-        <button class="miniBtn danger" onclick="removeProduct(4)">Remover</button>
-      </div>
-    </div></div>
+            <div class="list" id="productsList"></div>
           </div>
         </div>
       </div>
@@ -889,87 +838,10 @@ Av. André Maggi"></textarea>
               <h3>Objeções cadastradas</h3>
               <p class="subtitle">Clique em “Editar” para carregar no formulário.</p>
             </div>
-            <span class="chip" id="countObjections">7</span>
+            <span class="chip" id="countObjections">0</span>
           </div>
           <div class="body">
-            <div class="list" id="objectionsList"><div class="item">
-      <div style="min-width:0">
-        <h5>caro, muito caro, valor alto, preço alto</h5>
-        <p><strong>Leve:</strong> Entendo totalmente. Só pra eu te orientar certo: quando você diz caro, é pelo valor total ou pela parcela?</p>
-        <p><strong>Média:</strong> Caro comparado com qual opção? Se for só condição, eu consigo te mostrar o melhor encaixe pro seu bolso.</p>
-        <p><strong>Agressiva:</strong> Se eu ajustar pra caber sem te apertar (entrada/parcela/prazo), você avança agora ou ainda fica em dúvida?</p>
-      </div>
-      <div class="actions">
-        <button class="miniBtn" onclick="editObjection(0)">Editar</button>
-        <button class="miniBtn danger" onclick="removeObjection(0)">Remover</button>
-      </div>
-    </div><div class="item">
-      <div style="min-width:0">
-        <h5>orçamento, sem orçamento, estourado, limite, apertado</h5>
-        <p><strong>Leve:</strong> Faz sentido cuidar do orçamento. Qual faixa mensal fica confortável pra você hoje?</p>
-        <p><strong>Média:</strong> O ponto é a parcela ou o prazo? Se me disser o limite, eu te passo a melhor configuração.</p>
-        <p><strong>Agressiva:</strong> Se eu encaixar dentro do seu limite sem surpresa, você dá o próximo passo ou prefere encerrar?</p>
-      </div>
-      <div class="actions">
-        <button class="miniBtn" onclick="editObjection(1)">Editar</button>
-        <button class="miniBtn danger" onclick="removeObjection(1)">Remover</button>
-      </div>
-    </div><div class="item">
-      <div style="min-width:0">
-        <h5>vou pensar, pensar, analisar, vou analisar, ver depois, vou ver</h5>
-        <p><strong>Leve:</strong> Perfeito, analisar é o certo. O que você quer avaliar primeiro: preço, condição ou localização?</p>
-        <p><strong>Média:</strong> Pra sua análise não virar só “deixar pra depois”: o que precisa acontecer pra virar um sim?</p>
-        <p><strong>Agressiva:</strong> Se nada mudar nas condições, sua resposta tende mais pra sim ou pra não? Só pra eu não te prender aqui.</p>
-      </div>
-      <div class="actions">
-        <button class="miniBtn" onclick="editObjection(2)">Editar</button>
-        <button class="miniBtn danger" onclick="removeObjection(2)">Remover</button>
-      </div>
-    </div><div class="item">
-      <div style="min-width:0">
-        <h5>depois, mais pra frente, não agora, agora não, outro momento, não é o momento</h5>
-        <p><strong>Leve:</strong> Tudo bem. O que faz não ser o momento: grana, prioridade ou insegurança?</p>
-        <p><strong>Média:</strong> Só pra eu te ajudar: quando seria um bom timing? Semana que vem, mês que vem… o que você tem em mente?</p>
-        <p><strong>Agressiva:</strong> Se a condição mudar e ficar pior depois, tudo bem pra você? Ou prefere garantir agora e ir ajustando no caminho?</p>
-      </div>
-      <div class="actions">
-        <button class="miniBtn" onclick="editObjection(3)">Editar</button>
-        <button class="miniBtn danger" onclick="removeObjection(3)">Remover</button>
-      </div>
-    </div><div class="item">
-      <div style="min-width:0">
-        <h5>esposa, marido, familia, família, minha mulher, meu marido</h5>
-        <p><strong>Leve:</strong> Claro, faz sentido alinhar. O que ela(e) costuma perguntar primeiro: parcela, localização ou segurança?</p>
-        <p><strong>Média:</strong> Me diz a dúvida principal dele(a) que eu te mando uma mensagem curta pronta pra você encaminhar.</p>
-        <p><strong>Agressiva:</strong> Se ele(a) disser ok com a condição, você fecha? Porque aí eu te ajudo a conduzir do jeito mais rápido.</p>
-      </div>
-      <div class="actions">
-        <button class="miniBtn" onclick="editObjection(4)">Editar</button>
-        <button class="miniBtn danger" onclick="removeObjection(4)">Remover</button>
-      </div>
-    </div><div class="item">
-      <div style="min-width:0">
-        <h5>comparar, comparando, vou ver outro, outros, mais barato em outro lugar, tem outro</h5>
-        <p><strong>Leve:</strong> Normal comparar. Você tá comparando mais pelo preço ou pela localização?</p>
-        <p><strong>Média:</strong> Pra comparar certo, olha 3 pontos: documentação, acesso/local e potencial de valorização. Qual deles te chama mais atenç…</p>
-        <p><strong>Agressiva:</strong> Se eu te provar que aqui faz mais sentido no conjunto (não só no preço), você decide por aqui?</p>
-      </div>
-      <div class="actions">
-        <button class="miniBtn" onclick="editObjection(5)">Editar</button>
-        <button class="miniBtn danger" onclick="removeObjection(5)">Remover</button>
-      </div>
-    </div><div class="item">
-      <div style="min-width:0">
-        <h5>medo, receio, inseguro, insegurança, não confio, desconfio, golpe</h5>
-        <p><strong>Leve:</strong> Justíssimo. Medo de quê exatamente: documentação, localização ou experiência passada?</p>
-        <p><strong>Média:</strong> Pra você ficar tranquilo: eu te mostro o básico que valida tudo (mapa/registro/condição por escrito). O que você quer ve…</p>
-        <p><strong>Agressiva:</strong> Você prefere validar por documento agora ou por visita? Se a validação ficar ok, você avança?</p>
-      </div>
-      <div class="actions">
-        <button class="miniBtn" onclick="editObjection(6)">Editar</button>
-        <button class="miniBtn danger" onclick="removeObjection(6)">Remover</button>
-      </div>
-    </div></div>
+            <div class="list" id="objectionsList"></div>
           </div>
         </div>
       </div>
@@ -1014,36 +886,10 @@ Av. André Maggi"></textarea>
               <h3>Usuários cadastrados</h3>
               <p class="subtitle">Exceto admin, você pode remover/editar.</p>
             </div>
-            <span class="chip" id="countUsers">3</span>
+            <span class="chip" id="countUsers">0</span>
           </div>
           <div class="body">
-            <div class="list" id="usersList"><div class="item">
-    <div style="min-width:0">
-      <h5>Administrador <span class="chip good" style="margin-left:8px">Admin</span></h5>
-      <p>Conta fixa do sistema (pode editar tudo).</p>
-    </div>
-    <div class="actions">
-      <button class="miniBtn" disabled="" title="Admin fixo">Fixado</button>
-    </div>
-  </div><div class="item">
-      <div style="min-width:0">
-        <h5>vendedor <span class="chip" style="margin-left:8px">Usuário</span></h5>
-        <p>Sem acesso ao painel Admin.</p>
-      </div>
-      <div class="actions">
-        <button class="miniBtn" onclick="editUser(0)">Editar</button>
-        <button class="miniBtn danger" onclick="removeUser(0)">Remover</button>
-      </div>
-    </div><div class="item">
-      <div style="min-width:0">
-        <h5>luciana <span class="chip" style="margin-left:8px">Usuário</span></h5>
-        <p>Sem acesso ao painel Admin.</p>
-      </div>
-      <div class="actions">
-        <button class="miniBtn" onclick="editUser(1)">Editar</button>
-        <button class="miniBtn danger" onclick="removeUser(1)">Remover</button>
-      </div>
-    </div></div>
+            <div class="list" id="usersList"></div>
           </div>
         </div>
       </div>
@@ -1055,7 +901,7 @@ Av. André Maggi"></textarea>
           <br><span class="muted" style="display:inline-block; margin-top:6px">Obs: esta função já embute a base no <code>DEFAULT_BASE</code> e incrementa a versão local (BUILD_ID) para evitar base antiga presa no <code>localStorage</code>.</span>
         </div>
 
-        <!-- NOVO: CÓDIGO ATUALIZADO -->
+        <!-- CÓDIGO ATUALIZADO -->
         <div class="card">
           <div class="head">
             <div class="title">
@@ -1126,185 +972,100 @@ const DEFAULT_BASE = {
   "products": [
     {
       "name": "MORADA BRASIL",
-      "keys": [
-        "morada"
-      ],
-      "info": [
-        "Loteamento residencial",
-        "Parcelas a partir de R$ 713",
-        "Entrada: não",
-        "Av. André Maggi"
-      ]
+      "keys": ["morada"],
+      "info": ["Loteamento residencial","Parcelas a partir de R$ 713","Entrada: não","Av. André Maggi"]
     },
     {
       "name": "CASA PRONTA – SINOP",
-      "keys": [
-        "casa",
-        "mcmv"
-      ],
-      "info": [
-        "Casa 2 quartos",
-        "Parcelas a partir de R$ 699",
-        "Entrada: R$ 1.500",
-        "Financiamento Caixa"
-      ]
+      "keys": ["casa","mcmv"],
+      "info": ["Casa 2 quartos","Parcelas a partir de R$ 699","Entrada: R$ 1.500","Financiamento Caixa"]
     },
     {
       "name": "CHÁCARAS – SANTA CARMEM",
-      "keys": [
-        "chacara",
-        "chácara"
-      ],
-      "info": [
-        "1.800 m²",
-        "Parcelas a partir de R$ 695",
-        "Entrada: não",
-        "6 km de Santa Carmem"
-      ]
+      "keys": ["chacara","chácara"],
+      "info": ["1.800 m²","Parcelas a partir de R$ 695","Entrada: não","6 km de Santa Carmem"]
     },
     {
       "name": "GRAN CANÁRIO",
-      "keys": [
-        "canario",
-        "gran"
-      ],
-      "info": [
-        "Loteamento urbano",
-        "Parcelas a partir de R$ 595",
-        "Entrada: sim / não",
-        "MT-140"
-      ]
+      "keys": ["canario","gran"],
+      "info": ["Loteamento urbano","Parcelas a partir de R$ 595","Entrada: sim / não","MT-140"]
     },
     {
       "name": "CEDROS JARDINS",
-      "keys": [
-        "cedros",
-        "búfalo"
-      ],
-      "info": [
-        "Lotes 200 m²",
-        "Parcelas a partir de R$ 753",
-        "Entrada: não",
-        "Posto Búfalo"
-      ]
+      "keys": ["cedros","búfalo"],
+      "info": ["Lotes 200 m²","Parcelas a partir de R$ 753","Entrada: não","Posto Búfalo"]
     }
   ],
   "objections": [
     {
-      "keys": [
-        "caro",
-        "muito caro",
-        "valor alto",
-        "preço alto"
-      ],
+      "keys": ["caro","muito caro","valor alto","preço alto"],
       "a": "Entendo totalmente. Só pra eu te orientar certo: quando você diz caro, é pelo valor total ou pela parcela?",
       "b": "Caro comparado com qual opção? Se for só condição, eu consigo te mostrar o melhor encaixe pro seu bolso.",
       "c": "Se eu ajustar pra caber sem te apertar (entrada/parcela/prazo), você avança agora ou ainda fica em dúvida?"
     },
     {
-      "keys": [
-        "orçamento",
-        "sem orçamento",
-        "estourado",
-        "limite",
-        "apertado"
-      ],
+      "keys": ["orçamento","sem orçamento","estourado","limite","apertado"],
       "a": "Faz sentido cuidar do orçamento. Qual faixa mensal fica confortável pra você hoje?",
       "b": "O ponto é a parcela ou o prazo? Se me disser o limite, eu te passo a melhor configuração.",
       "c": "Se eu encaixar dentro do seu limite sem surpresa, você dá o próximo passo ou prefere encerrar?"
     },
     {
-      "keys": [
-        "vou pensar",
-        "pensar",
-        "analisar",
-        "vou analisar",
-        "ver depois",
-        "vou ver"
-      ],
+      "keys": ["vou pensar","pensar","analisar","vou analisar","ver depois","vou ver"],
       "a": "Perfeito, analisar é o certo. O que você quer avaliar primeiro: preço, condição ou localização?",
       "b": "Pra sua análise não virar só “deixar pra depois”: o que precisa acontecer pra virar um sim?",
       "c": "Se nada mudar nas condições, sua resposta tende mais pra sim ou pra não? Só pra eu não te prender aqui."
     },
     {
-      "keys": [
-        "depois",
-        "mais pra frente",
-        "não agora",
-        "agora não",
-        "outro momento",
-        "não é o momento"
-      ],
+      "keys": ["depois","mais pra frente","não agora","agora não","outro momento","não é o momento"],
       "a": "Tudo bem. O que faz não ser o momento: grana, prioridade ou insegurança?",
       "b": "Só pra eu te ajudar: quando seria um bom timing? Semana que vem, mês que vem… o que você tem em mente?",
       "c": "Se a condição mudar e ficar pior depois, tudo bem pra você? Ou prefere garantir agora e ir ajustando no caminho?"
     },
     {
-      "keys": [
-        "esposa",
-        "marido",
-        "familia",
-        "família",
-        "minha mulher",
-        "meu marido"
-      ],
+      "keys": ["esposa","marido","familia","família","minha mulher","meu marido"],
       "a": "Claro, faz sentido alinhar. O que ela(e) costuma perguntar primeiro: parcela, localização ou segurança?",
       "b": "Me diz a dúvida principal dele(a) que eu te mando uma mensagem curta pronta pra você encaminhar.",
       "c": "Se ele(a) disser ok com a condição, você fecha? Porque aí eu te ajudo a conduzir do jeito mais rápido."
     },
     {
-      "keys": [
-        "comparar",
-        "comparando",
-        "vou ver outro",
-        "outros",
-        "mais barato em outro lugar",
-        "tem outro"
-      ],
+      "keys": ["comparar","comparando","vou ver outro","outros","mais barato em outro lugar","tem outro"],
       "a": "Normal comparar. Você tá comparando mais pelo preço ou pela localização?",
       "b": "Pra comparar certo, olha 3 pontos: documentação, acesso/local e potencial de valorização. Qual deles te chama mais atenção?",
       "c": "Se eu te provar que aqui faz mais sentido no conjunto (não só no preço), você decide por aqui?"
     },
     {
-      "keys": [
-        "medo",
-        "receio",
-        "inseguro",
-        "insegurança",
-        "não confio",
-        "desconfio",
-        "golpe"
-      ],
+      "keys": ["medo","receio","inseguro","insegurança","não confio","desconfio","golpe"],
       "a": "Justíssimo. Medo de quê exatamente: documentação, localização ou experiência passada?",
       "b": "Pra você ficar tranquilo: eu te mostro o básico que valida tudo (mapa/registro/condição por escrito). O que você quer ver primeiro?",
       "c": "Você prefere validar por documento agora ou por visita? Se a validação ficar ok, você avança?"
     }
   ],
   "users": [
-    {
-      "login": "vendedor",
-      "pass": "1234"
-    },
-    {
-      "login": "luciana",
-      "pass": "2023"
-    }
+    {"login":"vendedor","pass":"1234"},
+    {"login":"luciana","pass":"2023"}
   ]
 };
 
-/* ===================== VERSÃO DO ARQUIVO (novo) ===================== */
-/* Essa versão é atualizada automaticamente pelo botão "Código atualizado". */
+/* ===================== VERSÃO DO ARQUIVO ===================== */
 const BUILD_ID = "2026-01-25T12:43:00.862Z";
 
 /* ===================== STORAGE ===================== */
-/* NOVO: LS_BASE versionado por BUILD_ID para evitar base antiga presa no localStorage */
 const LS_BASE = "copiloto_base_v5__" + BUILD_ID;
 const LS_SESSION = "copiloto_session_v2";
 const LS_WELCOME = "copiloto_welcome_seen_v1";
 
-/* ===================== AUTO-LIMPAR ENTRADA (NOVO) ===================== */
+/* ===================== DIGITAÇÃO / PROCESSAMENTO / AUTO-CLEAR ===================== */
 const AUTO_CLEAR_ENABLED = true;
-const AUTO_CLEAR_TYPING_MS = 900; // após parar de digitar
+
+/* Ajustes cirúrgicos:
+   - debounce do processamento (menos agressivo durante digitação)
+   - auto-clear só após inatividade mais natural
+*/
+const PROCESS_DEBOUNCE_MS = 220;
+const AUTO_CLEAR_IDLE_MS = 2800;   // ✅ mais tempo pra pensar/editar sem sumir
+const VOICE_CLEAR_MS = 1200;       // ✅ após microfone, dá tempo de ver a fala e respostas
+
+let processDebounceTimer = null;
 let autoClearTimer = null;
 
 /* ===================== ESTADO GLOBAL ===================== */
@@ -1315,8 +1076,8 @@ let editingProductIndex = null;
 let editingObjectionIndex = null;
 let editingUserIndex = null;
 
-let lastProduct = null;      // mantém último produto ativo
-let lastObjection = null;    // mantém última objeção (assinatura)
+let lastProduct = null;
+let lastObjection = null;
 let lastObjectionKey = "";
 let lastTextProcessed = "";
 
@@ -1345,6 +1106,7 @@ const micBtn = document.getElementById("micBtn");
 
 const rolePill = document.getElementById("rolePill");
 const adminBtn = document.getElementById("adminBtn");
+const logoutBtn = document.getElementById("logoutBtn");
 
 const loginOverlay = document.getElementById("loginOverlay");
 const loginUser = document.getElementById("loginUser");
@@ -1394,8 +1156,11 @@ const exportOut = document.getElementById("exportOut");
 const importIn = document.getElementById("importIn");
 const importStatus = document.getElementById("importStatus");
 
-/* NOVO: output do código atualizado */
 const codeOut = document.getElementById("codeOut");
+
+/* ===================== TEMPLATE LIMPO (para "Código atualizado") ===================== */
+/* Captura o HTML inicial (login visível, sem sessão, sem admin aberto). */
+const CLEAN_HTML_TEMPLATE = "<!DOCTYPE html>\n" + document.documentElement.outerHTML;
 
 /* ===================== UTIL ===================== */
 function showToast(msg){
@@ -1432,23 +1197,88 @@ function normalizeText(str){
     .trim();
 }
 
-/* ===================== AUTO-CLEAR (NOVO) ===================== */
+/* ===================== ACESSO / GUARDA ADMIN (BUGFIX PRIORIDADE) ===================== */
+function isAdmin(){
+  return !!(currentUser && currentUser.role === "admin");
+}
+
+/* Regras absolutas:
+   - Antes do login: adminBtn invisível, drawer fechado.
+   - Após login user: drawer TRAVADO (mesmo se tentar forçar via DOM).
+*/
+function applyAccessUI(){
+  if(!currentUser){
+    rolePill.textContent = "Acesso: —";
+    adminBtn.style.display = "none";
+    logoutBtn.style.display = "none";
+    closeAdmin(true);
+    return;
+  }
+
+  rolePill.textContent = `Acesso: ${isAdmin() ? "Admin" : "Usuário"} (${currentUser.login})`;
+  logoutBtn.style.display = "inline-flex";
+  adminBtn.style.display = isAdmin() ? "inline-flex" : "none";
+
+  if(!isAdmin()){
+    closeAdmin(true);
+  }
+}
+
+/* Fecha e trava (force = true remove show e também coloca proteção extra) */
+function closeAdmin(force){
+  if(force){
+    adminDrawer.classList.remove("show");
+    adminDrawer.style.display = ""; // deixa CSS controlar
+  }else{
+    adminDrawer.classList.remove("show");
+  }
+}
+
+/* Guard que impede abertura por DOM/refresh/forçar classe */
+function enforceAdminLock(){
+  if(isAdmin()) return;
+  // se não for admin, nunca pode ficar aberto
+  if(adminDrawer.classList.contains("show")){
+    adminDrawer.classList.remove("show");
+  }
+}
+
+/* MutationObserver: se alguém tentar forçar via DOM, volta imediatamente */
+const adminGuardObserver = new MutationObserver(() => {
+  enforceAdminLock();
+});
+adminGuardObserver.observe(adminDrawer, { attributes:true, attributeFilter:["class","style"] });
+
+/* Também reforça ao trocar visibilidade do documento (refresh/restore em alguns browsers) */
+document.addEventListener("visibilitychange", ()=> {
+  enforceAdminLock();
+});
+
+/* ===================== AUTO-CLEAR / DEBOUNCE ===================== */
 function clearInputNow(){
   input.value = "";
-  lastTextProcessed = ""; // garante que a próxima entrada sempre processe
+  lastTextProcessed = "";
 }
-function scheduleAutoClearAfterTyping(){
+
+function scheduleAutoClearIdle(){
   if(!AUTO_CLEAR_ENABLED) return;
   clearTimeout(autoClearTimer);
   autoClearTimer = setTimeout(()=>{
-    // só limpa se ainda tiver conteúdo (evita "piscar" desnecessário)
+    // só limpa se ainda tiver conteúdo
     if((input.value || "").trim()){
       clearInputNow();
     }
-  }, AUTO_CLEAR_TYPING_MS);
+  }, AUTO_CLEAR_IDLE_MS);
 }
 
-/* ===================== MATCH DE PRODUTO (keys + info, ignorando "sinop") ===================== */
+function scheduleProcessDebounced(){
+  clearTimeout(processDebounceTimer);
+  processDebounceTimer = setTimeout(()=> {
+    processText(false);
+  }, PROCESS_DEBOUNCE_MS);
+}
+
+/* ===================== MATCH DE PRODUTO ===================== */
 const PRODUCT_IGNORE_TERMS = new Set(["sinop"]);
 const INFO_PREFIX_IGNORE = new Set(["av","avenida","rua","rodovia","br","mt","km","santa","carmem"]);
 
@@ -1565,14 +1395,14 @@ function doLogin(){
 
 function afterLogin(){
   loginOverlay.style.display = "none";
-  rolePill.textContent = `Acesso: ${currentUser.role === "admin" ? "Admin" : "Usuário"} (${currentUser.login})`;
-  adminBtn.style.display = (currentUser.role === "admin") ? "inline-flex" : "none";
+  applyAccessUI();            // ✅ aplica botões e trava admin se user
+  enforceAdminLock();         // ✅ garante fechado
+  renderAdminAll();
 
   if(!localStorage.getItem(LS_WELCOME)){
     welcome.style.display = "flex";
   }
 
-  renderAdminAll();
   setTimeout(()=> input.focus(), 120);
 }
 
@@ -1580,9 +1410,8 @@ function logout(){
   stopListening();
   currentUser = null;
   clearSession();
-  adminBtn.style.display = "none";
-  rolePill.textContent = "Acesso: —";
-  closeAdmin();
+  closeAdmin(true);
+  applyAccessUI();
   loginOverlay.style.display = "flex";
   showToast("Sessão encerrada");
 }
@@ -1594,13 +1423,10 @@ function closeWelcome(){
 
 /* ===================== ADMIN UI ===================== */
 function openAdmin(){
-  if(!currentUser || currentUser.role !== "admin") return;
+  if(!isAdmin()) return;
   adminDrawer.classList.add("show");
   setTab("products");
   renderAdminAll();
-}
-function closeAdmin(){
-  adminDrawer.classList.remove("show");
 }
 function setTab(tab){
   tabProducts.classList.toggle("active", tab==="products");
@@ -1614,12 +1440,16 @@ function setTab(tab){
   viewExport.style.display = (tab==="export") ? "block" : "none";
 }
 function renderAdminAll(){
+  if(!isAdmin()){
+    // user não precisa renderizar painel
+    return;
+  }
   renderProductsList();
   renderObjectionsList();
   renderUsersList();
   countProducts.textContent = String((base.products||[]).length);
   countObjections.textContent = String((base.objections||[]).length);
-  countUsers.textContent = String((base.users||[]).length + 1); // + admin fixo
+  countUsers.textContent = String((base.users||[]).length + 1);
 }
 
 /* ===================== PRODUCTS CRUD ===================== */
@@ -1631,7 +1461,7 @@ function resetProductForm(){
   pInfo.value = "";
 }
 function saveProduct(){
-  if(!currentUser || currentUser.role !== "admin") return;
+  if(!isAdmin()) return;
 
   const name = (pName.value || "").trim();
   const keys = (pKeys.value || "").split(",").map(s=>s.trim()).filter(Boolean);
@@ -1656,6 +1486,7 @@ function saveProduct(){
   resetProductForm();
 }
 function editProduct(i){
+  if(!isAdmin()) return;
   const p = base.products[i];
   if(!p) return;
   editingProductIndex = i;
@@ -1665,6 +1496,7 @@ function editProduct(i){
   pInfo.value = (p.info || []).join("\n");
 }
 function removeProduct(i){
+  if(!isAdmin()) return;
   if(!confirm("Remover este produto?")) return;
   base.products.splice(i,1);
   saveBase();
@@ -1711,7 +1543,7 @@ function resetObjectionForm(){
   oC.value = "";
 }
 function saveObjection(){
-  if(!currentUser || currentUser.role !== "admin") return;
+  if(!isAdmin()) return;
 
   const keys = (oKeys.value || "").split(",").map(s=>s.trim()).filter(Boolean);
   const a = (oA.value || "").trim();
@@ -1737,6 +1569,7 @@ function saveObjection(){
   resetObjectionForm();
 }
 function editObjection(i){
+  if(!isAdmin()) return;
   const o = base.objections[i];
   if(!o) return;
   editingObjectionIndex = i;
@@ -1747,6 +1580,7 @@ function editObjection(i){
   oC.value = o.c || "";
 }
 function removeObjection(i){
+  if(!isAdmin()) return;
   if(!confirm("Remover esta objeção?")) return;
   base.objections.splice(i,1);
   saveBase();
@@ -1792,7 +1626,7 @@ function resetUserForm(){
   uPass.value = "";
 }
 function saveUser(){
-  if(!currentUser || currentUser.role !== "admin") return;
+  if(!isAdmin()) return;
 
   const login = (uLogin.value || "").trim();
   const pass = (uPass.value || "").trim();
@@ -1819,6 +1653,7 @@ function saveUser(){
   resetUserForm();
 }
 function editUser(i){
+  if(!isAdmin()) return;
   const u = base.users[i];
   if(!u) return;
   editingUserIndex = i;
@@ -1827,6 +1662,7 @@ function editUser(i){
   uPass.value = u.pass || "";
 }
 function removeUser(i){
+  if(!isAdmin()) return;
   const u = base.users[i];
   if(!u) return;
   if(!confirm("Remover este usuário?")) return;
@@ -1878,7 +1714,7 @@ function renderUsersList(){
 
 /* ===================== EXPORT/IMPORT ===================== */
 function exportBase(){
-  if(!currentUser || currentUser.role !== "admin") return;
+  if(!isAdmin()) return;
   exportOut.value = JSON.stringify(structuredClone(base), null, 2);
   showToast("Base exportada (copie tudo)");
   importStatus.textContent = "—";
@@ -1889,7 +1725,7 @@ function copyExport(){
   navigator.clipboard.writeText(txt).then(()=> showToast("Copiado ✅")).catch(()=> showToast("Não foi possível copiar"));
 }
 function importBase(){
-  if(!currentUser || currentUser.role !== "admin") return;
+  if(!isAdmin()) return;
   const txt = (importIn.value || "").trim();
   if(!txt){ importStatus.textContent = "Cole uma base primeiro"; return; }
   try{
@@ -1910,7 +1746,7 @@ function importBase(){
   }
 }
 function resetToDefaults(){
-  if(!currentUser || currentUser.role !== "admin") return;
+  if(!isAdmin()) return;
   if(!confirm("Restaurar a base padrão?")) return;
   base = structuredClone(DEFAULT_BASE);
   saveBase();
@@ -1921,31 +1757,28 @@ function resetToDefaults(){
   processText(true);
 }
 
-/* ===================== NOVO: CÓDIGO ATUALIZADO (Admin) ===================== */
+/* ===================== CÓDIGO ATUALIZADO (Admin) ===================== */
 function safeJSONStringifyForScript(obj){
-  // JSON é válido como literal JS, mas protegemos contra "</script" dentro de textos.
   let json = JSON.stringify(obj, null, 2);
   json = json.replace(/<\/script/gi, "<\\/script");
   return json;
 }
 function generateUpdatedCode(){
-  if(!currentUser || currentUser.role !== "admin") return;
+  if(!isAdmin()) return;
 
   const baseToEmbed = structuredClone(base);
   const newBuild = new Date().toISOString();
 
-  // Pega o HTML atual inteiro (offline, sem fetch)
-  let html = "<!DOCTYPE html>\n" + document.documentElement.outerHTML;
+  // ✅ Usa o template limpo (sem sessão / sem drawer aberto / login visível)
+  let html = CLEAN_HTML_TEMPLATE;
 
-  // Atualiza BUILD_ID (para versionar o LS_BASE e evitar base antiga presa no localStorage)
+  // Atualiza BUILD_ID
   const buildRe = /const\s+BUILD_ID\s*=\s*"[^"]*";/;
   if(buildRe.test(html)){
     html = html.replace(buildRe, `const BUILD_ID = "${newBuild}";`);
-  }else{
-    // Se por algum motivo não encontrar, ainda segue (não trava)
   }
 
-  // Substitui o bloco do DEFAULT_BASE pelo JSON atual
+  // Substitui DEFAULT_BASE
   const baseJson = safeJSONStringifyForScript(baseToEmbed);
   const defRe = /const\s+DEFAULT_BASE\s*=\s*{[\s\S]*?};/;
 
@@ -1973,7 +1806,6 @@ function processText(force){
   if(!force && tNorm === lastTextProcessed) return;
   lastTextProcessed = tNorm;
 
-  // Produto
   const products = base.products || [];
   const p = products.find(prod => productMatchesText(prod, tNorm));
 
@@ -2002,7 +1834,6 @@ function processText(force){
     }
   }
 
-  // Objeção
   const objections = base.objections || [];
   const o = objections.find(obj => (obj.keys || []).some(k => tNorm.includes(normalizeText(k))));
 
@@ -2102,14 +1933,18 @@ function startListening(){
   recognition.onresult = (e) => {
     const transcript = e.results?.[0]?.[0]?.transcript || "";
     if(transcript){
-      // processa o trecho novo
       input.value = transcript;
       processText(true);
       animateUpdate(document.getElementById("inputCard"));
 
-      // NOVO: limpa imediatamente após receber do microfone
+      // ✅ auto-clear após microfone (com delay humano)
       if(AUTO_CLEAR_ENABLED){
-        clearInputNow();
+        clearTimeout(autoClearTimer);
+        autoClearTimer = setTimeout(()=>{
+          if((input.value || "").trim()){
+            clearInputNow();
+          }
+        }, VOICE_CLEAR_MS);
       }
     }
   };
@@ -2122,13 +1957,14 @@ function stopListening(){
 
 /* ===================== EVENTOS ===================== */
 input.addEventListener("input", ()=>{
-  // processa (para mostrar produto/objeção)
-  processText(false);
-  // NOVO: auto-limpa depois que parar de digitar (mantém leve)
-  scheduleAutoClearAfterTyping();
+  // ✅ processamento com debounce (menos agressivo)
+  scheduleProcessDebounced();
+
+  // ✅ auto-clear só após inatividade maior
+  scheduleAutoClearIdle();
 });
 
-// Ctrl+K limpar
+// Ctrl+K limpar + Enter no login
 window.addEventListener("keydown", (e)=>{
   const isMac = navigator.platform.toUpperCase().includes("MAC");
   const ctrlOrCmd = isMac ? e.metaKey : e.ctrlKey;
@@ -2136,6 +1972,7 @@ window.addEventListener("keydown", (e)=>{
     e.preventDefault();
     clearAll();
   }
+  // Enter só atua quando login está visível
   if(e.key === "Enter" && loginOverlay.style.display !== "none"){
     doLogin();
   }
@@ -2145,11 +1982,16 @@ window.addEventListener("keydown", (e)=>{
 (function init(){
   loadBase();
 
+  // ✅ sempre inicia com UI travada (sem sessão)
+  applyAccessUI();
+  enforceAdminLock();
+
   const sess = getSession();
   if(sess){
     currentUser = sess;
     afterLogin();
   }else{
+    // loginOverlay já está visível por padrão no HTML
     loginOverlay.style.display = "flex";
   }
 
@@ -2157,7 +1999,4 @@ window.addEventListener("keydown", (e)=>{
 })();
 </script>
 
-
-
 </body></html>
-

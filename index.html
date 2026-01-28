@@ -1,175 +1,591 @@
 <!DOCTYPE html>
-<html lang="pt-BR">
-<head>
+<html lang="pt-BR"><head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>COPILOTO — Assistente de Objeções em Tempo Real</title>
 
 <style>
-:root{
-  --bg:#f6f7fb;
-  --panel:#ffffff;
-  --text:#0b1220;
-  --muted:#5b6474;
-  --border:#e5e7eb;
+  :root{
+    --bg:#f6f7fb;
+    --panel:#ffffff;
+    --text:#0b1220;
+    --muted:#5b6474;
+    --border:#e5e7eb;
+    --shadow: 0 14px 34px rgba(17,24,39,.10);
+    --shadow2: 0 8px 22px rgba(17,24,39,.08);
 
-  --primary:#4c5bd4;
-  --primary2:#3f4bd0;
-  --ring: rgba(76,91,212,.22);
+    --primary:#4c5bd4;
+    --primary2:#3f4bd0;
+    --ring: rgba(76,91,212,.22);
 
-  --good:#16a34a;
-  --warn:#f59e0b;
-  --bad:#ef4444;
+    --good:#16a34a;
+    --warn:#f59e0b;
+    --bad:#ef4444;
 
-  --radius:16px;
-  --radius2:22px;
-  --tap:48px;
-}
+    --chip:#f3f4f6;
+    --radius:16px;
+    --radius2:22px;
 
-*{box-sizing:border-box}
-html,body{height:100%}
-body{
-  margin:0;
-  font-family: Inter, system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
-  background: var(--bg);
-  color:var(--text);
-}
+    --tap:48px;
+    --fx: 860ms;
+  }
 
-/* HEADER */
-header{
-  position:sticky;
-  top:0;
-  z-index:10;
-  background:rgba(255,255,255,.9);
-  backdrop-filter: blur(10px);
-  border-bottom:1px solid var(--border);
-}
-.topbar{
-  max-width:1200px;
-  margin:0 auto;
-  padding:14px 18px;
-  display:flex;
-  justify-content:space-between;
-  align-items:center;
-  gap:10px;
-}
-.brand h1{
-  margin:0;
-  font-size:18px;
-  font-weight:900;
-}
-.brand span{
-  font-size:12px;
-  color:var(--muted);
-  font-weight:600;
-}
-.statusline{
-  display:flex;
-  gap:10px;
-  align-items:center;
-  flex-wrap:wrap;
-}
+  *{box-sizing:border-box}
+  html,body{height:100%}
+  body{
+    margin:0;
+    font-family: Inter, ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+    color:var(--text);
+    background:
+      radial-gradient(1000px 520px at 12% -4%, rgba(76,91,212,.14), transparent 58%),
+      radial-gradient(900px 520px at 92% 10%, rgba(245,158,11,.10), transparent 58%),
+      radial-gradient(720px 520px at 40% 100%, rgba(22,163,74,.07), transparent 60%),
+      var(--bg);
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    text-rendering: optimizeLegibility;
+    font-size:16px;
+    line-height:1.45;
+  }
 
-/* BOTÕES */
-button{
-  min-height:var(--tap);
-  padding:12px 14px;
-  border-radius:14px;
-  border:1px solid var(--border);
-  background:#fff;
-  font-weight:900;
-  cursor:pointer;
-}
-button.primary{
-  background:linear-gradient(180deg,var(--primary),var(--primary2));
-  color:#fff;
-  border:none;
-}
-button.danger{
-  background:rgba(239,68,68,.12);
-  border-color:rgba(239,68,68,.25);
-  color:#7f1d1d;
-}
-button.ghost{
-  background:rgba(76,91,212,.08);
-  border-color:rgba(76,91,212,.25);
-  color:#1f2a9a;
-}
+  /* TOPBAR */
+  header{
+    position:sticky; top:0; z-index:5;
+    background:rgba(255,255,255,.86);
+    backdrop-filter: blur(12px);
+    border-bottom:1px solid rgba(229,231,235,.95);
+  }
+  .topbar{
+    display:flex; align-items:center; justify-content:space-between;
+    padding:14px 18px;
+    max-width:1200px; margin:0 auto;
+    gap:12px;
+  }
+  .brand{display:flex; flex-direction:column; gap:2px}
+  .brand h1{
+    margin:0;
+    font-size:18px;
+    letter-spacing:.3px;
+    font-weight:900;
+  }
+  .brand span{
+    font-size:12px;
+    color:var(--muted);
+    font-weight:600;
+  }
+  .statusline{display:flex; align-items:center; gap:10px; flex-wrap:wrap}
 
-/* LAYOUT BASE */
-main{
-  max-width:1200px;
-  margin:0 auto;
-  padding:18px;
-}
-.grid{
-  display:grid;
-  grid-template-columns: 320px 1fr 430px;
-  gap:16px;
-}
+  .pill{
+    display:inline-flex; align-items:center; gap:8px;
+    padding:8px 10px;
+    border:1px solid rgba(229,231,235,.95);
+    border-radius:999px;
+    background:rgba(255,255,255,.92);
+    box-shadow: 0 1px 0 rgba(17,24,39,.03);
+    font-size:12px;
+    color:var(--muted);
+    font-weight:600;
+  }
+  .dot{width:8px; height:8px; border-radius:999px; background:#cbd5e1}
+  .dot.on{background: var(--good)}
+  .kbd{
+    font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+    font-size:11px;
+    padding:3px 7px;
+    border:1px solid rgba(229,231,235,.95);
+    border-bottom-color:#d1d5db;
+    background:#fff;
+    border-radius:9px;
+    color:#374151;
+  }
 
-/* CARDS */
-.card{
-  background:#fff;
-  border:1px solid var(--border);
-  border-radius:var(--radius);
-}
-.card .head{
-  padding:14px;
-  border-bottom:1px solid var(--border);
-}
-.card .body{
-  padding:14px;
-}
+  /* LAYOUT */
+  main{max-width:1200px; margin:0 auto; padding:18px}
+  .grid{
+    display:grid;
+    grid-template-columns: 320px 1fr 430px;
+    gap:16px;
+    align-items:start;
+  }
 
-/* LOGIN OVERLAY */
-.overlay{
-  position:fixed;
-  inset:0;
-  background:rgba(11,18,32,.6);
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  z-index:50;
-}
-.modal{
-  width:min(520px,100%);
-  background:#fff;
-  border-radius:var(--radius2);
-  padding:18px;
-}
-.formGrid{
-  display:grid;
-  gap:10px;
-}
-.formGrid.two{
-  grid-template-columns:1fr 1fr;
-}
-input{
-  width:100%;
-  padding:12px;
-  border-radius:12px;
-  border:1px solid var(--border);
-}
+  /* CARDS */
+  .card{
+    background:rgba(255,255,255,.92);
+    border:1px solid rgba(229,231,235,.92);
+    border-radius:var(--radius);
+    box-shadow: var(--shadow2);
+    overflow:hidden;
+  }
+  .card .head{
+    padding:14px 14px 10px;
+    border-bottom:1px solid rgba(229,231,235,.78);
+    display:flex; align-items:flex-start; justify-content:space-between; gap:10px;
+  }
+  .card .body{padding:14px}
 
-/* MOBILE */
-@media (max-width:980px){
-  .grid{grid-template-columns:1fr}
-}
+  .title{display:flex; flex-direction:column; gap:4px}
+  .title h2,.title h3,.title h4{
+    margin:0;
+    font-weight:900;
+    letter-spacing:.2px;
+    color:#0b1220;
+  }
+  .title h2,.title h3,.title h4{font-size:14px}
+  .subtitle{
+    margin:0;
+    font-size:12px;
+    color:var(--muted);
+    line-height:1.35;
+    font-weight:600;
+  }
+
+  .chip{
+    display:inline-flex; align-items:center; gap:6px;
+    padding:7px 10px;
+    border-radius:999px;
+    background:rgba(243,244,246,.72);
+    color:#111827;
+    border:1px solid rgba(229,231,235,.92);
+    font-size:12px;
+    white-space:nowrap;
+    font-weight:700;
+  }
+  .chip.good{background: rgba(22,163,74,.10); border-color: rgba(22,163,74,.22); color:#065f46}
+  .chip.warn{background: rgba(245,158,11,.12); border-color: rgba(245,158,11,.25); color:#7c2d12}
+  .chip.bad{background: rgba(239,68,68,.11); border-color: rgba(239,68,68,.24); color:#7f1d1d}
+
+  .updated-badge{
+    display:none;
+    align-items:center;
+    gap:6px;
+    padding:7px 10px;
+    border-radius:999px;
+    background: rgba(76,91,212,.10);
+    border: 1px solid rgba(76,91,212,.22);
+    color: #1f2a9a;
+    font-size:12px;
+    white-space:nowrap;
+    font-weight:800;
+    animation: badgePop var(--fx) ease-out 1;
+  }
+  .updated-badge.show{display:inline-flex}
+  @keyframes badgePop{
+    0%{opacity:.0; transform: translateY(-6px) scale(.98)}
+    55%{opacity:1; transform: translateY(0) scale(1.01)}
+    100%{opacity:1; transform: translateY(0) scale(1)}
+  }
+
+  /* PRODUTO */
+  .productName{font-size:17px; margin:0; line-height:1.2; font-weight:950}
+  .productMeta{padding:10px 14px 14px; display:flex; flex-direction:column; gap:10px}
+  .infoList{margin:0; padding-left:18px}
+  .infoList li{margin:6px 0; font-size:13px; line-height:1.4; color:#111827; font-weight:600}
+  .hint{font-size:12px; color:var(--muted); margin:0; font-weight:600}
+
+  /* INPUT */
+  .inputWrap{display:flex; flex-direction:column; gap:10px}
+  textarea{
+    width:100%;
+    min-height:260px;
+    resize:vertical;
+    padding:14px 14px;
+    font-size:15px;
+    line-height:1.6;
+    border-radius:14px;
+    border:1px solid rgba(229,231,235,.95);
+    outline:none;
+    background:rgba(255,255,255,.96);
+    box-shadow: 0 1px 0 rgba(17,24,39,.04);
+    transition: box-shadow .2s ease, border-color .2s ease, transform .18s ease;
+  }
+  textarea:focus{
+    border-color: rgba(76,91,212,.55);
+    box-shadow: 0 0 0 5px var(--ring);
+  }
+
+  .toolbar{
+    display:flex; gap:10px; flex-wrap:wrap;
+    align-items:center; justify-content:space-between;
+  }
+  .btnRow{display:flex; gap:10px; align-items:center; flex-wrap:wrap}
+
+  /* BUTTONS */
+  button{
+    border:1px solid rgba(229,231,235,.95);
+    background:rgba(255,255,255,.96);
+    color:#0b1220;
+    padding:12px 14px;
+    min-height: var(--tap);
+    border-radius:14px;
+    cursor:pointer;
+    font-weight:900;
+    font-size:14px;
+    letter-spacing:.1px;
+    box-shadow: 0 2px 0 rgba(17,24,39,.03);
+    transition:
+      transform .08s ease,
+      box-shadow .22s ease,
+      border-color .22s ease,
+      background .22s ease,
+      filter .22s ease;
+    user-select:none;
+  }
+  button:hover{
+    border-color: rgba(76,91,212,.34);
+    box-shadow: 0 14px 26px rgba(17,24,39,.10);
+    transform: translateY(-1px);
+  }
+  button:active{
+    transform: translateY(0px);
+    filter: brightness(.98);
+  }
+  button:focus-visible{
+    outline:none;
+    box-shadow: 0 0 0 5px var(--ring), 0 14px 26px rgba(17,24,39,.10);
+    border-color: rgba(76,91,212,.55);
+  }
+  button:disabled{opacity:.55; cursor:not-allowed; transform:none}
+
+  .primary{
+    background: linear-gradient(180deg, var(--primary), var(--primary2));
+    color:#fff;
+    border:none;
+  }
+  .primary:hover{box-shadow: 0 16px 28px rgba(76,91,212,.24)}
+  .danger{
+    background: rgba(239,68,68,.10);
+    border-color: rgba(239,68,68,.22);
+    color:#7f1d1d;
+  }
+  .ghost{
+    background: rgba(76,91,212,.08);
+    border-color: rgba(76,91,212,.22);
+    color:#1f2a9a;
+  }
+
+  /* RESPOSTAS */
+  .responsesGrid{display:flex; flex-direction:column; gap:12px}
+  .responseCard .body{padding-top:12px; display:flex; flex-direction:column; gap:10px}
+  .responseText{
+    margin:0;
+    font-size:15px;
+    line-height:1.65;
+    white-space:pre-wrap;
+    font-weight:650;
+    color:#0b1220;
+  }
+  .responseFooter{
+    display:flex; align-items:center; justify-content:space-between;
+    gap:10px; flex-wrap:wrap;
+  }
+
+  /* FX */
+  .fx{position:relative}
+  .fxPulse{animation: pulseGlow var(--fx) ease-out 1}
+  .fxSlideFade{animation: slideFadeIn var(--fx) cubic-bezier(.2,.8,.2,1) 1}
+
+  @keyframes slideFadeIn{
+    0%{opacity:.35; transform: translateY(10px)}
+    60%{opacity:1; transform: translateY(0)}
+    100%{opacity:1; transform: translateY(0)}
+  }
+  @keyframes pulseGlow{
+    0%{box-shadow: 0 0 0 0 rgba(76,91,212,.00)}
+    25%{box-shadow: 0 0 0 10px rgba(76,91,212,.18)}
+    70%{box-shadow: 0 0 0 3px rgba(76,91,212,.08)}
+    100%{box-shadow: 0 0 0 0 rgba(76,91,212,.00)}
+  }
+  .highlightBorder{border-color: rgba(76,91,212,.55) !important}
+  .fx::after{
+    content:"";
+    position:absolute;
+    inset:-2px;
+    border-radius: calc(var(--radius) + 2px);
+    pointer-events:none;
+    opacity:0;
+    transition: opacity var(--fx) ease;
+    background:
+      radial-gradient(420px 220px at 12% 8%, rgba(76,91,212,.12), transparent 55%),
+      radial-gradient(420px 220px at 88% 12%, rgba(245,158,11,.10), transparent 55%);
+  }
+  .fxPulse.fxSlideFade::after{opacity:1}
+
+  /* TOAST */
+  .toast{
+    position: fixed;
+    right: 16px;
+    bottom: 16px;
+    z-index: 30;
+    display:none;
+    align-items:center;
+    gap:10px;
+    padding:12px 14px;
+    border-radius:16px;
+    background: rgba(11,18,32,.92);
+    color:#fff;
+    border:1px solid rgba(255,255,255,.12);
+    box-shadow: 0 18px 34px rgba(0,0,0,.18);
+    max-width: min(520px, calc(100vw - 32px));
+    font-size:13px;
+    font-weight:700;
+  }
+  .toast.show{display:flex; animation: toastIn 420ms ease-out 1}
+  @keyframes toastIn{
+    from{opacity:0; transform: translateY(8px) scale(.98)}
+    to{opacity:1; transform: translateY(0) scale(1)}
+  }
+  .toast .mini{width:10px; height:10px; border-radius:999px; background: var(--good)}
+
+  /* MODAL / OVERLAY */
+  .overlay{
+    position:fixed; inset:0;
+    background:rgba(11,18,32,.58);
+    display:flex; align-items:center; justify-content:center;
+    z-index:20;
+    padding:16px;
+  }
+  .modal{
+    width:min(580px, 100%);
+    background: rgba(255,255,255,.98);
+    border:1px solid rgba(229,231,235,.92);
+    border-radius: var(--radius2);
+    box-shadow: var(--shadow);
+    overflow:hidden;
+    transform: translateY(0);
+    animation: modalIn 520ms ease-out 1;
+  }
+  @keyframes modalIn{
+    from{opacity:.0; transform: translateY(10px) scale(.985)}
+    to{opacity:1; transform: translateY(0) scale(1)}
+  }
+  .modal .mHead{padding:18px 18px 0}
+  .modal .mHead h1{margin:0; font-size:20px; letter-spacing:.3px; font-weight:950}
+  .modal .mHead h3{margin:8px 0 0; font-size:14px; color:var(--muted); font-weight:800}
+  .modal .mBody{padding:14px 18px 18px; color:#374151; line-height:1.6; font-size:14px; font-weight:650}
+  .modal-actions{display:flex; justify-content:flex-end; gap:10px; padding:0 18px 18px; flex-wrap:wrap}
+
+  /* DRAWER ADMIN */
+  .drawer{
+    position:fixed; inset:0;
+    display:none;
+    z-index:25;
+  }
+  .drawer.show{display:block}
+  .drawer .backdrop{
+    position:absolute; inset:0;
+    background:rgba(11,18,32,.62);
+  }
+  .drawer .panel{
+    position:absolute;
+    right:0; top:0; height:100%;
+    width:min(760px, 100%);
+    background: rgba(255,255,255,.98);
+    border-left:1px solid rgba(229,231,235,.95);
+    box-shadow: -22px 0 44px rgba(0,0,0,.18);
+    display:flex;
+    flex-direction:column;
+    animation: drawerIn 520ms ease-out 1;
+  }
+  @keyframes drawerIn{
+    from{opacity:.0; transform: translateX(16px)}
+    to{opacity:1; transform: translateX(0)}
+  }
+
+  .panelHeader{
+    padding:14px 14px 10px;
+    border-bottom:1px solid rgba(229,231,235,.88);
+    display:flex; align-items:flex-start; justify-content:space-between; gap:10px;
+  }
+  .panelHeader h2{margin:0; font-size:14px; font-weight:950}
+  .tabs{
+    display:flex;
+    gap:8px;
+    padding:10px 14px;
+    border-bottom:1px solid rgba(229,231,235,.88);
+    flex-wrap:wrap;
+  }
+  .tabBtn{
+    padding:10px 12px;
+    border-radius:999px;
+    font-size:12px;
+    min-height:42px;
+  }
+  .tabBtn.active{
+    background: rgba(76,91,212,.12);
+    border-color: rgba(76,91,212,.25);
+    color:#1f2a9a;
+  }
+  .panelBody{
+    padding:14px;
+    overflow:auto;
+    display:flex;
+    flex-direction:column;
+    gap:14px;
+  }
+
+  /* FORMS */
+  .formGrid{display:grid; gap:10px}
+  .formGrid.two{grid-template-columns: 1fr 1fr}
+  .formGrid.three{grid-template-columns: 1fr 1fr 1fr}
+  label{font-size:12px; color:var(--muted); font-weight:900; letter-spacing:.15px}
+  input[type="text"], input[type="password"], input[type="number"], textarea.smallArea{
+    width:100%;
+    padding:12px 12px;
+    border-radius:14px;
+    border:1px solid rgba(229,231,235,.95);
+    outline:none;
+    background:rgba(255,255,255,.98);
+    font-size:14px;
+    line-height:1.45;
+    font-weight:650;
+    transition: box-shadow .2s ease, border-color .2s ease;
+  }
+  textarea.smallArea{min-height:96px; resize:vertical}
+  input[type="text"]:focus, input[type="password"]:focus, input[type="number"]:focus, textarea.smallArea:focus{
+    border-color: rgba(76,91,212,.55);
+    box-shadow: 0 0 0 5px var(--ring);
+  }
+
+  .row{display:flex; gap:10px; align-items:center; flex-wrap:wrap}
+  .muted{color:var(--muted); font-size:12px; margin:0; line-height:1.35; font-weight:650}
+
+  .list{
+    display:flex; flex-direction:column; gap:10px;
+    border:1px dashed rgba(229,231,235,.95);
+    border-radius:14px;
+    padding:12px;
+    background: rgba(243,244,246,.42);
+  }
+  .item{
+    background: rgba(255,255,255,.98);
+    border:1px solid rgba(229,231,235,.95);
+    border-radius:14px;
+    padding:12px;
+    display:flex;
+    align-items:flex-start;
+    justify-content:space-between;
+    gap:12px;
+  }
+  .item h5{margin:0; font-size:13px; font-weight:950}
+  .item p{margin:6px 0 0; font-size:12px; color:var(--muted); line-height:1.35; font-weight:650}
+  .actions{display:flex; gap:8px; align-items:center; flex-wrap:wrap}
+  .miniBtn{padding:10px 12px; border-radius:12px; font-size:12px; min-height:42px}
+
+  .notice{
+    background: rgba(245,158,11,.10);
+    border:1px solid rgba(245,158,11,.25);
+    border-radius:14px;
+    padding:12px 12px;
+    color:#7c2d12;
+    font-size:12px;
+    line-height:1.45;
+    font-weight:750;
+  }
+  .success{
+    background: rgba(22,163,74,.10);
+    border:1px solid rgba(22,163,74,.22);
+    border-radius:14px;
+    padding:12px 12px;
+    color:#065f46;
+    font-size:12px;
+    line-height:1.45;
+    font-weight:750;
+  }
+
+  /* WIDGET ECON (fixo) */
+  .econWidget{
+    position: fixed;
+    left: 16px;
+    bottom: 16px;
+    z-index: 40;
+    display:flex;
+    gap:10px;
+    flex-wrap:wrap;
+  }
+
+  /* CARDS EXTRAS (calculadora/gráfico) */
+  .stack{display:flex; flex-direction:column; gap:12px}
+  .canvasWrap{width:100%; overflow:hidden}
+  canvas{width:100%; height:auto; display:block}
+
+  /* MOBILE */
+  @media (max-width: 980px){
+    .grid{grid-template-columns: 1fr; gap:14px}
+    .area-product{order:1}
+    .area-input{order:2}
+    .area-resp{order:3}
+    main{padding:14px}
+    .topbar{padding:12px 14px}
+    textarea{min-height:220px; font-size:16px}
+    .responseText{font-size:16px}
+    .formGrid.two, .formGrid.three{grid-template-columns: 1fr}
+  }
+  @media (max-width: 520px){
+    .statusline{gap:8px}
+    .pill{padding:7px 10px}
+    .brand h1{font-size:17px}
+    button{min-height:50px}
+  }
+  @media (prefers-reduced-motion: reduce){
+    *{animation:none !important; transition:none !important}
+  }
 </style>
 </head>
 
 <body>
 
-<!-- LOGIN -->
-<div id="loginOverlay" class="overlay">
+<!-- WELCOME -->
+<div id="welcome" class="overlay" style="display:none">
   <div class="modal">
-    <h2>Entrar no COPILOTO</h2>
-    <div class="formGrid two">
-      <input id="loginUser" placeholder="Login">
-      <input id="loginPass" type="password" placeholder="Senha">
+    <div class="mHead">
+      <h1>COPILOTO</h1>
+      <h3>Assistente de Objeções em Tempo Real</h3>
     </div>
-    <button class="primary" onclick="doLogin()">Entrar</button>
+    <div class="mBody">
+      Digite (ou dite) a fala do cliente. O sistema identifica <strong>produto</strong> e <strong>objeção</strong> por palavras no texto
+      e mostra 3 respostas (leve, média, agressiva).
+      <br><br>
+      <strong>Novo:</strong> Botão de formalização, calculadora de procrastinação e indicadores econômicos automáticos.
+    </div>
+    <div class="modal-actions">
+      <button onclick="closeWelcome()">Entendi</button>
+      <button class="primary" onclick="closeWelcome()">Começar</button>
+    </div>
+  </div>
+</div>
+
+<!-- LOGIN (inicia visível no GitHub Pages) -->
+<div id="loginOverlay" class="overlay" style="display:flex;">
+  <div class="modal">
+    <div class="mHead">
+      <h1>Entrar no COPILOTO</h1>
+      <h3>Acesso controlado (Admin edita / Usuários só usam)</h3>
+    </div>
+    <div class="mBody">
+      <div class="formGrid two">
+        <div>
+          <label>Login</label>
+          <input id="loginUser" type="text" placeholder="ex: edson" autocomplete="username">
+        </div>
+        <div>
+          <label>Senha</label>
+          <input id="loginPass" type="password" placeholder="••••••" autocomplete="current-password">
+        </div>
+      </div>
+      <div class="row" style="margin-top:12px; justify-content:space-between">
+        <label style="display:flex; align-items:center; gap:10px; font-weight:900; color:#111827">
+          <input type="checkbox" id="rememberMe" style="width:18px; height:18px; accent-color: var(--primary)">
+          Salvar neste dispositivo
+        </label>
+        <span class="chip" title="Dica">Sem credenciais visíveis</span>
+      </div>
+      <div id="loginError" class="notice" style="display:none; margin-top:12px">
+        Login ou senha inválidos.
+      </div>
+    </div>
+    <div class="modal-actions">
+      <button class="primary" onclick="doLogin()">Entrar</button>
+    </div>
   </div>
 </div>
 
@@ -179,68 +595,179 @@ input{
       <h1>COPILOTO</h1>
       <span>Assistente de Objeções em Tempo Real</span>
     </div>
+
     <div class="statusline">
-      <button id="adminBtn" class="ghost" style="display:none">⚙️ Admin</button>
-      <button id="logoutBtn" class="danger" style="display:none">Sair</button>
+      <div class="pill" title="Microfone manual (não fica escutando infinito)">
+        <span class="dot" id="micDot"></span>
+        <span id="micLabel">Microfone: desligado</span>
+      </div>
+
+      <div class="pill" title="Sessão / acesso">
+        <span id="rolePill">Acesso: —</span>
+      </div>
+
+      <div class="pill" title="Atalho para limpar">
+        <span class="kbd">Ctrl</span><span class="kbd">K</span>
+        <span style="color:var(--muted)">Limpar</span>
+      </div>
+
+      <button id="adminBtn" class="ghost" style="display:none" onclick="openAdmin()">⚙️ Admin</button>
+      <button id="logoutBtn" class="danger" style="display:none" onclick="logout()">Sair</button>
     </div>
   </div>
 </header>
+
 <main>
   <div class="grid">
 
-    <!-- PRODUTO ATIVO -->
-    <aside class="card" id="productCard">
+    <!-- PRODUTO -->
+    <aside class="card area-product fx" id="productCard">
       <div class="head">
-        <h3>Produto ativo</h3>
-        <p class="subtitle">Detectado automaticamente pela fala do cliente</p>
+        <div class="title">
+          <h2>Produto ativo</h2>
+          <p class="subtitle">Identifica por palavras-chave + informações do produto (ex.: “André Maggi”). “Sinop” é ignorado.</p>
+        </div>
+        <div class="updated-badge" id="prodBadge">✨ Atualizado</div>
       </div>
-      <div class="body">
-        <p id="prod-name" class="productName">Produto não identificado</p>
-        <ul id="prod-info" class="infoList"></ul>
+
+      <div class="productMeta">
+        <h3 class="productName" id="prod-name">Produto não identificado</h3>
+        <div class="row">
+          <span class="chip good" id="prodChip">—</span>
+          <span class="chip" style="color:var(--muted)">Entrada limpa automaticamente</span>
+        </div>
+        <ul class="infoList" id="prod-info"></ul>
+        <p class="hint">Dica: infos específicas ajudam a detectar por frases como “André Maggi” mesmo sem citar o nome do produto.</p>
       </div>
     </aside>
 
     <!-- INPUT -->
-    <section class="card" id="inputCard">
+    <section class="card area-input fx" id="inputCard">
       <div class="head">
-        <h3>Caixa de diálogo</h3>
-        <p class="subtitle">Digite exatamente o que o cliente falou</p>
+        <div class="title">
+          <h3>Caixa de diálogo</h3>
+          <p class="subtitle">Digite ou dite. Ao processar, o texto pode ser limpo automaticamente para manter desempenho.</p>
+        </div>
+        <div class="updated-badge" id="objBadge">⚡ Atualizado</div>
       </div>
-      <div class="body">
-        <textarea id="input" placeholder="Ex: achei caro, vou pensar melhor..."></textarea>
+
+      <div class="body inputWrap">
+        <textarea id="input" placeholder="Digite ou dite o que o cliente disse..."></textarea>
+
+        <div class="toolbar" id="mainToolbar">
+          <div class="btnRow" id="mainBtnRow">
+            <button class="primary" id="micBtn" onclick="toggleListening()">🎙️ Ouvir microfone</button>
+            <button class="danger" onclick="clearAll()">Limpar</button>
+
+            <!-- Botão do link (sem abrir um monte de abas) -->
+            <button class="ghost" id="formalizarBtn" onclick="openFormalizacao()">📄 Formalizar proposta</button>
+          </div>
+
+          <div class="row" style="justify-content:flex-end">
+            <span class="chip" id="objChip">Objeção: —</span>
+          </div>
+        </div>
       </div>
     </section>
 
-    <!-- RESPOSTAS -->
-    <section class="responsesGrid" id="responsesWrap">
+    <!-- RESPOSTAS + EXTRAS -->
+    <section class="responsesGrid area-resp fx" id="responsesWrap">
 
-      <div class="card">
+      <div class="card responseCard">
         <div class="head">
-          <h4>Quebra Leve</h4>
+          <div class="title">
+            <h4>Quebra Leve</h4>
+            <p class="subtitle">Acolhe + direciona com pergunta (cliente frio).</p>
+          </div>
+          <span class="chip good">Leve</span>
         </div>
         <div class="body">
-          <p id="r1">—</p>
-          <button onclick="copy('r1')">Copiar</button>
+          <p id="r1" class="responseText">—</p>
+          <div class="responseFooter">
+            <span class="chip">Tom: humano e consultivo</span>
+            <button onclick="copy('r1')">Copiar</button>
+          </div>
         </div>
       </div>
 
-      <div class="card">
+      <div class="card responseCard">
         <div class="head">
-          <h4>Quebra Média</h4>
+          <div class="title">
+            <h4>Quebra Média</h4>
+            <p class="subtitle">Reenquadra + pede critério (puxa o próximo passo).</p>
+          </div>
+          <span class="chip warn">Média</span>
         </div>
         <div class="body">
-          <p id="r2">—</p>
-          <button onclick="copy('r2')">Copiar</button>
+          <p id="r2" class="responseText">—</p>
+          <div class="responseFooter">
+            <span class="chip">Tom: firme, sem pressão</span>
+            <button onclick="copy('r2')">Copiar</button>
+          </div>
         </div>
       </div>
 
-      <div class="card">
+      <div class="card responseCard">
         <div class="head">
-          <h4>Quebra Agressiva</h4>
+          <div class="title">
+            <h4>Quebra Agressiva</h4>
+            <p class="subtitle">Custo da inação + decisão (direto, sem grosseria).</p>
+          </div>
+          <span class="chip bad">Agressiva</span>
         </div>
         <div class="body">
-          <p id="r3">—</p>
-          <button onclick="copy('r3')">Copiar</button>
+          <p id="r3" class="responseText">—</p>
+          <div class="responseFooter">
+            <span class="chip">Tom: objetivo e decisivo</span>
+            <button onclick="copy('r3')">Copiar</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- CALCULADORA -->
+      <div class="card fx" id="calcCard">
+        <div class="head">
+          <div class="title">
+            <h4>Calculadora de Procrastinação</h4>
+            <p class="subtitle">Mostra o custo de adiar (mês e ano) usando a taxa do produto ativo.</p>
+          </div>
+          <span class="chip" id="calcChip">Taxa: —</span>
+        </div>
+        <div class="body">
+          <div class="formGrid two">
+            <div>
+              <label>Valor do lote (R$)</label>
+              <input id="calcValor" type="number" inputmode="decimal" placeholder="Ex: 120000">
+            </div>
+            <div>
+              <label>Taxa anual do produto (%)</label>
+              <input id="calcTaxa" type="number" inputmode="decimal" placeholder="Auto" disabled>
+            </div>
+          </div>
+
+          <div class="row" style="justify-content:flex-end; margin-top:10px">
+            <button onclick="calcProcrastinacao()">Calcular</button>
+          </div>
+
+          <div id="calcResultado" class="success" style="display:none; margin-top:10px"></div>
+          <p class="muted" style="margin-top:10px">Dica: se não houver produto identificado, usamos uma taxa padrão (configurável no Admin).</p>
+        </div>
+      </div>
+
+      <!-- GRÁFICO -->
+      <div class="card fx" id="chartCard">
+        <div class="head">
+          <div class="title">
+            <h4>Investimento x Valorização</h4>
+            <p class="subtitle">Comparação em 5 anos com números no gráfico.</p>
+          </div>
+          <span class="chip" id="chartChip">5 anos</span>
+        </div>
+        <div class="body">
+          <div class="canvasWrap">
+            <canvas id="growthChart" width="780" height="260"></canvas>
+          </div>
+          <p class="muted" style="margin-top:10px">O gráfico usa o valor informado na calculadora e a taxa do produto ativo.</p>
         </div>
       </div>
 
@@ -249,55 +776,115 @@ input{
   </div>
 </main>
 
-<!-- ADMIN DRAWER -->
-<div id="adminDrawer" class="overlay" style="display:none">
-  <div class="modal" style="width:min(900px,100%)">
-    <h3>Admin — Produtos • Objeções • Usuários</h3>
+<!-- WIDGET ECONÔMICO (SELIC/IPCA/IGPM) -->
+<div class="econWidget" id="econWidget" aria-label="Indicadores econômicos">
+  <div class="pill"><strong>SELIC</strong>: <span id="selicVal">—</span></div>
+  <div class="pill"><strong>IPCA</strong>: <span id="ipcaVal">—</span></div>
+  <div class="pill"><strong>IGP-M</strong>: <span id="igpmVal">—</span></div>
+  <div class="pill" title="Última atualização"><span id="econUpdated">Atualizando…</span></div>
+</div>
+<!-- DRAWER ADMIN -->
+<div class="drawer" id="adminDrawer">
+  <div class="backdrop" onclick="closeAdmin()"></div>
 
-    <div class="formGrid three" style="margin-bottom:12px">
-      <button onclick="setTab('products')">Produtos</button>
-      <button onclick="setTab('objections')">Objeções</button>
-      <button onclick="setTab('users')">Usuários</button>
+  <div class="panel">
+    <div class="panelHeader">
+      <h2>Administração</h2>
+      <button class="danger miniBtn" onclick="closeAdmin()">Fechar</button>
     </div>
 
-    <!-- PRODUTOS -->
-    <div id="viewProducts" style="display:none">
-      <h4>Novo / Editar Produto</h4>
-      <div class="formGrid">
-        <input id="pName" placeholder="Nome do produto">
-        <input id="pKeys" placeholder="Palavras-chave (vírgula)">
-        <textarea id="pInfo" class="small" placeholder="Informações (1 por linha)"></textarea>
-        <button class="primary" onclick="saveProduct()">Salvar produto</button>
+    <div class="tabs">
+      <button class="tabBtn active" id="tabProducts" onclick="setTab('products')">Produtos</button>
+      <button class="tabBtn" id="tabObjections" onclick="setTab('objections')">Objeções</button>
+      <button class="tabBtn" id="tabUsers" onclick="setTab('users')">Usuários</button>
+    </div>
+
+    <div class="panelBody">
+
+      <!-- PRODUTOS -->
+      <div id="viewProducts">
+        <div class="notice">
+          ⚠️ Produtos são detectados por <strong>palavras-chave</strong>.  
+          Não remover produtos que já estão em uso.
+        </div>
+
+        <div class="formGrid">
+          <label>Nome do produto</label>
+          <input id="pName" type="text" placeholder="Ex: Cedros Jardins">
+
+          <label>Palavras-chave (separadas por vírgula)</label>
+          <input id="pKeys" type="text" placeholder="cedros, búfalo, andré maggi">
+
+          <label>Informações (1 por linha)</label>
+          <textarea id="pInfo" class="smallArea" placeholder="Parcelas a partir de R$ 753&#10;Sem entrada"></textarea>
+
+          <div class="row">
+            <button class="primary" onclick="saveProduct()">Salvar produto</button>
+          </div>
+        </div>
+
+        <div class="list" id="productsList"></div>
       </div>
-      <div class="list" id="productsList"></div>
-    </div>
 
-    <!-- OBJEÇÕES -->
-    <div id="viewObjections" style="display:none">
-      <h4>Novo / Editar Objeção</h4>
-      <input id="oKeys" placeholder="Palavras-chave (vírgula)">
-      <div class="formGrid three">
-        <textarea id="oA" class="small" placeholder="Resposta Leve"></textarea>
-        <textarea id="oB" class="small" placeholder="Resposta Média"></textarea>
-        <textarea id="oC" class="small" placeholder="Resposta Agressiva"></textarea>
+      <!-- OBJEÇÕES -->
+      <div id="viewObjections" style="display:none">
+        <div class="notice">
+          Cada objeção gera <strong>3 respostas automáticas</strong>.
+        </div>
+
+        <div class="formGrid">
+          <label>Palavras-chave da objeção</label>
+          <input id="oKeys" type="text" placeholder="caro, preço alto, muito caro">
+
+          <label>Resposta leve</label>
+          <textarea id="oA" class="smallArea"></textarea>
+
+          <label>Resposta média</label>
+          <textarea id="oB" class="smallArea"></textarea>
+
+          <label>Resposta agressiva</label>
+          <textarea id="oC" class="smallArea"></textarea>
+
+          <div class="row">
+            <button class="primary" onclick="saveObjection()">Salvar objeção</button>
+          </div>
+        </div>
+
+        <div class="list" id="objectionsList"></div>
       </div>
-      <button class="primary" onclick="saveObjection()">Salvar objeção</button>
-      <div class="list" id="objectionsList"></div>
-    </div>
 
-    <!-- USUÁRIOS -->
-    <div id="viewUsers" style="display:none">
-      <h4>Novo / Editar Usuário</h4>
-      <div class="formGrid two">
-        <input id="uLogin" placeholder="Login">
-        <input id="uPass" placeholder="Senha">
+      <!-- USUÁRIOS -->
+      <div id="viewUsers" style="display:none">
+        <div class="notice">
+          Usuários comuns <strong>não acessam o Admin</strong>.
+        </div>
+
+        <div class="formGrid two">
+          <div>
+            <label>Login</label>
+            <input id="uLogin" type="text">
+          </div>
+          <div>
+            <label>Senha</label>
+            <input id="uPass" type="password">
+          </div>
+        </div>
+
+        <div class="row" style="margin-top:10px">
+          <button class="primary" onclick="saveUser()">Salvar usuário</button>
+        </div>
+
+        <div class="list" id="usersList"></div>
       </div>
-      <button class="primary" onclick="saveUser()">Salvar usuário</button>
-      <div class="list" id="usersList"></div>
-    </div>
 
-    <button class="danger" onclick="closeAdmin()">Fechar</button>
+    </div>
   </div>
+</div>
+
+<!-- TOAST -->
+<div class="toast" id="toast">
+  <span class="mini"></span>
+  <span id="toastMsg">Mensagem</span>
 </div>
 <script>
 /* ===================== BASE PADRÃO ===================== */
@@ -306,12 +893,14 @@ const DEFAULT_BASE = {
     {
       name: "MORADA BRASIL",
       keys: ["morada"],
-      info: ["Parcelas a partir de R$ 713", "Entrada: não"]
+      info: ["Parcelas a partir de R$ 713", "Entrada: não"],
+      rate: 12
     },
     {
       name: "CEDROS JARDINS",
       keys: ["cedros", "búfalo"],
-      info: ["Lotes 200 m²", "Parcelas a partir de R$ 753", "Entrada: não", "Posto Búfalo"]
+      info: ["Lotes 200 m²", "Parcelas a partir de R$ 753", "Entrada: não", "Posto Búfalo"],
+      rate: 14
     }
   ],
   objections: [
@@ -335,26 +924,58 @@ const DEFAULT_BASE = {
 
 let base = JSON.parse(JSON.stringify(DEFAULT_BASE));
 let currentUser = null;
+let currentProduct = null;
+
+/* ===================== ELEMENTOS ===================== */
+const $ = id => document.getElementById(id);
+
+const loginOverlay = $("loginOverlay");
+const loginUser = $("loginUser");
+const loginPass = $("loginPass");
+const loginError = $("loginError");
+
+const adminBtn = $("adminBtn");
+const logoutBtn = $("logoutBtn");
+const rolePill = $("rolePill");
+
+const prodName = $("prod-name");
+const prodInfo = $("prod-info");
+const prodChip = $("prodChip");
+const prodBadge = $("prodBadge");
+
+const objChip = $("objChip");
+const objBadge = $("objBadge");
+
+const r1 = $("r1");
+const r2 = $("r2");
+const r3 = $("r3");
+
+const input = $("input");
 
 /* ===================== LOGIN ===================== */
 function doLogin(){
   const u = loginUser.value.trim();
   const p = loginPass.value.trim();
 
+  loginError.style.display = "none";
+
   if(u === "edson" && p === "2026"){
-    currentUser = { login:"edson", role:"admin" };
+    currentUser = { login: "edson", role: "admin" };
   } else {
     const found = base.users.find(x => x.login === u && x.pass === p);
     if(!found){
-      alert("Login inválido");
+      loginError.style.display = "block";
       return;
     }
-    currentUser = { login: found.login, role:"user" };
+    currentUser = { login: found.login, role: "user" };
   }
 
   loginOverlay.style.display = "none";
   logoutBtn.style.display = "inline-flex";
   adminBtn.style.display = currentUser.role === "admin" ? "inline-flex" : "none";
+  rolePill.textContent = "Acesso: " + currentUser.role.toUpperCase();
+
+  showToast("Login realizado com sucesso");
 }
 
 /* ===================== LOGOUT ===================== */
@@ -364,21 +985,21 @@ function logout(){
 
 /* ===================== ADMIN ===================== */
 function openAdmin(){
-  if(currentUser?.role !== "admin") return;
-  adminDrawer.style.display = "flex";
+  if(currentUser.role !== "admin") return;
+  document.getElementById("adminDrawer").classList.add("show");
   setTab("products");
   renderAll();
 }
 function closeAdmin(){
-  adminDrawer.style.display = "none";
+  document.getElementById("adminDrawer").classList.remove("show");
 }
-adminBtn.onclick = openAdmin;
 
 /* ===================== TABS ===================== */
 function setTab(tab){
-  viewProducts.style.display = tab === "products" ? "block" : "none";
-  viewObjections.style.display = tab === "objections" ? "block" : "none";
-  viewUsers.style.display = tab === "users" ? "block" : "none";
+  ["products","objections","users"].forEach(t=>{
+    document.getElementById("view"+capitalize(t)).style.display = t===tab?"block":"none";
+    document.getElementById("tab"+capitalize(t)).classList.toggle("active", t===tab);
+  });
 }
 
 /* ===================== PRODUTOS ===================== */
@@ -388,151 +1009,145 @@ function saveProduct(){
   const obj = {
     name: pName.value.trim(),
     keys: pKeys.value.split(",").map(s=>s.trim()).filter(Boolean),
-    info: pInfo.value.split("\n").map(s=>s.trim()).filter(Boolean)
+    info: pInfo.value.split("\n").map(s=>s.trim()).filter(Boolean),
+    rate: Number(prompt("Taxa anual (%) do produto", 12)) || 12
   };
 
-  if(!obj.name){ alert("Informe o nome do produto"); return; }
+  if(!obj.name){ alert("Informe o nome"); return; }
 
-  if(editingProduct === null){
-    base.products.push(obj);
-  } else {
-    base.products[editingProduct] = obj;
-  }
+  if(editingProduct===null) base.products.push(obj);
+  else base.products[editingProduct]=obj;
 
-  editingProduct = null;
+  editingProduct=null;
   renderProducts();
+  showToast("Produto salvo");
 }
 
 function editProduct(i){
   const p = base.products[i];
-  editingProduct = i;
-  pName.value = p.name;
-  pKeys.value = p.keys.join(", ");
-  pInfo.value = p.info.join("\n");
+  editingProduct=i;
+  pName.value=p.name;
+  pKeys.value=p.keys.join(", ");
+  pInfo.value=p.info.join("\n");
 }
 
 function removeProduct(i){
-  if(!confirm("Remover este produto?")) return;
-  base.products.splice(i,1);
-  renderProducts();
+  if(confirm("Remover produto?")){
+    base.products.splice(i,1);
+    renderProducts();
+  }
 }
 
 function renderProducts(){
-  productsList.innerHTML = "";
+  productsList.innerHTML="";
   base.products.forEach((p,i)=>{
-    productsList.innerHTML += `
+    productsList.innerHTML+=`
       <div class="item">
         <div>
-          <strong>${p.name}</strong>
-          <div class="muted">${p.info.join(" • ")}</div>
+          <h5>${p.name}</h5>
+          <p>${p.info.join(" • ")}</p>
         </div>
-        <div>
-          <button onclick="editProduct(${i})">Editar</button>
-          <button onclick="removeProduct(${i})">Remover</button>
+        <div class="actions">
+          <button class="miniBtn" onclick="editProduct(${i})">Editar</button>
+          <button class="miniBtn danger" onclick="removeProduct(${i})">Remover</button>
         </div>
-      </div>
-    `;
+      </div>`;
   });
 }
 
 /* ===================== OBJEÇÕES ===================== */
-let editingObjection = null;
+let editingObjection=null;
 
 function saveObjection(){
-  const obj = {
-    keys: oKeys.value.split(",").map(s=>s.trim()).filter(Boolean),
-    a: oA.value.trim(),
-    b: oB.value.trim(),
-    c: oC.value.trim()
+  const obj={
+    keys:oKeys.value.split(",").map(s=>s.trim()).filter(Boolean),
+    a:oA.value.trim(),
+    b:oB.value.trim(),
+    c:oC.value.trim()
   };
+  if(obj.keys.length===0) return alert("Informe palavras-chave");
 
-  if(obj.keys.length === 0){ alert("Informe palavras-chave"); return; }
+  if(editingObjection===null) base.objections.push(obj);
+  else base.objections[editingObjection]=obj;
 
-  if(editingObjection === null){
-    base.objections.push(obj);
-  } else {
-    base.objections[editingObjection] = obj;
-  }
-
-  editingObjection = null;
+  editingObjection=null;
   renderObjections();
+  showToast("Objeção salva");
 }
 
 function editObjection(i){
-  const o = base.objections[i];
-  editingObjection = i;
-  oKeys.value = o.keys.join(", ");
-  oA.value = o.a;
-  oB.value = o.b;
-  oC.value = o.c;
+  const o=base.objections[i];
+  editingObjection=i;
+  oKeys.value=o.keys.join(", ");
+  oA.value=o.a;
+  oB.value=o.b;
+  oC.value=o.c;
 }
 
 function removeObjection(i){
-  if(!confirm("Remover esta objeção?")) return;
-  base.objections.splice(i,1);
-  renderObjections();
+  if(confirm("Remover objeção?")){
+    base.objections.splice(i,1);
+    renderObjections();
+  }
 }
 
 function renderObjections(){
-  objectionsList.innerHTML = "";
+  objectionsList.innerHTML="";
   base.objections.forEach((o,i)=>{
-    objectionsList.innerHTML += `
+    objectionsList.innerHTML+=`
       <div class="item">
         <div>
-          <strong>${o.keys.join(", ")}</strong>
-          <div class="muted">${o.a}</div>
+          <h5>${o.keys.join(", ")}</h5>
+          <p>${o.a}</p>
         </div>
-        <div>
-          <button onclick="editObjection(${i})">Editar</button>
-          <button onclick="removeObjection(${i})">Remover</button>
+        <div class="actions">
+          <button class="miniBtn" onclick="editObjection(${i})">Editar</button>
+          <button class="miniBtn danger" onclick="removeObjection(${i})">Remover</button>
         </div>
-      </div>
-    `;
+      </div>`;
   });
 }
 
 /* ===================== USUÁRIOS ===================== */
-let editingUser = null;
+let editingUser=null;
 
 function saveUser(){
-  const obj = { login: uLogin.value.trim(), pass: uPass.value.trim() };
-  if(!obj.login || !obj.pass){ alert("Preencha login e senha"); return; }
+  const obj={login:uLogin.value.trim(), pass:uPass.value.trim()};
+  if(!obj.login||!obj.pass) return alert("Preencha login e senha");
 
-  if(editingUser === null){
-    base.users.push(obj);
-  } else {
-    base.users[editingUser] = obj;
-  }
+  if(editingUser===null) base.users.push(obj);
+  else base.users[editingUser]=obj;
 
-  editingUser = null;
+  editingUser=null;
   renderUsers();
+  showToast("Usuário salvo");
 }
 
 function editUser(i){
-  const u = base.users[i];
-  editingUser = i;
-  uLogin.value = u.login;
-  uPass.value = u.pass;
+  const u=base.users[i];
+  editingUser=i;
+  uLogin.value=u.login;
+  uPass.value=u.pass;
 }
 
 function removeUser(i){
-  if(!confirm("Remover este usuário?")) return;
-  base.users.splice(i,1);
-  renderUsers();
+  if(confirm("Remover usuário?")){
+    base.users.splice(i,1);
+    renderUsers();
+  }
 }
 
 function renderUsers(){
-  usersList.innerHTML = "";
+  usersList.innerHTML="";
   base.users.forEach((u,i)=>{
-    usersList.innerHTML += `
+    usersList.innerHTML+=`
       <div class="item">
         <div><strong>${u.login}</strong></div>
-        <div>
-          <button onclick="editUser(${i})">Editar</button>
-          <button onclick="removeUser(${i})">Remover</button>
+        <div class="actions">
+          <button class="miniBtn" onclick="editUser(${i})">Editar</button>
+          <button class="miniBtn danger" onclick="removeUser(${i})">Remover</button>
         </div>
-      </div>
-    `;
+      </div>`;
   });
 }
 
@@ -542,160 +1157,205 @@ function renderAll(){
   renderUsers();
 }
 
-/* ===================== CORE — DETECÇÃO ===================== */
+/* ===================== DETECÇÃO ===================== */
 function normalize(t){
   return t.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g,"");
 }
 
 input.addEventListener("input", ()=>{
-  const text = normalize(input.value);
+  const text=normalize(input.value);
 
-  const product = base.products.find(p =>
-    p.keys.some(k => text.includes(normalize(k)))
-  );
+  currentProduct=null;
+  base.products.forEach(p=>{
+    if(p.keys.some(k=>text.includes(normalize(k)))) currentProduct=p;
+  });
 
-  if(product){
-    prod-name.textContent = product.name;
-    prod-info.innerHTML = product.info.map(i=>`<li>${i}</li>`).join("");
+  if(currentProduct){
+    prodName.textContent=currentProduct.name;
+    prodInfo.innerHTML=currentProduct.info.map(i=>`<li>${i}</li>`).join("");
+    prodChip.textContent="Taxa "+currentProduct.rate+"%";
+    $("calcTaxa").value=currentProduct.rate;
+    prodBadge.classList.add("show");
   }
 
-  const objection = base.objections.find(o =>
-    o.keys.some(k => text.includes(normalize(k)))
-  );
+  base.objections.forEach(o=>{
+    if(o.keys.some(k=>text.includes(normalize(k)))){
+      r1.textContent=o.a;
+      r2.textContent=o.b;
+      r3.textContent=o.c;
+      objChip.textContent="Objeção detectada";
+      objBadge.classList.add("show");
+    }
+  });
+});
 
-  if(objection){
-    r1.textContent = objection.a;
-    r2.textContent = objection.b;
-    r3.textContent = objection.c;
+/* ===================== CALCULADORA ===================== */
+function calcProcrastinacao(){
+  const v=Number($("calcValor").value);
+  const t=Number($("calcTaxa").value||12)/100;
+  if(!v||!t) return alert("Informe valores");
+
+  const m=v*(t/12);
+  const a=v*t;
+  $("calcResultado").style.display="block";
+  $("calcResultado").innerHTML=`
+    ⏳ Mês: <strong>R$ ${m.toFixed(2)}</strong><br>
+    📆 Ano: <strong>R$ ${a.toFixed(2)}</strong>`;
+}
+
+/* ===================== GRÁFICO ===================== */
+const ctx=$("growthChart").getContext("2d");
+function drawChart(){
+  ctx.clearRect(0,0,800,300);
+  const v=Number($("calcValor").value||100);
+  const r=(Number($("calcTaxa").value||12))/100;
+
+  ctx.beginPath();
+  ctx.moveTo(40,240);
+
+  for(let i=1;i<=5;i++){
+    const val=v*Math.pow(1+r,i);
+    ctx.lineTo(40+i*140,240-val/1000);
+    ctx.fillText("R$ "+val.toFixed(0),40+i*140,220-val/1000);
+  }
+  ctx.strokeStyle="#4c5bd4";
+  ctx.lineWidth=3;
+  ctx.stroke();
+}
+setInterval(drawChart,2000);
+
+/* ===================== BOTÃO LINK ===================== */
+function openFormalizacao(){
+  window.open("https://lucianabogo333-spec.github.io/formalizacao-proposta/","_blank");
+}
+
+/* ===================== TOAST ===================== */
+function showToast(msg){
+  const t=$("toast");
+  $("toastMsg").textContent=msg;
+  t.classList.add("show");
+  setTimeout(()=>t.classList.remove("show"),3000);
+}
+
+/* ===================== HELPERS ===================== */
+function capitalize(t){return t.charAt(0).toUpperCase()+t.slice(1);}
+</script>
+<script>
+/* ===================== INDICADORES ECONÔMICOS ===================== */
+/* Fonte oficial (Banco Central / IBGE / FGV) via APIs públicas */
+async function carregarIndicadores(){
+  try{
+    // SELIC
+    const selicRes = await fetch("https://api.bcb.gov.br/dados/serie/bcdata.sgs.4189/dados/ultimos/1?formato=json");
+    const selic = (await selicRes.json())[0]?.valor;
+
+    // IPCA
+    const ipcaRes = await fetch("https://api.bcb.gov.br/dados/serie/bcdata.sgs.433/dados/ultimos/1?formato=json");
+    const ipca = (await ipcaRes.json())[0]?.valor;
+
+    // IGPM
+    const igpmRes = await fetch("https://api.bcb.gov.br/dados/serie/bcdata.sgs.189/dados/ultimos/1?formato=json");
+    const igpm = (await igpmRes.json())[0]?.valor;
+
+    if(selic) document.getElementById("selicVal").textContent = selic + "%";
+    if(ipca) document.getElementById("ipcaVal").textContent = ipca + "%";
+    if(igpm) document.getElementById("igpmVal").textContent = igpm + "%";
+
+    document.getElementById("econUpdated").textContent = "Atualizado agora";
+  }catch(e){
+    document.getElementById("econUpdated").textContent = "Offline";
+  }
+}
+carregarIndicadores();
+setInterval(carregarIndicadores, 60 * 60 * 1000); // 1h
+
+/* ===================== ATALHOS ===================== */
+document.addEventListener("keydown", e=>{
+  if(e.ctrlKey && e.key.toLowerCase()==="k"){
+    e.preventDefault();
+    clearAll();
   }
 });
 
-/* ===================== COPIAR ===================== */
-function copy(id){
-  navigator.clipboard.writeText(
-    document.getElementById(id).innerText
-  );
+/* ===================== LIMPAR ===================== */
+function clearAll(){
+  input.value="";
+  prodName.textContent="Produto não identificado";
+  prodInfo.innerHTML="";
+  prodChip.textContent="—";
+  objChip.textContent="Objeção: —";
+  r1.textContent="—";
+  r2.textContent="—";
+  r3.textContent="—";
+  document.getElementById("calcResultado").style.display="none";
 }
-</script>
-<script>
-/* ===================== BOTÃO FORMALIZAÇÃO ===================== */
-const btnFormalizar = document.createElement("button");
-btnFormalizar.className = "primary";
-btnFormalizar.textContent = "📄 Formalizar proposta";
-btnFormalizar.onclick = () => {
-  window.open(
-    "https://lucianabogo333-spec.github.io/formalizacao-proposta/",
-    "_blank"
-  );
-};
 
-document.querySelector(".toolbar .btnRow")?.appendChild(btnFormalizar);
+/* ===================== MICROFONE (manual) ===================== */
+let recognition=null;
+let listening=false;
 
-/* ===================== CALCULADORA DE PROCRASTINAÇÃO ===================== */
-const calcCard = document.createElement("div");
-calcCard.className = "card";
-calcCard.innerHTML = `
-  <div class="head">
-    <div class="title">
-      <h3>Calculadora de Procrastinação</h3>
-      <p class="subtitle">Quanto custa adiar a decisão</p>
-    </div>
-  </div>
-  <div class="body formGrid two">
-    <div>
-      <label>Valor do lote (R$)</label>
-      <input id="calcValor" type="number" placeholder="Ex: 120000">
-    </div>
-    <div>
-      <label>Valorização anual (%)</label>
-      <input id="calcTaxa" type="number" placeholder="Ex: 12">
-    </div>
-    <div class="row" style="grid-column:1/-1; justify-content:flex-end">
-      <button onclick="calcularProcrastinacao()">Calcular</button>
-    </div>
-    <div id="calcResultado" class="success" style="display:none"></div>
-  </div>
-`;
-
-document.querySelector("main").appendChild(calcCard);
-
-function calcularProcrastinacao(){
-  const valor = Number(document.getElementById("calcValor").value);
-  const taxa = Number(document.getElementById("calcTaxa").value) / 100;
-
-  if(!valor || !taxa){
-    alert("Preencha todos os campos");
+function toggleListening(){
+  if(!("webkitSpeechRecognition" in window)){
+    alert("Microfone não suportado neste navegador");
     return;
   }
 
-  const mensal = valor * (taxa / 12);
-  const anual = valor * taxa;
+  if(!recognition){
+    recognition = new webkitSpeechRecognition();
+    recognition.lang="pt-BR";
+    recognition.continuous=false;
+    recognition.interimResults=false;
 
-  const el = document.getElementById("calcResultado");
-  el.style.display = "block";
-  el.innerHTML = `
-    ⏳ <strong>Custo de esperar:</strong><br>
-    • Mês: <strong>R$ ${mensal.toFixed(2)}</strong><br>
-    • Ano: <strong>R$ ${anual.toFixed(2)}</strong>
-  `;
-}
+    recognition.onresult = e=>{
+      const text = e.results[0][0].transcript;
+      input.value += (input.value?" ":"") + text;
+      input.dispatchEvent(new Event("input"));
+    };
 
-/* ===================== RELÓGIO ECONÔMICO ===================== */
-const econ = document.createElement("div");
-econ.className = "pill";
-econ.style.position = "fixed";
-econ.style.bottom = "16px";
-econ.style.left = "16px";
-econ.style.zIndex = "50";
-econ.innerHTML = `
-  <strong>SELIC:</strong> 10,50% |
-  <strong>IPCA:</strong> 4,5% |
-  <strong>IGPM:</strong> 3,8%
-`;
-document.body.appendChild(econ);
-
-/* ===================== GRÁFICO INVESTIMENTO X VALORIZAÇÃO ===================== */
-const graphCard = document.createElement("div");
-graphCard.className = "card";
-graphCard.innerHTML = `
-  <div class="head">
-    <div class="title">
-      <h3>Investimento x Valorização (5 anos)</h3>
-    </div>
-  </div>
-  <div class="body">
-    <canvas id="grafico" height="220"></canvas>
-  </div>
-`;
-document.querySelector("main").appendChild(graphCard);
-
-const ctx = document.getElementById("grafico").getContext("2d");
-
-function drawChart(){
-  const base = 100;
-  const rate = 0.12;
-  ctx.clearRect(0,0,500,300);
-
-  ctx.beginPath();
-  ctx.moveTo(40,200);
-
-  for(let i=1;i<=5;i++){
-    const val = base * Math.pow(1+rate,i);
-    ctx.lineTo(40 + i*70, 200 - val);
-    ctx.fillText(`R$ ${(val*1000).toFixed(0)}`, 20 + i*70, 200 - val - 5);
+    recognition.onend = ()=>{
+      listening=false;
+      atualizarMic(false);
+    };
   }
 
-  ctx.strokeStyle = "#4c5bd4";
-  ctx.lineWidth = 3;
-  ctx.stroke();
-
-  ctx.fillText("Ano 0", 35, 220);
-  for(let i=1;i<=5;i++){
-    ctx.fillText(`Ano ${i}`, 30 + i*70, 220);
+  if(!listening){
+    recognition.start();
+    listening=true;
+    atualizarMic(true);
+  }else{
+    recognition.stop();
+    listening=false;
+    atualizarMic(false);
   }
 }
 
-drawChart();
+function atualizarMic(on){
+  document.getElementById("micDot").classList.toggle("on", on);
+  document.getElementById("micLabel").textContent = on ? "Microfone: ouvindo" : "Microfone: desligado";
+}
+
+/* ===================== AUTO-LOGIN (remember me) ===================== */
+const remember = document.getElementById("rememberMe");
+if(localStorage.getItem("copilotoUser")){
+  const u = JSON.parse(localStorage.getItem("copilotoUser"));
+  loginUser.value = u.login;
+}
+
+const oldLogin = doLogin;
+doLogin = function(){
+  oldLogin();
+  if(currentUser && remember.checked){
+    localStorage.setItem("copilotoUser", JSON.stringify({login: currentUser.login}));
+  }
+};
+
+/* ===================== BOAS-VINDAS ===================== */
+function closeWelcome(){
+  document.getElementById("welcome").style.display="none";
+}
+setTimeout(()=>{
+  document.getElementById("welcome").style.display="flex";
+}, 800);
 </script>
 
 </body>

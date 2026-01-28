@@ -179,7 +179,122 @@
 <script id="databaseScript">
   let base = {
     users: [{login:"edson", pass:"2026", role:"admin"}],
-    products: [],
+    products: [
+      { 
+        name: "LOTEAMENTO CARVALHOS", 
+        keys: ["carvalhos", "carvalho", "próximo ao shopping"], 
+        baseVal: 150000, 
+        rate: 15, 
+        info: [
+          "📍 Próximo ao Shopping",
+          "📏 Terrenos de 300 m² (12x25)",
+          "💰 Parcelas a partir de R$ 1.299,00",
+          "🚫 SEM ENTRADA",
+          "⏳ Planos em até 240x",
+          "🏗️ Liberação para obras em 2028"
+        ] 
+      },
+      { 
+        name: "RECANTO RENASCER (STA CARMEM)", 
+        keys: ["renascer", "santa carmem", "chácara renascer"], 
+        baseVal: 85000, 
+        rate: 18, 
+        info: [
+          "🌳 6 km da entrada de Santa Carmem",
+          "🌊 Lindo lago na frente do empreendimento",
+          "💡 Energia elétrica trifásica",
+          "🚫 SEM ENTRADA (exceto QD02)",
+          "💸 Parcelas a partir de R$ 695"
+        ] 
+      },
+      { 
+        name: "RECANTO ALVORADA", 
+        keys: ["alvorada", "rio azul", "canarinho"], 
+        baseVal: 75000, 
+        rate: 12, 
+        info: [
+          "📍 21 km do Canarinho",
+          "📐 Lotes a partir de 1.200 m²",
+          "🏞 Acesso coletivo ao Rio Azul",
+          "🌳 Chácaras entregues 100% com mata",
+          "💰 Parcelas a partir de R$ 600,00"
+        ] 
+      },
+      { 
+        name: "CEDROS JARDINS", 
+        keys: ["cedros", "jardins", "posto búfalo"], 
+        baseVal: 95000, 
+        rate: 14, 
+        info: [
+          "📍 Próximo ao Posto Búfalo, Fastec e Super Center",
+          "📏 Lotes a partir de 200 m²",
+          "🚫 Sem entrada",
+          "💵 Parcelas a partir de R$ 753,00"
+        ] 
+      },
+      { 
+        name: "RESIDENCIAL TUIUIÚ", 
+        keys: ["tuiuiú", "tuiuiu"], 
+        baseVal: 105000, 
+        rate: 15, 
+        info: [
+          "📍 Localização: Fastec, Super Center, Sonhalto Videira",
+          "💰 Parcelas a partir de R$ 869,00",
+          "📅 Construção liberada a partir de julho/2026"
+        ] 
+      },
+      { 
+        name: "MORADA BRASIL", 
+        keys: ["morada brasil", "andré maggi", "andre maggi"], 
+        baseVal: 170000, 
+        rate: 20, 
+        info: [
+          "📍 Acesso direto à Av. André Maggi (Região Nobre)",
+          "✅ Sem entrada",
+          "💰 Valor à vista a partir de R$ 170 mil",
+          "💸 Parcelas a partir de R$ 713,00",
+          "⏳ Até 240 vezes"
+        ] 
+      },
+      { 
+        name: "CASA PRONTA (MINHA CASA MINHA VIDA)", 
+        keys: ["casa pronta", "casa própria", "financiamento caixa"], 
+        baseVal: 220000, 
+        rate: 10, 
+        info: [
+          "🏠 2 quartos, Sala, Cozinha, Área de lazer",
+          "🏗️ Bairro planejado em Sinop",
+          "💰 Parcelas a partir de R$ 699,00",
+          "💳 Sinal de apenas R$ 1.500",
+          "🏦 Financiamento Minha Casa Minha Vida"
+        ] 
+      },
+      { 
+        name: "GRAN CANÁRIO", 
+        keys: ["gran canário", "canário", "fasipe agro", "mt-140"], 
+        baseVal: 78000, 
+        rate: 25, 
+        info: [
+          "🎓 Localização estratégica — Futura FASIPE AGRO",
+          "📍 Região do Belvedere / MT-140",
+          "📈 Potencial gigantesco de valorização",
+          "💸 Parcelas a partir de R$ 595"
+        ] 
+      },
+      { 
+        name: "CASA ANDRÉ MAGGI (300K)", 
+        keys: ["casa andré maggi", "casa 300 mil", "casa porcelanato"], 
+        baseVal: 300000, 
+        rate: 12, 
+        info: [
+          "🏠 Área Construída: 64 m² | Terreno: 302 m²",
+          "💎 Acabamento em porcelanato e iluminação LED",
+          "🛏️ 1 suíte + 1 quarto",
+          "🚀 Espaço para ampliação (3º quarto e garagem)",
+          "💰 Valor: R$ 300.000,00 (Aceita Financiamento)"
+        ] 
+      }
+    ],,
     objections: [
   // 1-10: Preço, Tempo e Decisão
   { keys: ["caro", "preço", "valor"], a: "Caro em relação a quê? Se eu te desse R$ 200 mil em barras de ouro por R$ 150 mil, você diria que está caro? (Lobo)", b: "O preço é o que você paga, o valor é o lucro que você leva no bolso na entrega. (Warren Buffett)", c: "Prefere economizar 10% hoje ou ganhar 40% de valorização amanhã? (Psicologia da Venda)" },
@@ -382,4 +497,5 @@ function toggleMic() {
 </script>
 </body>
 </html>
+
 

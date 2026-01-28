@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>COPILOTO — Gestão Total</title>
+<title>COPILOTO — Gestão e Performance</title>
 
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
@@ -17,46 +17,36 @@
   *{box-sizing:border-box; font-family: 'Inter', sans-serif;}
   body{ margin:0; background: var(--bg); color: var(--text); -webkit-font-smoothing: antialiased; }
 
-  /* TOPBAR */
   header{ position:sticky; top:0; z-index:50; background:rgba(255,255,255,.9); backdrop-filter: blur(10px); border-bottom:1px solid var(--border); padding:10px 20px; }
   .topbar{ max-width:1200px; margin:0 auto; display:flex; justify-content:space-between; align-items:center; }
   
-  /* GRID PRINCIPAL */
-  main{ max-width:1200px; margin:20px auto; padding:0 20px; display:grid; grid-template-columns: 300px 1fr 400px; gap:20px; }
+  main{ max-width:1200px; margin:20px auto; padding:0 20px; display:grid; grid-template-columns: 320px 1fr 420px; gap:20px; }
 
-  /* CARDS */
-  .card{ background:white; border-radius:var(--radius); border:1px solid var(--border); box-shadow: 0 4px 6px rgba(0,0,0,0.02); overflow:hidden; }
-  .card-head{ padding:15px; border-bottom:1px solid var(--border); background:#fafafa; font-weight:800; font-size:14px; }
+  .card{ background:white; border-radius:var(--radius); border:1px solid var(--border); box-shadow: 0 4px 6px rgba(0,0,0,0.02); overflow:hidden; margin-bottom:15px;}
+  .card-head{ padding:12px 15px; border-bottom:1px solid var(--border); background:#fafafa; font-weight:800; font-size:12px; color:var(--muted); text-transform:uppercase; }
   .card-body{ padding:15px; }
 
-  /* FORMULÁRIOS */
-  input, textarea, select { 
-    width:100%; padding:10px; margin: 5px 0 15px 0; border:1px solid var(--border); border-radius:8px; font-size:14px;
-  }
-  label{ font-size:12px; font-weight:700; color:var(--muted); text-transform: uppercase; }
+  input, textarea, select { width:100%; padding:10px; margin: 5px 0 12px 0; border:1px solid var(--border); border-radius:8px; font-size:14px; }
+  label{ font-size:11px; font-weight:700; color:var(--muted); text-transform: uppercase; }
 
-  /* BOTÕES */
   button{ padding:10px 15px; border-radius:8px; border:none; cursor:pointer; font-weight:700; transition: 0.2s; font-size:13px; }
   .btn-primary{ background: var(--primary); color:white; }
-  .btn-primary:hover{ background: var(--primary2); }
   .btn-outline{ border:1px solid var(--border); background:white; }
-  .btn-danger{ background: #fee2e2; color: #b91c1c; }
-  .btn-export{ background: #000; color: #fff; width:100%; margin-top:10px; font-size:15px; padding:15px; }
+  .btn-danger{ background: #fee2e2; color: #b91c1c; padding: 5px 10px; font-size:11px; }
+  .btn-export{ background: #111; color: #fff; width:100%; margin:20px 0; font-size:14px; padding:15px; border: 2px solid var(--primary); }
 
-  /* ADMIN DRAWER */
   #adminDrawer{ position:fixed; inset:0; display:none; z-index:100; }
   #adminDrawer.show{ display:flex; }
-  .drawer-content{ width:min(800px, 95%); background:white; margin-left:auto; height:100%; box-shadow:-10px 0 30px rgba(0,0,0,0.1); display:flex; flex-direction:column; animation: slide 0.3s ease-out; }
-  @keyframes slide { from{transform: translateX(100%)} to{transform: translateX(0)} }
+  .drawer-content{ width:min(850px, 95%); background:white; margin-left:auto; height:100%; box-shadow:-10px 0 30px rgba(0,0,0,0.1); display:flex; flex-direction:column; }
   .drawer-body{ flex:1; overflow-y:auto; padding:30px; }
   
-  /* TABELAS ADMIN */
-  .data-list{ margin-top:20px; border-top:1px solid var(--border); }
-  .data-item{ display:flex; justify-content:space-between; align-items:center; padding:10px; border-bottom:1px solid #f0f0f0; font-size:13px; }
+  .tabs{ display:flex; gap:10px; border-bottom:1px solid #eee; margin-bottom:20px; }
+  .tab-btn{ padding:10px 20px; background:none; color:var(--muted); border-bottom: 2px solid transparent; border-radius:0; }
+  .tab-btn.active{ color:var(--primary); border-bottom: 2px solid var(--primary); }
 
-  /* RESPONSIVIDADE */
+  .data-item{ display:flex; justify-content:space-between; align-items:center; padding:10px; border:1px solid #f0f0f0; margin-bottom:5px; border-radius:8px; font-size:13px; }
+
   @media (max-width: 1000px){ main{ grid-template-columns: 1fr; } }
-
   .toast{ position:fixed; bottom:20px; left:50%; transform:translateX(-50%); background:#333; color:white; padding:10px 30px; border-radius:50px; display:none; z-index:1000; }
 </style>
 </head>
@@ -64,9 +54,9 @@
 
 <header>
   <div class="topbar">
-    <div><strong>COPILOTO</strong> <small style="color:var(--muted)">v2.6</small></div>
+    <div><strong>COPILOTO</strong> <small id="roleDisplay"></small></div>
     <div id="userTools" style="display:none; gap:10px;">
-      <button class="btn-outline" onclick="openAdmin()">⚙️ Painel de Edição</button>
+      <button class="btn-outline" id="btnOpenAdmin" onclick="openAdmin()">⚙️ Editar Sistema</button>
       <button class="btn-danger" onclick="location.reload()">Sair</button>
     </div>
   </div>
@@ -74,42 +64,46 @@
 
 <div id="loginArea" style="position:fixed; inset:0; background:var(--bg); z-index:200; display:flex; align-items:center; justify-content:center;">
   <div class="card" style="width:340px; padding:20px;">
-    <h3>Acesso Restrito</h3>
-    <label>Login</label><input id="lUser" type="text" value="edson">
-    <label>Senha</label><input id="lPass" type="password" value="2026">
+    <h3>Acesso Copiloto</h3>
+    <label>Login</label><input id="lUser" type="text" placeholder="usuário">
+    <label>Senha</label><input id="lPass" type="password" placeholder="senha">
     <button class="btn-primary" onclick="initApp()" style="width:100%">Entrar</button>
+    <p id="loginError" style="color:red; font-size:12px; display:none; margin-top:10px;">Acesso negado.</p>
   </div>
 </div>
 
-<main id="appMain" style="opacity:0.3; pointer-events:none;">
+<main id="appMain" style="opacity:0.2; pointer-events:none;">
   <aside>
     <div class="card">
-      <div class="card-head">PRODUTO DETECTADO</div>
+      <div class="card-head">📍 Produto Ativo</div>
       <div class="card-body">
-        <h2 id="view-prod-name" style="margin:0; color:var(--primary)">Aguardando...</h2>
-        <ul id="view-prod-info" style="font-size:14px; margin-top:15px; color:var(--muted)"></ul>
+        <h2 id="view-prod-name" style="margin:0; color:var(--primary)">Pendente...</h2>
+        <ul id="view-prod-info" style="font-size:13px; margin-top:15px; color:var(--muted); font-weight:600;"></ul>
       </div>
+    </div>
+    <div class="card">
+      <div class="card-head">📈 Projeção 5 Anos</div>
+      <div class="card-body"><canvas id="growthChart"></canvas></div>
     </div>
   </aside>
 
   <section>
     <div class="card">
-      <div class="card-head">ENTRADA DO CLIENTE</div>
+      <div class="card-head">🗣️ Escuta Ativa</div>
       <div class="card-body">
-        <textarea id="mainInput" placeholder="O que o cliente disse? (Ex: Achei o Cedros Caro)" style="min-height:200px; font-size:16px;"></textarea>
+        <textarea id="mainInput" placeholder="Aguardando fala do cliente ou digitação..." style="min-height:280px; font-size:16px; line-height:1.6"></textarea>
         <div style="display:flex; gap:10px">
-          <button class="btn-primary" onclick="toggleMic()">🎙️ Iniciar Microfone</button>
-          <button class="btn-outline" onclick="clearInput()">Limpar</button>
+          <button class="btn-primary" onclick="toggleMic()" id="micBtn">🎙️ Ouvir Cliente</button>
+          <button class="btn-outline" onclick="document.getElementById('mainInput').value='';">Limpar</button>
         </div>
       </div>
     </div>
   </section>
 
   <aside>
-    <div class="card" style="margin-bottom:15px"><div class="card-body"><strong>Leve:</strong><p id="res-a">—</p></div></div>
-    <div class="card" style="margin-bottom:15px"><div class="card-body"><strong>Média:</strong><p id="res-b">—</p></div></div>
-    <div class="card" style="margin-bottom:15px"><div class="card-body"><strong>Agressiva:</strong><p id="res-c">—</p></div></div>
-    <div class="card"><div class="card-body"><canvas id="growthChart"></canvas></div></div>
+    <div class="card"><div class="card-head">🟢 Quebra Leve</div><div class="card-body"><p id="res-a" style="font-weight:600">—</p></div></div>
+    <div class="card"><div class="card-head">🟡 Quebra Média</div><div class="card-body"><p id="res-b" style="font-weight:600">—</p></div></div>
+    <div class="card"><div class="card-head">🔴 Quebra Agressiva</div><div class="card-body"><p id="res-c" style="font-weight:600">—</p></div></div>
   </aside>
 </main>
 
@@ -117,49 +111,67 @@
   <div style="flex:1; background:rgba(0,0,0,0.5)" onclick="closeAdmin()"></div>
   <div class="drawer-content">
     <div class="drawer-body">
-      <h1>Painel de Edição</h1>
-      <p style="color:var(--muted)">Gerencie seus dados e exporte o código para o GitHub.</p>
+      <h2>Configurações do Sistema</h2>
+      <button class="btn-export" onclick="copyFullCode()">🚀 COPIAR CÓDIGO INDEX.HTML ATUALIZADO</button>
       
-      <button class="btn-export" onclick="copyFullCode()">💾 COPIAR CÓDIGO ATUALIZADO (INDEX.HTML)</button>
-      
-      <hr style="margin:30px 0; border:0; border-top:1px solid #eee;">
-
-      <h3>📦 Gerenciar Produtos</h3>
-      <div class="card-body" style="background:#f9f9f9; border-radius:10px;">
-        <label>Nome do Produto</label><input id="fProdName" placeholder="Ex: Cedros">
-        <label>Chaves (vírgula)</label><input id="fProdKeys" placeholder="cedros, bufalo, maggi">
-        <label>Taxa Anual %</label><input id="fProdRate" type="number" value="12">
-        <label>Infos (1 por linha)</label><textarea id="fProdInfo" style="min-height:60px"></textarea>
-        <button class="btn-primary" onclick="addData('products')">Salvar Produto</button>
+      <div class="tabs">
+        <button class="tab-btn active" onclick="showTab('tab-p', this)">Produtos</button>
+        <button class="tab-btn" onclick="showTab('tab-o', this)">Objeções</button>
+        <button class="tab-btn" onclick="showTab('tab-u', this)">Usuários</button>
       </div>
-      <div id="list-products" class="data-list"></div>
 
-      <h3 style="margin-top:40px">🚫 Gerenciar Objeções</h3>
-      <div class="card-body" style="background:#f9f9f9; border-radius:10px;">
-        <label>Chaves da Objeção</label><input id="fObjKeys" placeholder="caro, preço, valor">
-        <label>Resposta Leve</label><textarea id="fObjA"></textarea>
-        <label>Resposta Média</label><textarea id="fObjB"></textarea>
-        <label>Resposta Agressiva</label><textarea id="fObjC"></textarea>
-        <button class="btn-primary" onclick="addData('objections')">Salvar Objeção</button>
+      <div id="tab-p" class="tab-content">
+        <div class="card-body" style="background:#f9f9f9; border-radius:10px; margin-bottom:15px">
+          <label>Nome</label><input id="fProdName">
+          <label>Chaves (Ex: cedros, búfalo)</label><input id="fProdKeys">
+          <label>Valor Médio Lote (R$)</label><input id="fProdVal" type="number" value="120000">
+          <label>Taxa Valorização Anual (%)</label><input id="fProdRate" type="number" value="12">
+          <label>Infos</label><textarea id="fProdInfo"></textarea>
+          <button class="btn-primary" onclick="addData('products')">Adicionar</button>
+        </div>
+        <div id="list-products"></div>
       </div>
-      <div id="list-objections" class="data-list"></div>
+
+      <div id="tab-o" class="tab-content" style="display:none">
+        <div class="card-body" style="background:#f9f9f9; border-radius:10px; margin-bottom:15px">
+          <label>Palavras-Chave</label><input id="fObjKeys">
+          <label>Leve</label><textarea id="fObjA"></textarea>
+          <label>Média</label><textarea id="fObjB"></textarea>
+          <label>Agressiva</label><textarea id="fObjC"></textarea>
+          <button class="btn-primary" onclick="addData('objections')">Adicionar</button>
+        </div>
+        <div id="list-objections"></div>
+      </div>
+
+      <div id="tab-u" class="tab-content" style="display:none">
+        <div class="card-body" style="background:#f9f9f9; border-radius:10px; margin-bottom:15px">
+          <label>Novo Login</label><input id="fUserLogin">
+          <label>Senha</label><input id="fUserPass">
+          <label>Perfil</label>
+          <select id="fUserRole"><option value="user">Vendedor</option><option value="admin">Administrador</option></select>
+          <button class="btn-primary" onclick="addData('users')">Adicionar Usuário</button>
+        </div>
+        <div id="list-users"></div>
+      </div>
 
     </div>
-    <div style="padding:20px; border-top:1px solid #eee"><button class="btn-outline" style="width:100%" onclick="closeAdmin()">Fechar Painel</button></div>
   </div>
 </div>
 
-<div id="toast" class="toast">Copiado!</div>
+<div id="toast" class="toast"></div>
 
 <script id="databaseScript">
-  // ESTA É A BASE QUE O BOTÃO DE EXPORTAR IRÁ ATUALIZAR
   let base = {
+    users: [
+      { login: "edson", pass: "2026", role: "admin" },
+      { login: "vendedor", pass: "123", role: "user" }
+    ],
     products: [
-      { name: "CEDROS JARDINS", keys: ["cedros", "búfalo"], info: ["Lotes 200m²", "Parcelas R$ 753"], rate: 14 },
-      { name: "MORADA BRASIL", keys: ["morada"], info: ["Lotes 250m²", "Parcelas R$ 713"], rate: 12 }
+      { name: "CEDROS JARDINS", keys: ["cedros", "búfalo"], info: ["Lotes 200m²", "Parcelas R$ 753"], rate: 15, baseVal: 120000 },
+      { name: "MORADA BRASIL", keys: ["morada"], info: ["Lotes 250m²", "Parcelas R$ 713"], rate: 10, baseVal: 100000 }
     ],
     objections: [
-      { keys: ["caro", "preço", "valor"], a: "Entendo. É caro comparado a quê?", b: "O investimento se paga com a valorização.", c: "Se eu baixar a parcela, fechamos?" }
+      { keys: ["caro", "preço"], a: "Entendo. É caro comparado a quê?", b: "O investimento se paga com a valorização.", c: "Se eu baixar a parcela, fechamos?" }
     ]
   };
 </script>
@@ -170,29 +182,30 @@ let chart;
 function initApp() {
   const u = document.getElementById("lUser").value;
   const p = document.getElementById("lPass").value;
-  if(u === "edson" && p === "2026") {
+  const user = base.users.find(x => x.login === u && x.pass === p);
+  
+  if(user) {
     document.getElementById("loginArea").style.display = "none";
     document.getElementById("appMain").style.opacity = "1";
     document.getElementById("appMain").style.pointerEvents = "all";
     document.getElementById("userTools").style.display = "flex";
+    document.getElementById("roleDisplay").innerText = `(${user.role})`;
+    if(user.role !== 'admin') document.getElementById("btnOpenAdmin").style.display = 'none';
     initChart();
     renderLists();
+  } else {
+    document.getElementById("loginError").style.display = "block";
   }
 }
 
-// LÓGICA DE INPUT
 document.getElementById("mainInput").addEventListener("input", function() {
   const text = this.value.toLowerCase();
-  
-  // Detectar Produto
   const p = base.products.find(item => item.keys.some(k => text.includes(k.trim().toLowerCase())));
   if(p) {
     document.getElementById("view-prod-name").innerText = p.name;
     document.getElementById("view-prod-info").innerHTML = p.info.map(i => `<li>${i}</li>`).join("");
-    updateChart(p.rate);
+    updateChart(p.baseVal, p.rate);
   }
-
-  // Detectar Objeção
   const o = base.objections.find(item => item.keys.some(k => text.includes(k.trim().toLowerCase())));
   if(o) {
     document.getElementById("res-a").innerText = o.a;
@@ -201,25 +214,29 @@ document.getElementById("mainInput").addEventListener("input", function() {
   }
 });
 
-// GESTÃO DE DADOS (ADMIN)
 function addData(type) {
   if(type === 'products') {
     base.products.push({
       name: document.getElementById("fProdName").value.toUpperCase(),
-      keys: document.getElementById("fProdKeys").value.split(","),
+      keys: document.getElementById("fProdKeys").value.split(",").map(k => k.trim()),
+      baseVal: Number(document.getElementById("fProdVal").value),
       rate: Number(document.getElementById("fProdRate").value),
       info: document.getElementById("fProdInfo").value.split("\n")
     });
-  } else {
+  } else if(type === 'objections') {
     base.objections.push({
-      keys: document.getElementById("fObjKeys").value.split(","),
-      a: document.getElementById("fObjA").value,
-      b: document.getElementById("fObjB").value,
-      c: document.getElementById("fObjC").value
+      keys: document.getElementById("fObjKeys").value.split(",").map(k => k.trim()),
+      a: document.getElementById("fObjA").value, b: document.getElementById("fObjB").value, c: document.getElementById("fObjC").value
+    });
+  } else if(type === 'users') {
+    base.users.push({
+      login: document.getElementById("fUserLogin").value,
+      pass: document.getElementById("fUserPass").value,
+      role: document.getElementById("fUserRole").value
     });
   }
   renderLists();
-  showToast("Adicionado!");
+  showToast("Salvo com sucesso!");
 }
 
 function removeData(type, index) {
@@ -228,56 +245,61 @@ function removeData(type, index) {
 }
 
 function renderLists() {
-  document.getElementById("list-products").innerHTML = base.products.map((p, i) => `
-    <div class="data-item"><span>${p.name}</span> <button class="btn-danger" onclick="removeData('products', ${i})">Remover</button></div>
-  `).join("");
-  
-  document.getElementById("list-objections").innerHTML = base.objections.map((o, i) => `
-    <div class="data-item"><span>Objeção: ${o.keys[0]}</span> <button class="btn-danger" onclick="removeData('objections', ${i})">Remover</button></div>
-  `).join("");
+  document.getElementById("list-products").innerHTML = base.products.map((p, i) => `<div class="data-item"><span>${p.name}</span> <button class="btn-danger" onclick="removeData('products', ${i})">X</button></div>`).join("");
+  document.getElementById("list-objections").innerHTML = base.objections.map((o, i) => `<div class="data-item"><span>Objeção: ${o.keys[0]}</span> <button class="btn-danger" onclick="removeData('objections', ${i})">X</button></div>`).join("");
+  document.getElementById("list-users").innerHTML = base.users.map((u, i) => `<div class="data-item"><span>👤 ${u.login} (${u.role})</span> <button class="btn-danger" onclick="removeData('users', ${i})">X</button></div>`).join("");
 }
 
-// EXPORTAÇÃO MÁGICA
 function copyFullCode() {
-  // Pegamos o script do database e atualizamos ele com os novos valores
   const scriptDb = document.getElementById("databaseScript");
   scriptDb.innerHTML = `\n  let base = ${JSON.stringify(base, null, 2)};\n`;
-
-  // Pegamos o HTML completo
-  const fullHtml = "<!DOCTYPE html>\n" + document.documentElement.outerHTML;
-  
-  navigator.clipboard.writeText(fullHtml).then(() => {
-    alert("CÓDIGO COMPLETO COPIADO!\n\nAgora seu index.html contém todos os produtos e objeções que você acabou de criar. É só colar no arquivo e salvar.");
-  });
+  const finalCode = "<!DOCTYPE html>\n" + document.documentElement.outerHTML;
+  navigator.clipboard.writeText(finalCode);
+  alert("CÓDIGO COPIADO! Cole no seu index.html e salve para atualizar o GitHub permanentemente.");
 }
 
-// GRÁFICO
 function initChart() {
   const ctx = document.getElementById('growthChart').getContext('2d');
   chart = new Chart(ctx, {
     type: 'line',
     data: {
-      labels: ['12m', '24m', '36m', '48m', '60m'],
-      datasets: [{ label: 'Valorização', data: [100, 115, 130, 150, 175], borderColor: '#4c5bd4', backgroundColor: 'rgba(76,91,212,0.1)', fill: true }]
+      labels: ['Início', 'Ano 1', 'Ano 2', 'Ano 3', 'Ano 4', 'Ano 5'],
+      datasets: [
+        { label: 'Valorização (Mercado)', data: [120000, 138000, 158000, 182000, 210000, 240000], borderColor: '#4c5bd4', backgroundColor: 'rgba(76,91,212,0.1)', fill: true, tension: 0.3 },
+        { label: 'Investimento (Pago)', data: [0, 24000, 48000, 72000, 96000, 120000], borderColor: '#16a34a', borderDash: [5, 5], tension: 0.1 }
+      ]
     },
-    options: { plugins: { legend: { display: false } } }
+    options: { responsive: true, plugins: { legend: { position: 'bottom', labels: { boxWidth: 10, font: { size: 10 } } } } }
   });
 }
 
-function updateChart(rate) {
-  let val = 100000;
-  let newData = [val];
-  for(let i=1; i<5; i++) { val *= (1 + (rate/100)); newData.push(Math.round(val)); }
-  chart.data.datasets[0].data = newData;
+function updateChart(baseVal, rate) {
+  let val = baseVal;
+  let dataVal = [val];
+  let dataInv = [0];
+  let invAnual = baseVal / 5; // Simulação de quitação em 5 anos
+
+  for(let i=1; i<=5; i++) {
+    val *= (1 + (rate/100));
+    dataVal.push(Math.round(val));
+    dataInv.push(Math.round(invAnual * i));
+  }
+  chart.data.datasets[0].data = dataVal;
+  chart.data.datasets[1].data = dataInv;
   chart.update();
+}
+
+function showTab(id, btn) {
+  document.querySelectorAll('.tab-content').forEach(c => c.style.display = 'none');
+  document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+  document.getElementById(id).style.display = 'block';
+  btn.classList.add('active');
 }
 
 function openAdmin() { document.getElementById("adminDrawer").classList.add("show"); }
 function closeAdmin() { document.getElementById("adminDrawer").classList.remove("show"); }
 function showToast(m) { const t = document.getElementById("toast"); t.innerText = m; t.style.display="block"; setTimeout(()=>t.style.display="none", 2000); }
-function clearInput() { document.getElementById("mainInput").value = ""; }
 
-// VOZ
 let rec;
 if(window.webkitSpeechRecognition) {
   rec = new webkitSpeechRecognition();
@@ -288,8 +310,14 @@ if(window.webkitSpeechRecognition) {
     document.getElementById("mainInput").dispatchEvent(new Event('input'));
   };
 }
-function toggleMic() { rec.start(); showToast("Ouvindo..."); }
+function toggleMic() { 
+  const btn = document.getElementById("micBtn");
+  if(btn.innerText.includes("Ouvir")) {
+    rec.start(); btn.innerText = "🛑 Parar Escuta"; btn.style.background = "red";
+  } else {
+    rec.stop(); btn.innerText = "🎙️ Ouvir Cliente"; btn.style.background = "var(--primary)";
+  }
+}
 </script>
-
 </body>
 </html>

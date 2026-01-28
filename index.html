@@ -1356,7 +1356,249 @@ function closeWelcome(){
 setTimeout(()=>{
   document.getElementById("welcome").style.display="flex";
 }, 800);
+<script>
+/* ===================== GRÁFICO (CANVAS) — 2 LINHAS ===================== */
+/* Usa: <canvas id="growthChart"></canvas> + card #chartCard */
+
+(function(){
+  const canvas = document.getElementById("growthChart");
+  if(!canvas) return;
+
+  const ctx = canvas.getContext("2d");
+
+  // Estado
+  const chart = {
+    hover: null,
+    last: { valor: 120000, taxa: 0.12, anos: 5 },
+    ptsA: [],
+    ptsB: []
+  };
+
+  function moneyBR(v){
+    return "R$ " + (Number(v)||0).toLocaleString("pt-BR", { maximumFractionDigits: 0 });
+  }
+
+  function resizeToWrap(){
+    const wrap = canvas.parentElement;
+    if(!wrap) return;
+    const w = Math.max(320, Math.min(wrap.clientWidth || 780, 980));
+    canvas.width = w;
+    canvas.height = 260;
+  }
+
+  // Série A: compra agora (0..5)
+  // Série B: espera 12 meses (ano 0 igual; do ano 1 em diante = série A deslocada 1 ano)
+  function buildSeries(valor, taxa, anos){
+    const A = [];
+    const B = [];
+    for(let ano=0; ano<=anos; ano++){
+      const valA = valor * Math.pow(1 + taxa, ano);
+      A.push({ ano, val: valA });
+
+      const valB = (ano === 0) ? valor : valor * Math.pow(1 + taxa, ano - 1);
+      B.push({ ano, val: valB });
+    }
+    return {A, B};
+  }
+
+  function drawLegend(x, y){
+    ctx.font = "800 12px Inter, system-ui, -apple-system, Segoe UI, Roboto, Arial";
+    ctx.textBaseline = "middle";
+
+    // Azul
+    ctx.fillStyle = "#4c5bd4";
+    ctx.fillRect(x, y-2, 18, 4);
+    ctx.fillStyle = "rgba(11,18,32,.78)";
+    ctx.fillText("Comprar agora", x+26, y);
+
+    // Laranja
+    ctx.fillStyle = "#f59e0b";
+    ctx.fillRect(x+150, y-2, 18, 4);
+    ctx.fillStyle = "rgba(11,18,32,.78)";
+    ctx.fillText("Esperar 12 meses", x+176, y);
+  }
+
+  function drawLine(points, color){
+    ctx.strokeStyle = color;
+    ctx.lineWidth = 3;
+    ctx.beginPath();
+    ctx.moveTo(points[0].x, points[0].y);
+    for(let i=1;i<points.length;i++) ctx.lineTo(points[i].x, points[i].y);
+    ctx.stroke();
+
+    // pontos
+    ctx.fillStyle = color;
+    for(const p of points){
+      ctx.beginPath();
+      ctx.arc(p.x, p.y, 5, 0, Math.PI*2);
+      ctx.fill();
+    }
+  }
+
+  function drawLabels(points){
+    ctx.fillStyle = "#0b1220";
+    ctx.font = "900 12px Inter, system-ui, -apple-system, Segoe UI, Roboto, Arial";
+    ctx.textBaseline = "bottom";
+
+    for(const p of points){
+      const txt = moneyBR(p.val);
+      ctx.fillText(txt, p.x - (txt.length*3.2), p.y - 10);
+    }
+  }
+
+  function drawChart(valor, taxa, anos=5){
+    chart.last = { valor, taxa, anos };
+
+    resizeToWrap();
+    const W = canvas.width, H = canvas.height;
+
+    const padL = 66, padR = 18, padT = 18, padB = 46;
+    const plotW = W - padL - padR;
+    const plotH = H - padT - padB;
+
+    const {A, B} = buildSeries(valor, taxa, anos);
+
+    const all = [...A.map(d=>d.val), ...B.map(d=>d.val)];
+    const minV = Math.min(...all);
+    const maxV = Math.max(...all);
+    const range = (maxV - minV) || 1;
+
+    const yMin = Math.max(0, minV - range*0.12);
+    const yMax = maxV + range*0.12;
+
+    const xOf = (i)=> padL + plotW * (i/(A.length-1));
+    const yOf = (v)=> {
+      const t = (v - yMin) / (yMax - yMin);
+      return padT + plotH * (1 - t);
+    };
+
+    // fundo
+    ctx.clearRect(0,0,W,H);
+    ctx.fillStyle = "#ffffff";
+    ctx.fillRect(0,0,W,H);
+
+    // grade + eixo Y
+    const ticks = 5;
+    ctx.strokeStyle = "rgba(11,18,32,.10)";
+    ctx.lineWidth = 1;
+    ctx.fillStyle = "rgba(11,18,32,.65)";
+    ctx.font = "800 12px Inter, system-ui, -apple-system, Segoe UI, Roboto, Arial";
+    ctx.textBaseline = "middle";
+
+    for(let t=0; t<=ticks; t++){
+      const y = padT + plotH * (t/ticks);
+      ctx.beginPath();
+      ctx.moveTo(padL, y);
+      ctx.lineTo(W - padR, y);
+      ctx.stroke();
+
+      const valTick = yMax - (yMax - yMin) * (t/ticks);
+      ctx.fillText(moneyBR(valTick), 10, y);
+    }
+
+    // eixo X
+    ctx.strokeStyle = "rgba(11,18,32,.22)";
+    ctx.beginPath();
+    ctx.moveTo(padL, padT + plotH);
+    ctx.lineTo(W - padR, padT + plotH);
+    ctx.stroke();
+
+    // labels X
+    ctx.fillStyle = "rgba(11,18,32,.72)";
+    ctx.font = "800 12px Inter, system-ui, -apple-system, Segoe UI, Roboto, Arial";
+    ctx.textBaseline = "top";
+    for(let i=0; i<A.length; i++){
+      const x = xOf(i);
+      ctx.fillText("Ano " + i, x - 18, padT + plotH + 10);
+    }
+
+    // pontos
+    const ptsA = A.map((d,i)=>({ x:xOf(i), y:yOf(d.val), ano:d.ano, val:d.val, s:"A" }));
+    const ptsB = B.map((d,i)=>({ x:xOf(i), y:yOf(d.val), ano:d.ano, val:d.val, s:"B" }));
+    chart.ptsA = ptsA;
+    chart.ptsB = ptsB;
+
+    // linhas
+    drawLine(ptsB, "#f59e0b");
+    drawLine(ptsA, "#4c5bd4");
+
+    // números nos pontos
+    drawLabels(ptsB);
+    drawLabels(ptsA);
+
+    // legenda
+    drawLegend(padL, 12);
+
+    // hover highlight (opcional)
+    if(chart.hover){
+      const p = chart.hover;
+      ctx.strokeStyle = "rgba(11,18,32,.55)";
+      ctx.lineWidth = 2;
+      ctx.beginPath();
+      ctx.arc(p.x, p.y, 10, 0, Math.PI*2);
+      ctx.stroke();
+    }
+
+    // chip
+    const chip = document.getElementById("chartChip");
+    if(chip) chip.textContent = `${anos} anos`;
+  }
+
+  // Hover simples (fica bonito e ajuda leitura)
+  canvas.addEventListener("mousemove", (ev)=>{
+    const r = canvas.getBoundingClientRect();
+    const mx = ev.clientX - r.left;
+    const my = ev.clientY - r.top;
+
+    let best = 9999, hit = null;
+
+    const test = (arr)=>{
+      for(const p of arr){
+        const d = Math.hypot(mx-p.x, my-p.y);
+        if(d < best && d <= 16){ best = d; hit = p; }
+      }
+    };
+
+    test(chart.ptsA);
+    test(chart.ptsB);
+
+    chart.hover = hit;
+    canvas.style.cursor = hit ? "pointer" : "default";
+    drawChart(chart.last.valor, chart.last.taxa, chart.last.anos);
+  });
+
+  window.addEventListener("resize", ()=>{
+    drawChart(chart.last.valor, chart.last.taxa, chart.last.anos);
+  });
+
+  // 🔗 Integração com sua calculadora:
+  // Se você tiver inputs com IDs calcValor e calcTaxa, ele puxa automático.
+  function syncFromCalculator(){
+    const vEl = document.getElementById("calcValor");
+    const tEl = document.getElementById("calcTaxa");
+
+    const valor = Number(vEl?.value || chart.last.valor);
+    const taxa = Number(tEl?.value || (chart.last.taxa*100)) / 100;
+
+    drawChart(valor || 120000, taxa || 0.12, 5);
+  }
+
+  // se existir botão/calculadora que chama calcularProcrastinacao(), a gente “encaixa”
+  if(typeof window.calcularProcrastinacao === "function"){
+    const old = window.calcularProcrastinacao;
+    window.calcularProcrastinacao = function(){
+      old();
+      syncFromCalculator();
+    };
+  }
+
+  // inicial
+  drawChart(chart.last.valor, chart.last.taxa, 5);
+})();
+</script>
+
 </script>
 
 </body>
 </html>
+

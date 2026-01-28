@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>COPILOTO PRO — Gestão Total</title>
+<title>COPILOTO PRO — Dados Oficiais</title>
 
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
@@ -16,7 +16,6 @@
   *{box-sizing:border-box; font-family: 'Inter', system-ui, sans-serif;}
   body{ margin:0; background: var(--bg); color: var(--text); }
 
-  /* TOPBAR ECONÔMICA */
   .eco-header { background: #0f172a; color: #fff; padding: 10px 20px; display: flex; justify-content: space-between; align-items: center; font-size: 13px; }
   .eco-stats { display: flex; gap: 20px; }
   .eco-item span { color: var(--accent); font-weight: 800; margin-left: 5px; }
@@ -31,16 +30,13 @@
   .card-head{ padding:12px 15px; border-bottom:1px solid var(--border); background:#f8fafc; font-weight:800; font-size:11px; color:var(--muted); text-transform:uppercase; letter-spacing: 1px; }
   .card-body{ padding:15px; }
 
-  /* LISTA DE INFOS COMPLETAS */
   .info-block { background: #f1f5f9; border-radius: 8px; padding: 12px; margin-top: 10px; }
   .info-item { display: flex; justify-content: space-between; padding: 5px 0; border-bottom: 1px solid #e2e8f0; font-size: 13px; }
   .info-item:last-child { border: none; }
 
-  /* CALCULADORA DE PROCRASTINAÇÃO */
   .proc-calc { background: #fff7ed; border: 1px dashed #fdba74; padding: 15px; border-radius: 8px; margin-top: 15px; }
   .loss-value { color: #dc2626; font-size: 20px; font-weight: 800; }
 
-  /* BOTÕES */
   button, .btn-link{ padding:10px 20px; border-radius:8px; border:none; cursor:pointer; font-weight:700; transition: 0.2s; text-decoration: none; display: inline-block; text-align: center; }
   .btn-primary{ background: var(--primary); color:white; }
   .btn-success{ background: var(--success); color:white; width:100%; margin-top:15px; font-size:14px; }
@@ -50,7 +46,6 @@
   input, textarea, select { width:100%; padding:10px; margin: 5px 0 12px 0; border:1px solid var(--border); border-radius:8px; }
   label { font-size: 11px; font-weight: 700; color: var(--muted); text-transform: uppercase; }
 
-  /* ADMIN DRAWER */
   #adminDrawer{ position:fixed; inset:0; display:none; z-index:100; }
   #adminDrawer.show{ display:flex; }
   .drawer-content{ width:min(850px, 95%); background:white; margin-left:auto; height:100%; box-shadow:-20px 0 50px rgba(0,0,0,0.2); display:flex; flex-direction:column; }
@@ -58,19 +53,18 @@
   .tab-btn { padding: 10px 20px; background: #e2e8f0; border-radius: 8px 8px 0 0; color: var(--muted); border: none; cursor: pointer; }
   .tab-btn.active { background: white; color: var(--primary); font-weight: 800; }
   .drawer-body{ flex:1; overflow-y:auto; padding:30px; }
-
   .data-row { display: flex; justify-content: space-between; align-items: center; padding: 10px; border-bottom: 1px solid #eee; font-size: 13px; }
 
   @media (max-width: 1100px){ main{ grid-template-columns: 1fr; } }
 </style>
 </head>
-<body onload="startTime()">
+<body onload="startTime(); updateEcoRates();">
 
 <div class="eco-header">
   <div class="eco-stats">
-    <div class="eco-item">SELIC: <span id="val-selic">11.75%</span></div>
-    <div class="eco-item">IPCA: <span id="val-ipca">4.62%</span></div>
-    <div class="eco-item">IGP-M: <span id="val-igpm">0.89%</span></div>
+    <div class="eco-item">SELIC: <span id="val-selic">Carregando...</span></div>
+    <div class="eco-item">IPCA (12m): <span id="val-ipca">Carregando...</span></div>
+    <div class="eco-item">IGP-M: <span id="val-igpm">Carregando...</span></div>
   </div>
   <div id="live-clock">00:00:00</div>
 </div>
@@ -97,19 +91,18 @@
 <main id="appMain" style="opacity:0.1; pointer-events:none;">
   <aside>
     <div class="card">
-      <div class="card-head">Ficha Completa do Imóvel</div>
+      <div class="card-head">Ficha Técnica do Imóvel</div>
       <div class="card-body">
         <h2 id="view-name" style="color:var(--primary); margin:0 0 10px 0;">Aguardando...</h2>
         <div id="view-details" class="info-block">
-          <p style="font-size:12px; color:var(--muted)">Mencione um produto para carregar todos os campos cadastrados.</p>
+          <p style="font-size:12px; color:var(--muted)">Os dados aqui são os que você cadastrou.</p>
         </div>
       </div>
     </div>
 
     <div class="card">
-      <div class="card-head">Custo da Procrastinação</div>
+      <div class="card-head">Procrastinação (12 meses)</div>
       <div class="card-body proc-calc">
-        <p style="margin:0; font-size:12px; font-weight:700;">VALORIZAÇÃO EM 12 MESES:</p>
         <div class="loss-value" id="view-loss">R$ 0,00</div>
       </div>
     </div>
@@ -130,10 +123,10 @@
   </section>
 
   <aside>
-    <div class="card"><div class="card-head">Sugestão de Quebra</div><div class="card-body">
+    <div class="card"><div class="card-head">Quebra Sugerida</div><div class="card-body">
       <div id="res-box" style="font-size:15px; line-height:1.5;">Aguardando objeções...</div>
     </div></div>
-    <div class="card"><div class="card-head">Gráfico de Evolução</div><div class="card-body"><canvas id="mainChart"></canvas></div></div>
+    <div class="card"><div class="card-head">Projeção Patrimonial</div><div class="card-body"><canvas id="mainChart"></canvas></div></div>
   </aside>
 </main>
 
@@ -141,7 +134,7 @@
   <div style="flex:1; background:rgba(0,0,0,0.6)" onclick="closeAdmin()"></div>
   <div class="drawer-content">
     <div style="padding:20px 20px 0 20px">
-        <h2>Painel Administrativo</h2>
+        <h2>Gestão de Dados</h2>
         <button class="btn-export" onclick="copyFullCode()">🚀 COPIAR CÓDIGO ATUALIZADO (GITHUB)</button>
     </div>
     
@@ -153,28 +146,28 @@
 
     <div class="drawer-body">
         <div id="tab-users" class="tab-content">
-            <label>Novo Login</label><input id="fUserLogin">
+            <label>Login</label><input id="fUserLogin">
             <label>Senha</label><input id="fUserPass">
-            <label>Nível</label><select id="fUserRole"><option value="admin">Administrador</option><option value="vendedor">Vendedor</option></select>
-            <button class="btn-primary" onclick="saveData('users')">Adicionar Usuário</button>
+            <label>Perfil</label><select id="fUserRole"><option value="admin">Admin</option><option value="vendedor">Vendedor</option></select>
+            <button class="btn-primary" onclick="saveData('users')">Adicionar</button>
             <div id="list-users" style="margin-top:20px"></div>
         </div>
 
         <div id="tab-products" class="tab-content" style="display:none">
-            <label>Nome Comercial</label><input id="fProdName">
-            <label>Chaves (vírgula)</label><input id="fProdKeys" placeholder="Ex: cedros, búfalo">
-            <label>Valor Base (R$)</label><input id="fProdVal" type="number">
-            <label>Valorização Anual (%)</label><input id="fProdRate" type="number">
-            <label>Informações Técnicas (uma por linha)</label><textarea id="fProdInfo" style="min-height:100px"></textarea>
+            <label>Nome do Produto</label><input id="fProdName">
+            <label>Chaves p/ Busca (vírgula)</label><input id="fProdKeys">
+            <label>Valor de Venda (R$)</label><input id="fProdVal" type="number">
+            <label>Estimativa Valorização Anual (%)</label><input id="fProdRate" type="number">
+            <label>Dados Reais (uma info por linha)</label><textarea id="fProdInfo" style="min-height:100px"></textarea>
             <button class="btn-primary" onclick="saveData('products')">Salvar Produto</button>
             <div id="list-products" style="margin-top:20px"></div>
         </div>
 
         <div id="tab-objections" class="tab-content" style="display:none">
-            <label>Palavras-Chave (vírgula)</label><input id="fObjKeys">
-            <label>Resposta Leve</label><textarea id="fObjA"></textarea>
-            <label>Resposta Forte</label><textarea id="fObjB"></textarea>
-            <label>Resposta Fechamento</label><textarea id="fObjC"></textarea>
+            <label>Objeção Chave</label><input id="fObjKeys">
+            <label>Argumento Leve</label><textarea id="fObjA"></textarea>
+            <label>Argumento Forte</label><textarea id="fObjB"></textarea>
+            <label>Fechamento</label><textarea id="fObjC"></textarea>
             <button class="btn-primary" onclick="saveData('objections')">Salvar Objeção</button>
             <div id="list-objections" style="margin-top:20px"></div>
         </div>
@@ -185,19 +178,31 @@
 
 <script id="databaseScript">
   let base = {
-    indicators: { selic: "11.75%", ipca: "4.62%", igpm: "0.89%" },
     users: [{login:"edson", pass:"2026", role:"admin"}],
-    products: [
-      { name: "CEDROS JARDINS", keys: ["cedros", "búfalo"], baseVal: 150000, rate: 18, info: ["Lotes: 200m² a 450m²", "Localização: Bairro Planejado", "Entrega: Dez/2026", "Lazer: Piscina e Quadras"] }
-    ],
-    objections: [
-      { keys: ["caro", "preço"], a: "Entendo. O senhor avalia o preço ou o lucro?", b: "Lotes vizinhos já custam mais.", c: "O metro quadrado aqui é o menor da região." }
-    ]
+    products: [],
+    objections: []
   };
 </script>
 
 <script>
 let chart;
+
+// BUSCA DE TAXAS REAIS (API BANCO CENTRAL)
+async function updateEcoRates() {
+    try {
+        const fetchRate = async (id) => {
+            const r = await fetch(`https://api.bcb.gov.br/dados/serie/bcdata.sgs.${id}/dados/ultimos/1?formato=json`);
+            const d = await r.json();
+            return d[0].valor;
+        };
+        document.getElementById('val-selic').innerText = await fetchRate(11) + '%'; // Selic
+        document.getElementById('val-ipca').innerText = await fetchRate(433) + '%'; // IPCA
+        document.getElementById('val-igpm').innerText = await fetchRate(189) + '%'; // IGP-M
+    } catch (e) {
+        console.log("Erro ao buscar taxas, usando padrão.");
+        document.getElementById('val-selic').innerText = '11.25%';
+    }
+}
 
 function startTime() {
   document.getElementById('live-clock').innerHTML = new Date().toLocaleTimeString('pt-BR');
@@ -223,7 +228,7 @@ document.getElementById("mainInput").addEventListener("input", function() {
   const p = base.products.find(item => item.keys.some(k => text.includes(k.trim().toLowerCase())));
   if(p) {
     document.getElementById("view-name").innerText = p.name;
-    let html = p.info.map(i => `<div class="info-item"><span>${i}</span></div>`).join("");
+    let html = p.info.filter(i => i.trim() !== "").map(i => `<div class="info-item"><span>${i}</span></div>`).join("");
     html += `<div class="info-item"><strong>Valor Hoje:</strong> <span>R$ ${p.baseVal.toLocaleString()}</span></div>`;
     html += `<div class="info-item"><strong>Valorização:</strong> <span>${p.rate}% a.a.</span></div>`;
     document.getElementById("view-details").innerHTML = html;
@@ -255,16 +260,12 @@ function saveData(type) {
         });
     }
     renderLists();
-    alert("Salvo com sucesso!");
 }
 
-function removeData(type, index) {
-    base[type].splice(index, 1);
-    renderLists();
-}
+function removeData(type, index) { base[type].splice(index, 1); renderLists(); }
 
 function renderLists() {
-    document.getElementById("list-users").innerHTML = base.users.map((u, i) => `<div class="data-row">${u.login} (${u.role}) <button class="btn-danger" onclick="removeData('users', ${i})">X</button></div>`).join("");
+    document.getElementById("list-users").innerHTML = base.users.map((u, i) => `<div class="data-row">${u.login} <button class="btn-danger" onclick="removeData('users', ${i})">X</button></div>`).join("");
     document.getElementById("list-products").innerHTML = base.products.map((p, i) => `<div class="data-row">${p.name} <button class="btn-danger" onclick="removeData('products', ${i})">X</button></div>`).join("");
     document.getElementById("list-objections").innerHTML = base.objections.map((o, i) => `<div class="data-row">${o.keys[0]} <button class="btn-danger" onclick="removeData('objections', ${i})">X</button></div>`).join("");
 }
@@ -273,7 +274,7 @@ function copyFullCode() {
   const scriptDb = document.getElementById("databaseScript");
   scriptDb.innerHTML = `\n  let base = ${JSON.stringify(base, null, 2)};\n`;
   navigator.clipboard.writeText("<!DOCTYPE html>\n" + document.documentElement.outerHTML);
-  alert("CÓDIGO ATUALIZADO COPIADO!");
+  alert("CÓDIGO OFICIAL COPIADO!");
 }
 
 function initChart() {
@@ -282,9 +283,8 @@ function initChart() {
     type: 'line',
     data: {
       labels: ['Hoje', 'Ano 1', 'Ano 2', 'Ano 3'],
-      datasets: [{ label: 'Valorização', data: [100, 118, 140, 165], borderColor: '#2563eb', fill: true, backgroundColor: 'rgba(37,99,235,0.1)' }]
-    },
-    options: { plugins: { legend: { display: false } } }
+      datasets: [{ label: 'Patrimônio', data: [0,0,0,0], borderColor: '#2563eb', fill: true, backgroundColor: 'rgba(37,99,235,0.1)' }]
+    }
   });
 }
 

@@ -1,6 +1,5 @@
 <!DOCTYPE html>
-<html lang="pt-BR">
-<head>
+<html lang="pt-BR"><head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>COPILOTO PRO — Dados Oficiais</title>
@@ -62,24 +61,24 @@
 
 <div class="eco-header">
   <div class="eco-stats">
-    <div class="eco-item">SELIC: <span id="val-selic">Carregando...</span></div>
-    <div class="eco-item">IPCA (12m): <span id="val-ipca">Carregando...</span></div>
-    <div class="eco-item">IGP-M: <span id="val-igpm">Carregando...</span></div>
+    <div class="eco-item">SELIC: <span id="val-selic">0.055131%</span></div>
+    <div class="eco-item">IPCA (12m): <span id="val-ipca">0.33%</span></div>
+    <div class="eco-item">IGP-M: <span id="val-igpm">-0.01%</span></div>
   </div>
-  <div id="live-clock">00:00:00</div>
+  <div id="live-clock">23:14:38</div>
 </div>
 
 <header>
   <div class="topbar">
-    <div><strong>COPILOTO PRO</strong> <span id="userBadge" style="font-size:10px; background:#eee; padding:2px 6px; border-radius:4px;"></span></div>
-    <div id="userTools" style="display:none; gap:10px;">
+    <div><strong>COPILOTO PRO</strong> <span id="userBadge" style="font-size:10px; background:#eee; padding:2px 6px; border-radius:4px;">ADMIN</span></div>
+    <div id="userTools" style="display: flex; gap: 10px;">
       <button class="btn-outline" id="btnAdmin" onclick="openAdmin()">⚙️ Painel de Edição</button>
       <button onclick="location.reload()">Sair</button>
     </div>
   </div>
 </header>
 
-<div id="loginArea" style="position:fixed; inset:0; background:var(--bg); z-index:200; display:flex; align-items:center; justify-content:center;">
+<div id="loginArea" style="position: fixed; inset: 0px; background: var(--bg); z-index: 200; display: none; align-items: center; justify-content: center;">
   <div class="card" style="width:350px; padding:30px;">
     <h2>Acesso Portal</h2>
     <input id="lUser" type="text" placeholder="Usuário" value="edson">
@@ -88,7 +87,7 @@
   </div>
 </div>
 
-<main id="appMain" style="opacity:0.1; pointer-events:none;">
+<main id="appMain" style="opacity: 1; pointer-events: all;">
   <aside>
     <div class="card">
       <div class="card-head">Ficha Técnica do Imóvel</div>
@@ -126,11 +125,11 @@
     <div class="card"><div class="card-head">Quebra Sugerida</div><div class="card-body">
       <div id="res-box" style="font-size:15px; line-height:1.5;">Aguardando objeções...</div>
     </div></div>
-    <div class="card"><div class="card-head">Projeção Patrimonial</div><div class="card-body"><canvas id="mainChart"></canvas></div></div>
+    <div class="card"><div class="card-head">Projeção Patrimonial</div><div class="card-body"><canvas id="mainChart" width="404" height="202" style="display: block; box-sizing: border-box; height: 184.1px; width: 368px;"></canvas></div></div>
   </aside>
 </main>
 
-<div id="adminDrawer">
+<div id="adminDrawer" class="show">
   <div style="flex:1; background:rgba(0,0,0,0.6)" onclick="closeAdmin()"></div>
   <div class="drawer-content">
     <div style="padding:20px 20px 0 20px">
@@ -150,7 +149,7 @@
             <label>Senha</label><input id="fUserPass">
             <label>Perfil</label><select id="fUserRole"><option value="admin">Admin</option><option value="vendedor">Vendedor</option></select>
             <button class="btn-primary" onclick="saveData('users')">Adicionar</button>
-            <div id="list-users" style="margin-top:20px"></div>
+            <div id="list-users" style="margin-top:20px"><div class="data-row">edson <button class="btn-danger" onclick="removeData('users', 0)">X</button></div><div class="data-row">luciana <button class="btn-danger" onclick="removeData('users', 1)">X</button></div></div>
         </div>
 
         <div id="tab-products" class="tab-content" style="display:none">
@@ -160,7 +159,7 @@
             <label>Estimativa Valorização Anual (%)</label><input id="fProdRate" type="number">
             <label>Dados Reais (uma info por linha)</label><textarea id="fProdInfo" style="min-height:100px"></textarea>
             <button class="btn-primary" onclick="saveData('products')">Salvar Produto</button>
-            <div id="list-products" style="margin-top:20px"></div>
+            <div id="list-products" style="margin-top:20px"><div class="data-row">LOTEAMENTO CARVALHOS <button class="btn-danger" onclick="removeData('products', 0)">X</button></div><div class="data-row">RECANTO RENASCER (STA CARMEM) <button class="btn-danger" onclick="removeData('products', 1)">X</button></div><div class="data-row">RECANTO ALVORADA <button class="btn-danger" onclick="removeData('products', 2)">X</button></div><div class="data-row">CEDROS JARDINS <button class="btn-danger" onclick="removeData('products', 3)">X</button></div><div class="data-row">RESIDENCIAL TUIUIÚ <button class="btn-danger" onclick="removeData('products', 4)">X</button></div><div class="data-row">MORADA BRASIL <button class="btn-danger" onclick="removeData('products', 5)">X</button></div><div class="data-row">CASA PRONTA (MCMV) <button class="btn-danger" onclick="removeData('products', 6)">X</button></div><div class="data-row">GRAN CANÁRIO <button class="btn-danger" onclick="removeData('products', 7)">X</button></div><div class="data-row">CASA ANDRÉ MAGGI (300K) <button class="btn-danger" onclick="removeData('products', 8)">X</button></div></div>
         </div>
 
         <div id="tab-objections" class="tab-content" style="display:none">
@@ -169,7 +168,7 @@
             <label>Argumento Forte</label><textarea id="fObjB"></textarea>
             <label>Fechamento</label><textarea id="fObjC"></textarea>
             <button class="btn-primary" onclick="saveData('objections')">Salvar Objeção</button>
-            <div id="list-objections" style="margin-top:20px"></div>
+            <div id="list-objections" style="margin-top:20px"><div class="data-row">caro <button class="btn-danger" onclick="removeData('objections', 0)">X</button></div><div class="data-row">pensar <button class="btn-danger" onclick="removeData('objections', 1)">X</button></div><div class="data-row">esposa <button class="btn-danger" onclick="removeData('objections', 2)">X</button></div><div class="data-row">crise <button class="btn-danger" onclick="removeData('objections', 3)">X</button></div><div class="data-row">longe <button class="btn-danger" onclick="removeData('objections', 4)">X</button></div><div class="data-row">esperar <button class="btn-danger" onclick="removeData('objections', 5)">X</button></div><div class="data-row">comparar <button class="btn-danger" onclick="removeData('objections', 6)">X</button></div><div class="data-row">juros <button class="btn-danger" onclick="removeData('objections', 7)">X</button></div><div class="data-row">desconto <button class="btn-danger" onclick="removeData('objections', 8)">X</button></div><div class="data-row">medo <button class="btn-danger" onclick="removeData('objections', 9)">X</button></div><div class="data-row">obra <button class="btn-danger" onclick="removeData('objections', 10)">X</button></div><div class="data-row">infraestrutura <button class="btn-danger" onclick="removeData('objections', 11)">X</button></div><div class="data-row">tamanho <button class="btn-danger" onclick="removeData('objections', 12)">X</button></div><div class="data-row">condomínio <button class="btn-danger" onclick="removeData('objections', 13)">X</button></div><div class="data-row">entrada <button class="btn-danger" onclick="removeData('objections', 14)">X</button></div><div class="data-row">dinheiro <button class="btn-danger" onclick="removeData('objections', 15)">X</button></div><div class="data-row">consultar <button class="btn-danger" onclick="removeData('objections', 16)">X</button></div><div class="data-row">preciso <button class="btn-danger" onclick="removeData('objections', 17)">X</button></div><div class="data-row">desemprego <button class="btn-danger" onclick="removeData('objections', 18)">X</button></div><div class="data-row">conheço <button class="btn-danger" onclick="removeData('objections', 19)">X</button></div><div class="data-row">vizinho <button class="btn-danger" onclick="removeData('objections', 20)">X</button></div><div class="data-row">comércio <button class="btn-danger" onclick="removeData('objections', 21)">X</button></div><div class="data-row">barulho <button class="btn-danger" onclick="removeData('objections', 22)">X</button></div><div class="data-row">segurança <button class="btn-danger" onclick="removeData('objections', 23)">X</button></div><div class="data-row">lazer <button class="btn-danger" onclick="removeData('objections', 24)">X</button></div><div class="data-row">valorização <button class="btn-danger" onclick="removeData('objections', 25)">X</button></div><div class="data-row">planta <button class="btn-danger" onclick="removeData('objections', 26)">X</button></div><div class="data-row">regras <button class="btn-danger" onclick="removeData('objections', 27)">X</button></div><div class="data-row">investimento <button class="btn-danger" onclick="removeData('objections', 28)">X</button></div><div class="data-row">liquidez <button class="btn-danger" onclick="removeData('objections', 29)">X</button></div><div class="data-row">muito <button class="btn-danger" onclick="removeData('objections', 30)">X</button></div><div class="data-row">vou <button class="btn-danger" onclick="removeData('objections', 31)">X</button></div><div class="data-row">crédito <button class="btn-danger" onclick="removeData('objections', 32)">X</button></div><div class="data-row">não <button class="btn-danger" onclick="removeData('objections', 33)">X</button></div><div class="data-row">muitas <button class="btn-danger" onclick="removeData('objections', 34)">X</button></div><div class="data-row">parcela <button class="btn-danger" onclick="removeData('objections', 35)">X</button></div><div class="data-row">não <button class="btn-danger" onclick="removeData('objections', 36)">X</button></div><div class="data-row">estou <button class="btn-danger" onclick="removeData('objections', 37)">X</button></div><div class="data-row">outra <button class="btn-danger" onclick="removeData('objections', 38)">X</button></div><div class="data-row">acho <button class="btn-danger" onclick="removeData('objections', 39)">X</button></div><div class="data-row">não <button class="btn-danger" onclick="removeData('objections', 40)">X</button></div><div class="data-row">quero <button class="btn-danger" onclick="removeData('objections', 41)">X</button></div><div class="data-row">posso <button class="btn-danger" onclick="removeData('objections', 42)">X</button></div><div class="data-row">muito <button class="btn-danger" onclick="removeData('objections', 43)">X</button></div><div class="data-row">taxa <button class="btn-danger" onclick="removeData('objections', 44)">X</button></div><div class="data-row">itbi <button class="btn-danger" onclick="removeData('objections', 45)">X</button></div><div class="data-row">família <button class="btn-danger" onclick="removeData('objections', 46)">X</button></div><div class="data-row">sou <button class="btn-danger" onclick="removeData('objections', 47)">X</button></div><div class="data-row">estou <button class="btn-danger" onclick="removeData('objections', 48)">X</button></div><div class="data-row">última <button class="btn-danger" onclick="removeData('objections', 49)">X</button></div></div>
         </div>
     </div>
     <button class="btn-outline" style="margin:20px" onclick="closeAdmin()">Fechar</button>
@@ -178,185 +177,675 @@
 
 <script id="databaseScript">
   let base = {
-    users: [{login:"edson", pass:"2026", role:"admin"}],
-    products: [
-      { 
-        name: "LOTEAMENTO CARVALHOS", 
-        keys: ["carvalhos", "carvalho", "terra rica", "bobeiro", "integrçao", "shopping", "12x25", "300m", "2028"], 
-        baseVal: 150000, 
-        rate: 15, 
-        info: [
-          "📍 Próximo ao Shopping",
-          "📏 Terrenos de 300 m² (12x25)",
-          "💰 Parcelas a partir de R$ 1.299,00",
-          "🚫 SEM ENTRADA",
-          "⏳ Planos em até 240x",
-          "🏗️ Liberação para obras em 2028"
-        ] 
-      },
-      { 
-        name: "RECANTO RENASCER (STA CARMEM)", 
-        keys: ["renascer", "carmem", "chácara", "lago", "trifásica", "6km"], 
-        baseVal: 85000, 
-        rate: 18, 
-        info: [
-          "🌳 6 km da entrada de Santa Carmem",
-          "🌊 Lindo lago na frente do empreendimento",
-          "💡 Energia elétrica trifásica",
-          "🚫 SEM ENTRADA (exceto QD02)",
-          "💸 Parcelas a partir de R$ 695"
-        ] 
-      },
-      { 
-        name: "RECANTO ALVORADA", 
-        keys: ["alvorada", "azul", "canarinho", "21km", "carmen", "chacara", "1200m", "mata"], 
-        baseVal: 75000, 
-        rate: 12, 
-        info: [
-          "📍 21 km do Canarinho",
-          "📐 Lotes a partir de 1.200 m²",
-          "🏞 Acesso coletivo ao Rio Azul",
-          "🌳 Chácaras entregues 100% com mata",
-          "💰 Parcelas a partir de R$ 600,00"
-        ] 
-      },
-      { 
-        name: "CEDROS JARDINS", 
-        keys: ["cedros", "jardins", "búfalo", "bufalo", "fastec", "center"], 
-        baseVal: 95000, 
-        rate: 14, 
-        info: [
-          "📍 Próximo ao Posto Búfalo, Fastec e Super Center",
-          "📏 Lotes a partir de 200 m²",
-          "🚫 Sem entrada",
-          "💵 Parcelas a partir de R$ 753,00"
-        ] 
-      },
-      { 
-        name: "RESIDENCIAL TUIUIÚ", 
-        keys: ["tuiuiú", "tuiuiu", "videira", "super", "center", "fastec", "sonhalto", "2026"], 
-        baseVal: 105000, 
-        rate: 15, 
-        info: [
-          "📍 Localização: Fastec, Super Center, Sonhalto Videira",
-          "💰 Parcelas a partir de R$ 869,00",
-          "📅 Construção liberada a partir de julho/2026"
-        ] 
-      },
-      { 
-        name: "MORADA BRASIL", 
-        keys: ["morada", "brasil", "maggi", "andre", "170k"], 
-        baseVal: 170000, 
-        rate: 20, 
-        info: [
-          "📍 Acesso direto à Av. André Maggi (Região Nobre)",
-          "✅ Sem entrada",
-          "💰 Valor à vista a partir de R$ 170 mil",
-          "💸 Parcelas a partir de R$ 713,00",
-          "⏳ Até 240 vezes"
-        ] 
-      },
-      { 
-        name: "CASA PRONTA (MCMV)", 
-        keys: ["pronta", "caixa", "mcmv", "minha", "sinal", "1500"], 
-        baseVal: 220000, 
-        rate: 10, 
-        info: [
-          "🏠 2 quartos, Sala, Cozinha, Área de lazer",
-          "🏗️ Bairro planejado em Sinop",
-          "💰 Parcelas a partir de R$ 699,00",
-          "💳 Sinal de apenas R$ 1.500",
-          "🏦 Financiamento Minha Casa Minha Vida"
-        ] 
-      },
-      { 
-        name: "GRAN CANÁRIO", 
-        keys: ["gran", "canário", "canario", "fasipe", "agro", "140", "belvedere"], 
-        baseVal: 78000, 
-        rate: 25, 
-        info: [
-          "🎓 Localização estratégica — Futura FASIPE AGRO",
-          "📍 Região do Belvedere / MT-140",
-          "📈 Potencial gigantesco de valorização",
-          "💸 Parcelas a partir de R$ 595"
-        ] 
-      },
-      { 
-        name: "CASA ANDRÉ MAGGI (300K)", 
-        keys: ["300k", "300.000", "porcelanato", "inteiro", "detalhada", "suíte"], 
-        baseVal: 300000, 
-        rate: 12, 
-        info: [
-          "🏠 Área Construída: 64 m² | Terreno: 302 m²",
-          "💎 Acabamento em porcelanato e iluminação LED",
-          "🛏️ 1 suíte + 1 quarto",
-          "🚀 Espaço para ampliação (3º quarto e garagem)",
-          "💰 Valor: R$ 300.000,00 (Aceita Financiamento)"
-        ] 
-      }
-    ],
-    objections: [
-  // 1-10: Preço, Tempo e Decisão
-  { keys: ["caro", "preço", "valor"], a: "Caro em relação a quê? Se eu te desse R$ 200 mil em barras de ouro por R$ 150 mil, você diria que está caro? (Lobo)", b: "O preço é o que você paga, o valor é o lucro que você leva no bolso na entrega. (Warren Buffett)", c: "Prefere economizar 10% hoje ou ganhar 40% de valorização amanhã? (Psicologia da Venda)" },
-  { keys: ["pensar", "analisar"], a: "Pensar não compra terreno. O que exatamente te impede de assinar agora: o projeto ou eu? (Lobo)", b: "90% de quem diz que vai pensar, acaba não agindo e perde a oportunidade. Vamos resolver sua dúvida agora. (Bíblia das Vendas)", c: "Enquanto você pensa, os lotes de oportunidade acabam. Sobrarão os piores e mais caros. (Escassez)" },
-  { keys: ["esposa", "marido", "sócio"], a: "Se você chegar em casa com um lucro de R$ 50 mil garantido, ela vai ficar brava ou te dar um beijo? (Lobo)", b: "Você é o investidor. Se você viu o valor, sua função é liderar a família para a prosperidade. (Straight Line)", c: "Vamos ligar para ela agora. Eu explico os números, você explica o sonho. (Ação Imediata)" },
-  { keys: ["crise", "mercado", "governo"], a: "O governo muda, a crise passa, mas a terra continua lá valorizando. Onde você prefere seu dinheiro? (Lobo)", b: "Ricos investem na crise, pobres fogem dela. De qual lado você quer estar? (Pai Rico Pai Pobre)", c: "O mercado imobiliário é o único que sobrevive a qualquer cenário político há 500 anos. (Autoridade)" },
-  { keys: ["longe", "distância"], a: "Longe é onde não tem crescimento. Daqui a 2 anos, isso aqui será o novo centro. (Lobo)", b: "Quem comprou Alphaville no começo ouviu que era longe. Hoje eles são milionários. (Prova Social)", c: "A distância hoje é o que garante o preço de hoje. Amanhã, perto e caro será tarde. (Antecipação)" },
-  { keys: ["esperar", "momento"], a: "Esperar o quê? O preço subir ou o melhor lote ser vendido? (Lobo)", b: "O melhor momento para plantar uma árvore foi há 20 anos. O segundo melhor é agora. (Provérbio de Vendas)", c: "O mercado não espera ninguém. Cada dia parado é dinheiro que você deixa de ganhar. (Custo de Oportunidade)" },
-  { keys: ["comparar", "outros"], a: "Pode comparar. Mas você vai voltar aqui e esse lote já terá dono. (Lobo)", b: "A concorrência vende metros quadrados, eu vendo patrimônio e liquidez. (Diferenciação)", c: "Não compare preço de banana com preço de ouro. Este projeto é único. (Venda Desafiadora)" },
-  { keys: ["juros", "parcela"], a: "O juros incomoda? A valorização de 20% ao ano engole qualquer taxa que o banco te cobrar. (Lobo)", b: "Foque na parcela que cabe no bolso, o tempo cuida da valorização do seu capital. (Venda Consultiva)", c: "O juros é o aluguel do dinheiro. O terreno é a sua liberdade financeira. (Psicologia Financeira)" },
-  { keys: ["desconto", "baixar"], a: "Eu não vendo preço, vendo oportunidade. Se eu baixar, tiro a qualidade do seu vizinho. (Lobo)", b: "O valor é justo pela entrega. Se fosse mais barato, você deveria desconfiar da obra. (Autoridade)", c: "Posso ver uma condição de prazo, mas o valor do ativo é inegociável pela qualidade. (Integridade)" },
-  { keys: ["medo", "risco"], a: "O único risco aqui é você ficar de fora e me ver vendendo esse lote pelo dobro ano que vem. (Lobo)", b: "O risco de não investir é maior que o risco de investir. O dinheiro parado derrete. (Mente Milionária)", c: "Temos garantia em contrato e registro em cartório. Sua segurança é minha prioridade. (Garantia)" },
-
-  // 11-20: Infraestrutura e Confiança
-  { keys: ["obra", "atraso"], a: "O contrato prevê multa. Minha pele está em jogo tanto quanto a sua. (Lobo)", b: "Veja o histórico: entregamos 100% dos projetos. Nosso nome é nosso maior ativo. (Credibilidade)", c: "Obra em andamento é o momento exato de lucro. Depois de pronto, o preço explode. (Timing)" },
-  { keys: ["infraestrutura", "luz", "água"], a: "Se já tivesse tudo pronto, você não estaria falando comigo por esse preço. (Lobo)", b: "Toda a infraestrutura está garantida por alienação fiduciária. Risco zero. (Técnico)", c: "Estamos criando um novo padrão de bairro. Você está no topo da pirâmide. (Exclusividade)" },
-  { keys: ["tamanho", "pequeno"], a: "Não é o tamanho do lote, é o que você constrói e quanto valoriza por m². (Lobo)", b: "Lotes menores têm maior liquidez. É muito mais fácil vender ou alugar depois. (Estratégia)", c: "O projeto prioriza áreas de convivência premium, não apenas terra bruta. (Estilo de Vida)" },
-  { keys: ["condomínio", "taxa"], a: "A taxa é o seguro do seu patrimônio. Prefere um bairro aberto que desvaloriza? (Lobo)", b: "O que você paga de condomínio, ganha em segurança e lazer para sua família. (Custo-Benefício)", c: "Um imóvel em condomínio valoriza 30% mais rápido que um de rua. (Investimento)" },
-  { keys: ["entrada", "alta"], a: "A entrada é o que garante que o saldo devedor não te sufoque. É proteção para você. (Lobo)", b: "Podemos parcelar a entrada? Se eu conseguir, fechamos o negócio agora? (Fechamento Condicional)", c: "Quanto maior a entrada, menor o custo total do seu terreno. Pense no longo prazo. (Lógica)" },
-  { keys: ["dinheiro", "aplicado"], a: "Sua aplicação rende 10%? O imóvel aqui rende 20% mais inflação. A conta é simples. (Lobo)", b: "Diversifique. Não coloque todos os ovos no mesmo cesto, especialmente se o cesto for o banco. (Investidor)", c: "Tire do papel e coloque na terra. Papel queima, terra permanece. (Segurança)" },
-  { keys: ["consultar", "advogado"], a: "Traga ele. Se ele for bom, vai te mandar comprar dois lotes. (Lobo)", b: "Toda a documentação é pública. Temos transparência total. (Confiança)", c: "Aprovação da prefeitura e RI estão à sua disposição. Nada a esconder. (Legalidade)" },
-  { keys: ["preciso", "vender", "outro"], a: "Eu te ajudo a vender. Mas garanta este aqui antes que mude a tabela. (Lobo)", b: "Não espere vender para comprar, o mercado sobe mais rápido que sua venda. (Urgência)", c: "Fazemos um plano de pagamento que espera a sua venda acontecer. (Flexibilidade)" },
-  { keys: ["desemprego", "instabilidade"], a: "Por isso você precisa de patrimônio. Imóvel é o seu bote salva-vidas. (Lobo)", b: "O plano é flexível. Se algo mudar, o lote é seu e você pode revender com lucro. (Liquidez)", c: "Segurança financeira se constrói na incerteza. Quem tem terra, tem tudo. (Sobrevivência)" },
-  { keys: ["conheço", "empresa"], a: "Prazer, somos líderes no setor. Pergunte para qualquer dono de imobiliária sobre nós. (Lobo)", b: "Nossos números falam por nós: milhares de lotes entregues e clientes lucrando. (Autoridade)", c: "Visite nossas obras prontas. A qualidade é o nosso cartão de visitas. (Prova Real)" },
-
-  // 21-30: Localização e Futuro
-  { keys: ["vizinho", "vizinhança"], a: "Você não compra só terra, compra os vizinhos. Aqui o padrão é garantido. (Lobo)", b: "O perfil dos compradores aqui é de alto nível. Networking puro. (Exclusividade)", c: "Condomínio fechado filtra quem valoriza a paz e a segurança. (Ambiente)" },
-  { keys: ["comércio", "serviço"], a: "Onde tem gente morando, o comércio nasce em volta. Você está chegando antes da valorização. (Lobo)", b: "Temos áreas comerciais previstas no masterplan. Conveniência total. (Planejamento)", c: "A 5 minutos do centro, mas com o silêncio do campo. O melhor dos dois mundos. (Conforto)" },
-  { keys: ["barulho", "rodovia"], a: "Acesso fácil valoriza. O isolamento acústico natural do projeto resolve o resto. (Lobo)", b: "Estar perto da rodovia significa que você chega rápido em qualquer lugar. (Mobilidade)", c: "Os lotes mais valorizados do mundo estão perto de eixos de transporte. (Fato Econômico)" },
-  { keys: ["segurança", "assalto"], a: "Muros, câmeras e ronda 24h. Onde você estaria mais seguro que aqui? (Lobo)", b: "Investimos pesado em tecnologia de monitoramento. Sua família merece isso. (Paz)", c: "É um bunker de luxo. Segurança é o nosso primeiro item da lista. (Prioridade)" },
-  { keys: ["lazer", "clube"], a: "Você vai ter um resort no quintal de casa sem precisar viajar. (Lobo)", b: "O lazer aqui valoriza o lote mais que a própria construção da casa. (Ativo)", c: "Piscina, academia, quadras... sua saúde e diversão sem custo extra de deslocamento. (Saúde)" },
-  { keys: ["valorização", "baixa"], a: "Olhe em volta. Onde a cidade cresce? Para cá. A matemática não mente. (Lobo)", b: "Historicamente, esta região subiu 15% acima da inflação nos últimos 5 anos. (Dados)", c: "O preço de pré-lançamento é o lucro certo de quem compra agora. (Oportunidade)" },
-  { keys: ["planta", "projeto"], a: "Na planta você compra com desconto. Pronto, você paga o preço de mercado. (Lobo)", b: "Participar do nascimento do projeto te dá as melhores escolhas de lote. (Privilégio)", c: "Personalize sua visão. Construa exatamente o que sempre sonhou. (Sonho)" },
-  { keys: ["regras", "construção"], a: "As regras protegem sua casa da casa feia do vizinho. Valorização garantida. (Lobo)", b: "O padrão construtivo mantém o nível do condomínio sempre alto. (Patrimônio)", c: "Harmonia visual gera valor de revenda muito superior a bairros abertos. (Estética)" },
-  { keys: ["investimento", "curto", "prazo"], a: "Terra é para quem quer ficar rico com segurança, não para apostadores. (Lobo)", b: "Em 24 meses você terá um ativo que vale 40% mais. Qual banco faz isso? (Comparação)", c: "Imóvel é o investimento mais sólido para criar riqueza geracional. (Legado)" },
-  { keys: ["liquidez", "difícil", "vender"], a: "Lote bom vende em uma semana. Lote ruim nunca vende. Este aqui é excelente. (Lobo)", b: "Temos fila de espera em projetos anteriores. A demanda aqui é reprimida. (Demanda)", c: "Nossa imobiliária ajuda na revenda se você precisar de caixa rápido. (Parceria)" },
-
-  // 31-40: Perfil do Cliente e Psicológico
-  { keys: ["muito", "caro", "lote"], a: "Caro é não ter onde morar ou ver seu dinheiro sumir na inflação. (Lobo)", b: "Você trabalha muito duro para não ter o melhor para sua família. (Merecimento)", c: "O valor se dissolve na qualidade de vida que você terá aqui. (Bem-estar)" },
-  { keys: ["vou", "perder", "dinheiro"], a: "Você perde dinheiro todo dia que deixa de investir em ativos reais. (Lobo)", b: "Ninguém nunca ficou pobre comprando terra bem localizada. (História)", c: "Eu não estaria aqui se não acreditasse nos números. Meu nome vale mais que esta venda. (Ética)" },
-  { keys: ["crédito", "banco", "negado"], a: "Nós financiamos direto. Sem burocracia bancária, direto com a gente. (Lobo)", b: "Aprovamos seu cadastro internamente com as garantias do próprio lote. (Solução)", c: "Comece agora, limpe seu nome depois. O terreno já vai estar valorizando. (Apoio)" },
-  { keys: ["não", "gostei", "corretor"], a: "Não compre de mim, compre do projeto. Eu sou apenas o mensageiro do seu lucro. (Lobo)", b: "Peço desculpas se não me expressei bem, mas os números são inquestionáveis. (Humildade)", c: "Foque no seu benefício. Minha missão é te tornar um proprietário satisfeito. (Foco)" },
-  { keys: ["muitas", "opções"], a: "Opções demais geram paralisia. Esta é a melhor escolha técnica, ponto final. (Lobo)", b: "Eu já filtrei o mercado para você. Este lote é o 'filé mignon' do estoque. (Curadoria)", c: "Escolha o que te faz sorrir quando imagina o futuro. É este aqui. (Intuição)" },
-  { keys: ["parcela", "longa"], a: "Melhor pagar 120 meses e ser dono do que pagar 120 meses de aluguel e não ter nada. (Lobo)", b: "Você pode antecipar parcelas de trás para frente com desconto absurdo. (Estratégia)", c: "A inflação vai deixar essa parcela rídícula daqui a 3 anos. O tempo joga a seu favor. (Lógica)" },
-  { keys: ["não", "conheço", "região"], a: "Por isso você deve comprar. Quem chega primeiro bebe água limpa. (Lobo)", b: "Vou te levar para dar uma volta e te mostrar o potencial de crescimento. (Experiência)", c: "A prefeitura está investindo R$ 10 milhões em asfalto e acesso aqui do lado. (Informação)" },
-  { keys: ["estou", "sem", "tempo"], a: "Quem não tem tempo para cuidar do dinheiro, trabalha para quem tem. (Lobo)", b: "Assinatura digital. Resolvemos tudo em 5 minutos pelo celular. (Praticidade)", c: "Eu cuido de toda a burocracia para você. Só assine e lucre. (Serviço)" },
-  { keys: ["outra", "prioridade"], a: "Qual prioridade é maior que a segurança da sua família e seu futuro? (Lobo)", b: "Terra é a base para todas as outras prioridades da vida. (Fundamento)", c: "Faça o investimento agora e use o lucro para suas outras prioridades depois. (Inteligência)" },
-  { keys: ["acho", "vai", "cair"], a: "O preço dos imóveis nunca caiu no Brasil em 50 anos. Vai esperar o impossível? (Lobo)", b: "Custo de material de construção só sobe. O preço do lote acompanha. (Fato)", c: "Esperar queda é estratégia de quem perde o bonde da história. (Realidade)" },
-
-  // 41-50: Fechamento Final
-  { keys: ["não", "tenho", "certeza"], a: "Certeza vem da ação. Quem fica parado só tem dúvida e arrependimento. (Lobo)", b: "Se 80% do que eu disse faz sentido, os outros 20% você resolve no caminho. (Venda)", c: "Confie na sua jornada até aqui. Você sabe que este é um bom negócio. (Validação)" },
-  { keys: ["quero", "mais", "prazo"], a: "Prazo eu tenho, o que eu não tenho é mais lotes nessa tabela de preços. (Lobo)", b: "Consigo esticar o prazo, mas a entrada precisa ser à vista. Aceita? (Troca)", c: "Vamos montar um fluxo que não aperte seu caixa mensal. (Personalização)" },
-  { keys: ["posso", "perder", "emprego"], a: "Se perder, você tem um terreno quitado ou valorizado para vender e se sustentar. (Lobo)", b: "O lote é um seguro-desemprego em forma de terra. (Segurança)", c: "Temos seguro prestamista que garante as parcelas em caso de imprevistos. (Proteção)" },
-  { keys: ["muito", "longe", "entrega"], a: "O tempo voa. Quando você piscar, está inaugurando a piscina. (Lobo)", b: "A valorização de quem compra no início é o dobro de quem compra no fim. (Lucro)", c: "Acompanhe cada etapa pelo nosso app. O prazer está na construção. (Jornada)" },
-  { keys: ["taxa", "venda"], a: "Nossa taxa de corretagem é padrão, nosso serviço é excepcional. (Lobo)", b: "Você não paga comissão, você investe em uma consultoria de sucesso. (Visão)", c: "O custo de um profissional ruim é muito maior que a comissão de um bom. (Qualidade)" },
-  { keys: ["itbi", "escritura"], a: "Isso é investimento, não gasto. Faz parte da legalização do seu império. (Lobo)", b: "Podemos parcelar os custos de transferência junto com o lote. (Facilidade)", c: "Documento em dia é o que faz seu lote valer mais na hora da venda. (Valorização)" },
-  { keys: ["família", "grande"], a: "Por isso você precisa de um lote amplo e um condomínio com lazer completo. (Lobo)", b: "Crie memórias que seus filhos levarão para sempre. Espaço não falta. (Emocional)", c: "Este é o lugar onde seus netos vão passar as férias. Pense no legado. (Futuro)" },
-  { keys: ["sou", "solteiro"], a: "Lote é o melhor ativo para um jovem construir patrimônio antes de casar. (Lobo)", b: "Imóvel é o maior imã de estabilidade e sucesso que você pode ter. (Status)", c: "Liquidez fácil para quando você decidir mudar de vida ou de cidade. (Liberdade)" },
-  { keys: ["estou", "velho"], a: "Terra não tem idade. É o melhor rendimento para sua aposentadoria. (Lobo)", b: "Deixe um patrimônio sólido para seus herdeiros não passarem dificuldade. (Generosidade)", c: "Viva com o conforto e a segurança que você trabalhou a vida toda para ter. (Merecimento)" },
-  { keys: ["última", "unidade"], a: "Se você não assinar agora, o próximo da fila vai. E ele vai lucrar no seu lugar. (Lobo)", b: "O cavalo selado não passa duas vezes. Monte ou fique a pé. (Urgência)", c: "É o último com essa vista e esse preço. A decisão é sua, o lucro também. (Fechamento)" }
-]
-  };
+  "users": [
+    {
+      "login": "edson",
+      "pass": "2026",
+      "role": "admin"
+    },
+    {
+      "login": "luciana",
+      "pass": "2023",
+      "role": "vendedor"
+    }
+  ],
+  "products": [
+    {
+      "name": "LOTEAMENTO CARVALHOS",
+      "keys": [
+        "carvalhos",
+        "carvalho",
+        "terra rica",
+        "bobeiro",
+        "integrçao",
+        "shopping",
+        "12x25",
+        "300m",
+        "2028"
+      ],
+      "baseVal": 150000,
+      "rate": 15,
+      "info": [
+        "📍 Próximo ao Shopping",
+        "📏 Terrenos de 300 m² (12x25)",
+        "💰 Parcelas a partir de R$ 1.299,00",
+        "🚫 SEM ENTRADA",
+        "⏳ Planos em até 240x",
+        "🏗️ Liberação para obras em 2028"
+      ]
+    },
+    {
+      "name": "RECANTO RENASCER (STA CARMEM)",
+      "keys": [
+        "renascer",
+        "carmem",
+        "chácara",
+        "lago",
+        "trifásica",
+        "6km"
+      ],
+      "baseVal": 85000,
+      "rate": 18,
+      "info": [
+        "🌳 6 km da entrada de Santa Carmem",
+        "🌊 Lindo lago na frente do empreendimento",
+        "💡 Energia elétrica trifásica",
+        "🚫 SEM ENTRADA (exceto QD02)",
+        "💸 Parcelas a partir de R$ 695"
+      ]
+    },
+    {
+      "name": "RECANTO ALVORADA",
+      "keys": [
+        "alvorada",
+        "azul",
+        "canarinho",
+        "21km",
+        "carmen",
+        "chacara",
+        "1200m",
+        "mata"
+      ],
+      "baseVal": 75000,
+      "rate": 12,
+      "info": [
+        "📍 21 km do Canarinho",
+        "📐 Lotes a partir de 1.200 m²",
+        "🏞 Acesso coletivo ao Rio Azul",
+        "🌳 Chácaras entregues 100% com mata",
+        "💰 Parcelas a partir de R$ 600,00"
+      ]
+    },
+    {
+      "name": "CEDROS JARDINS",
+      "keys": [
+        "cedros",
+        "jardins",
+        "búfalo",
+        "bufalo",
+        "fastec",
+        "center"
+      ],
+      "baseVal": 95000,
+      "rate": 14,
+      "info": [
+        "📍 Próximo ao Posto Búfalo, Fastec e Super Center",
+        "📏 Lotes a partir de 200 m²",
+        "🚫 Sem entrada",
+        "💵 Parcelas a partir de R$ 753,00"
+      ]
+    },
+    {
+      "name": "RESIDENCIAL TUIUIÚ",
+      "keys": [
+        "tuiuiú",
+        "tuiuiu",
+        "videira",
+        "super",
+        "center",
+        "fastec",
+        "sonhalto",
+        "2026"
+      ],
+      "baseVal": 105000,
+      "rate": 15,
+      "info": [
+        "📍 Localização: Fastec, Super Center, Sonhalto Videira",
+        "💰 Parcelas a partir de R$ 869,00",
+        "📅 Construção liberada a partir de julho/2026"
+      ]
+    },
+    {
+      "name": "MORADA BRASIL",
+      "keys": [
+        "morada",
+        "brasil",
+        "maggi",
+        "andre",
+        "170k"
+      ],
+      "baseVal": 170000,
+      "rate": 20,
+      "info": [
+        "📍 Acesso direto à Av. André Maggi (Região Nobre)",
+        "✅ Sem entrada",
+        "💰 Valor à vista a partir de R$ 170 mil",
+        "💸 Parcelas a partir de R$ 713,00",
+        "⏳ Até 240 vezes"
+      ]
+    },
+    {
+      "name": "CASA PRONTA (MCMV)",
+      "keys": [
+        "pronta",
+        "caixa",
+        "mcmv",
+        "minha",
+        "sinal",
+        "1500"
+      ],
+      "baseVal": 220000,
+      "rate": 10,
+      "info": [
+        "🏠 2 quartos, Sala, Cozinha, Área de lazer",
+        "🏗️ Bairro planejado em Sinop",
+        "💰 Parcelas a partir de R$ 699,00",
+        "💳 Sinal de apenas R$ 1.500",
+        "🏦 Financiamento Minha Casa Minha Vida"
+      ]
+    },
+    {
+      "name": "GRAN CANÁRIO",
+      "keys": [
+        "gran",
+        "canário",
+        "canario",
+        "fasipe",
+        "agro",
+        "140",
+        "belvedere"
+      ],
+      "baseVal": 78000,
+      "rate": 25,
+      "info": [
+        "🎓 Localização estratégica — Futura FASIPE AGRO",
+        "📍 Região do Belvedere / MT-140",
+        "📈 Potencial gigantesco de valorização",
+        "💸 Parcelas a partir de R$ 595"
+      ]
+    },
+    {
+      "name": "CASA ANDRÉ MAGGI (300K)",
+      "keys": [
+        "300k",
+        "300.000",
+        "porcelanato",
+        "inteiro",
+        "detalhada",
+        "suíte"
+      ],
+      "baseVal": 300000,
+      "rate": 12,
+      "info": [
+        "🏠 Área Construída: 64 m² | Terreno: 302 m²",
+        "💎 Acabamento em porcelanato e iluminação LED",
+        "🛏️ 1 suíte + 1 quarto",
+        "🚀 Espaço para ampliação (3º quarto e garagem)",
+        "💰 Valor: R$ 300.000,00 (Aceita Financiamento)"
+      ]
+    }
+  ],
+  "objections": [
+    {
+      "keys": [
+        "caro",
+        "preço",
+        "valor"
+      ],
+      "a": "Caro em relação a quê? Se eu te desse R$ 200 mil em barras de ouro por R$ 150 mil, você diria que está caro? (Lobo)",
+      "b": "O preço é o que você paga, o valor é o lucro que você leva no bolso na entrega. (Warren Buffett)",
+      "c": "Prefere economizar 10% hoje ou ganhar 40% de valorização amanhã? (Psicologia da Venda)"
+    },
+    {
+      "keys": [
+        "pensar",
+        "analisar"
+      ],
+      "a": "Pensar não compra terreno. O que exatamente te impede de assinar agora: o projeto ou eu? (Lobo)",
+      "b": "90% de quem diz que vai pensar, acaba não agindo e perde a oportunidade. Vamos resolver sua dúvida agora. (Bíblia das Vendas)",
+      "c": "Enquanto você pensa, os lotes de oportunidade acabam. Sobrarão os piores e mais caros. (Escassez)"
+    },
+    {
+      "keys": [
+        "esposa",
+        "marido",
+        "sócio"
+      ],
+      "a": "Se você chegar em casa com um lucro de R$ 50 mil garantido, ela vai ficar brava ou te dar um beijo? (Lobo)",
+      "b": "Você é o investidor. Se você viu o valor, sua função é liderar a família para a prosperidade. (Straight Line)",
+      "c": "Vamos ligar para ela agora. Eu explico os números, você explica o sonho. (Ação Imediata)"
+    },
+    {
+      "keys": [
+        "crise",
+        "mercado",
+        "governo"
+      ],
+      "a": "O governo muda, a crise passa, mas a terra continua lá valorizando. Onde você prefere seu dinheiro? (Lobo)",
+      "b": "Ricos investem na crise, pobres fogem dela. De qual lado você quer estar? (Pai Rico Pai Pobre)",
+      "c": "O mercado imobiliário é o único que sobrevive a qualquer cenário político há 500 anos. (Autoridade)"
+    },
+    {
+      "keys": [
+        "longe",
+        "distância"
+      ],
+      "a": "Longe é onde não tem crescimento. Daqui a 2 anos, isso aqui será o novo centro. (Lobo)",
+      "b": "Quem comprou Alphaville no começo ouviu que era longe. Hoje eles são milionários. (Prova Social)",
+      "c": "A distância hoje é o que garante o preço de hoje. Amanhã, perto e caro será tarde. (Antecipação)"
+    },
+    {
+      "keys": [
+        "esperar",
+        "momento"
+      ],
+      "a": "Esperar o quê? O preço subir ou o melhor lote ser vendido? (Lobo)",
+      "b": "O melhor momento para plantar uma árvore foi há 20 anos. O segundo melhor é agora. (Provérbio de Vendas)",
+      "c": "O mercado não espera ninguém. Cada dia parado é dinheiro que você deixa de ganhar. (Custo de Oportunidade)"
+    },
+    {
+      "keys": [
+        "comparar",
+        "outros"
+      ],
+      "a": "Pode comparar. Mas você vai voltar aqui e esse lote já terá dono. (Lobo)",
+      "b": "A concorrência vende metros quadrados, eu vendo patrimônio e liquidez. (Diferenciação)",
+      "c": "Não compare preço de banana com preço de ouro. Este projeto é único. (Venda Desafiadora)"
+    },
+    {
+      "keys": [
+        "juros",
+        "parcela"
+      ],
+      "a": "O juros incomoda? A valorização de 20% ao ano engole qualquer taxa que o banco te cobrar. (Lobo)",
+      "b": "Foque na parcela que cabe no bolso, o tempo cuida da valorização do seu capital. (Venda Consultiva)",
+      "c": "O juros é o aluguel do dinheiro. O terreno é a sua liberdade financeira. (Psicologia Financeira)"
+    },
+    {
+      "keys": [
+        "desconto",
+        "baixar"
+      ],
+      "a": "Eu não vendo preço, vendo oportunidade. Se eu baixar, tiro a qualidade do seu vizinho. (Lobo)",
+      "b": "O valor é justo pela entrega. Se fosse mais barato, você deveria desconfiar da obra. (Autoridade)",
+      "c": "Posso ver uma condição de prazo, mas o valor do ativo é inegociável pela qualidade. (Integridade)"
+    },
+    {
+      "keys": [
+        "medo",
+        "risco"
+      ],
+      "a": "O único risco aqui é você ficar de fora e me ver vendendo esse lote pelo dobro ano que vem. (Lobo)",
+      "b": "O risco de não investir é maior que o risco de investir. O dinheiro parado derrete. (Mente Milionária)",
+      "c": "Temos garantia em contrato e registro em cartório. Sua segurança é minha prioridade. (Garantia)"
+    },
+    {
+      "keys": [
+        "obra",
+        "atraso"
+      ],
+      "a": "O contrato prevê multa. Minha pele está em jogo tanto quanto a sua. (Lobo)",
+      "b": "Veja o histórico: entregamos 100% dos projetos. Nosso nome é nosso maior ativo. (Credibilidade)",
+      "c": "Obra em andamento é o momento exato de lucro. Depois de pronto, o preço explode. (Timing)"
+    },
+    {
+      "keys": [
+        "infraestrutura",
+        "luz",
+        "água"
+      ],
+      "a": "Se já tivesse tudo pronto, você não estaria falando comigo por esse preço. (Lobo)",
+      "b": "Toda a infraestrutura está garantida por alienação fiduciária. Risco zero. (Técnico)",
+      "c": "Estamos criando um novo padrão de bairro. Você está no topo da pirâmide. (Exclusividade)"
+    },
+    {
+      "keys": [
+        "tamanho",
+        "pequeno"
+      ],
+      "a": "Não é o tamanho do lote, é o que você constrói e quanto valoriza por m². (Lobo)",
+      "b": "Lotes menores têm maior liquidez. É muito mais fácil vender ou alugar depois. (Estratégia)",
+      "c": "O projeto prioriza áreas de convivência premium, não apenas terra bruta. (Estilo de Vida)"
+    },
+    {
+      "keys": [
+        "condomínio",
+        "taxa"
+      ],
+      "a": "A taxa é o seguro do seu patrimônio. Prefere um bairro aberto que desvaloriza? (Lobo)",
+      "b": "O que você paga de condomínio, ganha em segurança e lazer para sua família. (Custo-Benefício)",
+      "c": "Um imóvel em condomínio valoriza 30% mais rápido que um de rua. (Investimento)"
+    },
+    {
+      "keys": [
+        "entrada",
+        "alta"
+      ],
+      "a": "A entrada é o que garante que o saldo devedor não te sufoque. É proteção para você. (Lobo)",
+      "b": "Podemos parcelar a entrada? Se eu conseguir, fechamos o negócio agora? (Fechamento Condicional)",
+      "c": "Quanto maior a entrada, menor o custo total do seu terreno. Pense no longo prazo. (Lógica)"
+    },
+    {
+      "keys": [
+        "dinheiro",
+        "aplicado"
+      ],
+      "a": "Sua aplicação rende 10%? O imóvel aqui rende 20% mais inflação. A conta é simples. (Lobo)",
+      "b": "Diversifique. Não coloque todos os ovos no mesmo cesto, especialmente se o cesto for o banco. (Investidor)",
+      "c": "Tire do papel e coloque na terra. Papel queima, terra permanece. (Segurança)"
+    },
+    {
+      "keys": [
+        "consultar",
+        "advogado"
+      ],
+      "a": "Traga ele. Se ele for bom, vai te mandar comprar dois lotes. (Lobo)",
+      "b": "Toda a documentação é pública. Temos transparência total. (Confiança)",
+      "c": "Aprovação da prefeitura e RI estão à sua disposição. Nada a esconder. (Legalidade)"
+    },
+    {
+      "keys": [
+        "preciso",
+        "vender",
+        "outro"
+      ],
+      "a": "Eu te ajudo a vender. Mas garanta este aqui antes que mude a tabela. (Lobo)",
+      "b": "Não espere vender para comprar, o mercado sobe mais rápido que sua venda. (Urgência)",
+      "c": "Fazemos um plano de pagamento que espera a sua venda acontecer. (Flexibilidade)"
+    },
+    {
+      "keys": [
+        "desemprego",
+        "instabilidade"
+      ],
+      "a": "Por isso você precisa de patrimônio. Imóvel é o seu bote salva-vidas. (Lobo)",
+      "b": "O plano é flexível. Se algo mudar, o lote é seu e você pode revender com lucro. (Liquidez)",
+      "c": "Segurança financeira se constrói na incerteza. Quem tem terra, tem tudo. (Sobrevivência)"
+    },
+    {
+      "keys": [
+        "conheço",
+        "empresa"
+      ],
+      "a": "Prazer, somos líderes no setor. Pergunte para qualquer dono de imobiliária sobre nós. (Lobo)",
+      "b": "Nossos números falam por nós: milhares de lotes entregues e clientes lucrando. (Autoridade)",
+      "c": "Visite nossas obras prontas. A qualidade é o nosso cartão de visitas. (Prova Real)"
+    },
+    {
+      "keys": [
+        "vizinho",
+        "vizinhança"
+      ],
+      "a": "Você não compra só terra, compra os vizinhos. Aqui o padrão é garantido. (Lobo)",
+      "b": "O perfil dos compradores aqui é de alto nível. Networking puro. (Exclusividade)",
+      "c": "Condomínio fechado filtra quem valoriza a paz e a segurança. (Ambiente)"
+    },
+    {
+      "keys": [
+        "comércio",
+        "serviço"
+      ],
+      "a": "Onde tem gente morando, o comércio nasce em volta. Você está chegando antes da valorização. (Lobo)",
+      "b": "Temos áreas comerciais previstas no masterplan. Conveniência total. (Planejamento)",
+      "c": "A 5 minutos do centro, mas com o silêncio do campo. O melhor dos dois mundos. (Conforto)"
+    },
+    {
+      "keys": [
+        "barulho",
+        "rodovia"
+      ],
+      "a": "Acesso fácil valoriza. O isolamento acústico natural do projeto resolve o resto. (Lobo)",
+      "b": "Estar perto da rodovia significa que você chega rápido em qualquer lugar. (Mobilidade)",
+      "c": "Os lotes mais valorizados do mundo estão perto de eixos de transporte. (Fato Econômico)"
+    },
+    {
+      "keys": [
+        "segurança",
+        "assalto"
+      ],
+      "a": "Muros, câmeras e ronda 24h. Onde você estaria mais seguro que aqui? (Lobo)",
+      "b": "Investimos pesado em tecnologia de monitoramento. Sua família merece isso. (Paz)",
+      "c": "É um bunker de luxo. Segurança é o nosso primeiro item da lista. (Prioridade)"
+    },
+    {
+      "keys": [
+        "lazer",
+        "clube"
+      ],
+      "a": "Você vai ter um resort no quintal de casa sem precisar viajar. (Lobo)",
+      "b": "O lazer aqui valoriza o lote mais que a própria construção da casa. (Ativo)",
+      "c": "Piscina, academia, quadras... sua saúde e diversão sem custo extra de deslocamento. (Saúde)"
+    },
+    {
+      "keys": [
+        "valorização",
+        "baixa"
+      ],
+      "a": "Olhe em volta. Onde a cidade cresce? Para cá. A matemática não mente. (Lobo)",
+      "b": "Historicamente, esta região subiu 15% acima da inflação nos últimos 5 anos. (Dados)",
+      "c": "O preço de pré-lançamento é o lucro certo de quem compra agora. (Oportunidade)"
+    },
+    {
+      "keys": [
+        "planta",
+        "projeto"
+      ],
+      "a": "Na planta você compra com desconto. Pronto, você paga o preço de mercado. (Lobo)",
+      "b": "Participar do nascimento do projeto te dá as melhores escolhas de lote. (Privilégio)",
+      "c": "Personalize sua visão. Construa exatamente o que sempre sonhou. (Sonho)"
+    },
+    {
+      "keys": [
+        "regras",
+        "construção"
+      ],
+      "a": "As regras protegem sua casa da casa feia do vizinho. Valorização garantida. (Lobo)",
+      "b": "O padrão construtivo mantém o nível do condomínio sempre alto. (Patrimônio)",
+      "c": "Harmonia visual gera valor de revenda muito superior a bairros abertos. (Estética)"
+    },
+    {
+      "keys": [
+        "investimento",
+        "curto",
+        "prazo"
+      ],
+      "a": "Terra é para quem quer ficar rico com segurança, não para apostadores. (Lobo)",
+      "b": "Em 24 meses você terá um ativo que vale 40% mais. Qual banco faz isso? (Comparação)",
+      "c": "Imóvel é o investimento mais sólido para criar riqueza geracional. (Legado)"
+    },
+    {
+      "keys": [
+        "liquidez",
+        "difícil",
+        "vender"
+      ],
+      "a": "Lote bom vende em uma semana. Lote ruim nunca vende. Este aqui é excelente. (Lobo)",
+      "b": "Temos fila de espera em projetos anteriores. A demanda aqui é reprimida. (Demanda)",
+      "c": "Nossa imobiliária ajuda na revenda se você precisar de caixa rápido. (Parceria)"
+    },
+    {
+      "keys": [
+        "muito",
+        "caro",
+        "lote"
+      ],
+      "a": "Caro é não ter onde morar ou ver seu dinheiro sumir na inflação. (Lobo)",
+      "b": "Você trabalha muito duro para não ter o melhor para sua família. (Merecimento)",
+      "c": "O valor se dissolve na qualidade de vida que você terá aqui. (Bem-estar)"
+    },
+    {
+      "keys": [
+        "vou",
+        "perder",
+        "dinheiro"
+      ],
+      "a": "Você perde dinheiro todo dia que deixa de investir em ativos reais. (Lobo)",
+      "b": "Ninguém nunca ficou pobre comprando terra bem localizada. (História)",
+      "c": "Eu não estaria aqui se não acreditasse nos números. Meu nome vale mais que esta venda. (Ética)"
+    },
+    {
+      "keys": [
+        "crédito",
+        "banco",
+        "negado"
+      ],
+      "a": "Nós financiamos direto. Sem burocracia bancária, direto com a gente. (Lobo)",
+      "b": "Aprovamos seu cadastro internamente com as garantias do próprio lote. (Solução)",
+      "c": "Comece agora, limpe seu nome depois. O terreno já vai estar valorizando. (Apoio)"
+    },
+    {
+      "keys": [
+        "não",
+        "gostei",
+        "corretor"
+      ],
+      "a": "Não compre de mim, compre do projeto. Eu sou apenas o mensageiro do seu lucro. (Lobo)",
+      "b": "Peço desculpas se não me expressei bem, mas os números são inquestionáveis. (Humildade)",
+      "c": "Foque no seu benefício. Minha missão é te tornar um proprietário satisfeito. (Foco)"
+    },
+    {
+      "keys": [
+        "muitas",
+        "opções"
+      ],
+      "a": "Opções demais geram paralisia. Esta é a melhor escolha técnica, ponto final. (Lobo)",
+      "b": "Eu já filtrei o mercado para você. Este lote é o 'filé mignon' do estoque. (Curadoria)",
+      "c": "Escolha o que te faz sorrir quando imagina o futuro. É este aqui. (Intuição)"
+    },
+    {
+      "keys": [
+        "parcela",
+        "longa"
+      ],
+      "a": "Melhor pagar 120 meses e ser dono do que pagar 120 meses de aluguel e não ter nada. (Lobo)",
+      "b": "Você pode antecipar parcelas de trás para frente com desconto absurdo. (Estratégia)",
+      "c": "A inflação vai deixar essa parcela rídícula daqui a 3 anos. O tempo joga a seu favor. (Lógica)"
+    },
+    {
+      "keys": [
+        "não",
+        "conheço",
+        "região"
+      ],
+      "a": "Por isso você deve comprar. Quem chega primeiro bebe água limpa. (Lobo)",
+      "b": "Vou te levar para dar uma volta e te mostrar o potencial de crescimento. (Experiência)",
+      "c": "A prefeitura está investindo R$ 10 milhões em asfalto e acesso aqui do lado. (Informação)"
+    },
+    {
+      "keys": [
+        "estou",
+        "sem",
+        "tempo"
+      ],
+      "a": "Quem não tem tempo para cuidar do dinheiro, trabalha para quem tem. (Lobo)",
+      "b": "Assinatura digital. Resolvemos tudo em 5 minutos pelo celular. (Praticidade)",
+      "c": "Eu cuido de toda a burocracia para você. Só assine e lucre. (Serviço)"
+    },
+    {
+      "keys": [
+        "outra",
+        "prioridade"
+      ],
+      "a": "Qual prioridade é maior que a segurança da sua família e seu futuro? (Lobo)",
+      "b": "Terra é a base para todas as outras prioridades da vida. (Fundamento)",
+      "c": "Faça o investimento agora e use o lucro para suas outras prioridades depois. (Inteligência)"
+    },
+    {
+      "keys": [
+        "acho",
+        "vai",
+        "cair"
+      ],
+      "a": "O preço dos imóveis nunca caiu no Brasil em 50 anos. Vai esperar o impossível? (Lobo)",
+      "b": "Custo de material de construção só sobe. O preço do lote acompanha. (Fato)",
+      "c": "Esperar queda é estratégia de quem perde o bonde da história. (Realidade)"
+    },
+    {
+      "keys": [
+        "não",
+        "tenho",
+        "certeza"
+      ],
+      "a": "Certeza vem da ação. Quem fica parado só tem dúvida e arrependimento. (Lobo)",
+      "b": "Se 80% do que eu disse faz sentido, os outros 20% você resolve no caminho. (Venda)",
+      "c": "Confie na sua jornada até aqui. Você sabe que este é um bom negócio. (Validação)"
+    },
+    {
+      "keys": [
+        "quero",
+        "mais",
+        "prazo"
+      ],
+      "a": "Prazo eu tenho, o que eu não tenho é mais lotes nessa tabela de preços. (Lobo)",
+      "b": "Consigo esticar o prazo, mas a entrada precisa ser à vista. Aceita? (Troca)",
+      "c": "Vamos montar um fluxo que não aperte seu caixa mensal. (Personalização)"
+    },
+    {
+      "keys": [
+        "posso",
+        "perder",
+        "emprego"
+      ],
+      "a": "Se perder, você tem um terreno quitado ou valorizado para vender e se sustentar. (Lobo)",
+      "b": "O lote é um seguro-desemprego em forma de terra. (Segurança)",
+      "c": "Temos seguro prestamista que garante as parcelas em caso de imprevistos. (Proteção)"
+    },
+    {
+      "keys": [
+        "muito",
+        "longe",
+        "entrega"
+      ],
+      "a": "O tempo voa. Quando você piscar, está inaugurando a piscina. (Lobo)",
+      "b": "A valorização de quem compra no início é o dobro de quem compra no fim. (Lucro)",
+      "c": "Acompanhe cada etapa pelo nosso app. O prazer está na construção. (Jornada)"
+    },
+    {
+      "keys": [
+        "taxa",
+        "venda"
+      ],
+      "a": "Nossa taxa de corretagem é padrão, nosso serviço é excepcional. (Lobo)",
+      "b": "Você não paga comissão, você investe em uma consultoria de sucesso. (Visão)",
+      "c": "O custo de um profissional ruim é muito maior que a comissão de um bom. (Qualidade)"
+    },
+    {
+      "keys": [
+        "itbi",
+        "escritura"
+      ],
+      "a": "Isso é investimento, não gasto. Faz parte da legalização do seu império. (Lobo)",
+      "b": "Podemos parcelar os custos de transferência junto com o lote. (Facilidade)",
+      "c": "Documento em dia é o que faz seu lote valer mais na hora da venda. (Valorização)"
+    },
+    {
+      "keys": [
+        "família",
+        "grande"
+      ],
+      "a": "Por isso você precisa de um lote amplo e um condomínio com lazer completo. (Lobo)",
+      "b": "Crie memórias que seus filhos levarão para sempre. Espaço não falta. (Emocional)",
+      "c": "Este é o lugar onde seus netos vão passar as férias. Pense no legado. (Futuro)"
+    },
+    {
+      "keys": [
+        "sou",
+        "solteiro"
+      ],
+      "a": "Lote é o melhor ativo para um jovem construir patrimônio antes de casar. (Lobo)",
+      "b": "Imóvel é o maior imã de estabilidade e sucesso que você pode ter. (Status)",
+      "c": "Liquidez fácil para quando você decidir mudar de vida ou de cidade. (Liberdade)"
+    },
+    {
+      "keys": [
+        "estou",
+        "velho"
+      ],
+      "a": "Terra não tem idade. É o melhor rendimento para sua aposentadoria. (Lobo)",
+      "b": "Deixe um patrimônio sólido para seus herdeiros não passarem dificuldade. (Generosidade)",
+      "c": "Viva com o conforto e a segurança que você trabalhou a vida toda para ter. (Merecimento)"
+    },
+    {
+      "keys": [
+        "última",
+        "unidade"
+      ],
+      "a": "Se você não assinar agora, o próximo da fila vai. E ele vai lucrar no seu lugar. (Lobo)",
+      "b": "O cavalo selado não passa duas vezes. Monte ou fique a pé. (Urgência)",
+      "c": "É o último com essa vista e esse preço. A decisão é sua, o lucro também. (Fechamento)"
+    }
+  ]
+};
 </script>
 
 <script>
@@ -495,9 +984,10 @@ function toggleMic() {
   else { rec.stop(); b.innerText = "🎙️ Capturar Voz"; b.style.background = "var(--primary)"; }
 }
 </script>
-</body>
-</html>
 
 
 
 
+
+
+</body></html>
